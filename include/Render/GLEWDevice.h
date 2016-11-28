@@ -13,5 +13,9 @@ namespace vrv
 
 		virtual GraphicsWindow* createWindow(int width, int height, const std::string& title,
 			GraphicsWindow::WINDOWFLAG = GraphicsWindow::WINDOWED);
+
+		virtual VertexBuffer* createVertexBuffer(BufferUsage usage, int sizeInBytes);
+
+		virtual IndexBuffer* createIndexBuffer(BufferUsage usage, int sizeInBytes);
 	};
 }

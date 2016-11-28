@@ -1,10 +1,10 @@
 #include <Render/GLEWDevice.h>
+#include <Render/VertexBufferGL3X.h>
+#include <Render/IndexBufferGL3X.h>
 #include <Render/GLFWGraphicsWindow.h>
 #define  GLEW_STATIC
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
-
 
 namespace vrv
 {
@@ -31,6 +31,20 @@ namespace vrv
 		window = new GLFWGraphicsWindow(width, height, title, flag);
 		window->initialize();
 		return window;
+	}
+
+	VertexBuffer* GLEWDevice::createVertexBuffer(BufferUsage usage, int sizeInBytes)
+	{
+		VertexBufferGL3X* vertexBuffer = 0;
+		vertexBuffer = new VertexBufferGL3X(usage, sizeInBytes);
+		return vertexBuffer;
+	}
+
+	IndexBuffer* GLEWDevice::createIndexBuffer(BufferUsage usage, int sizeInBytes)
+	{
+		IndexBufferGL3X* indexBuffer = 0;
+		indexBuffer = new IndexBufferGL3X(usage, sizeInBytes);
+		return indexBuffer;
 	}
 
 }
