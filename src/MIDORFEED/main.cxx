@@ -1,11 +1,9 @@
-#include <MIDORFEED/Application.h>
-
-using namespace vrv;
+#include<MIDORFEED/Application.h>
 
 int main(int argc, char** argv)
 {
-	Application* application = new Application(1280, 960, "vrv");
-	application->run();
-
+	vrv::Application* app = new vrv::Application();
+	app->initialize(800, 600, "main window");
+	app->run();
 	return 0;
 }

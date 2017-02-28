@@ -1,28 +1,29 @@
-#include <MIDORFEED/Application.h>
-#include <Render/GLEWDevice.h>
-#include <Render/GLFWGraphicsWindow.h>
- 
+#include<MIDORFEED/Application.h>
+#include<Render/GLFWGraphicsWindow.h>
+#include<Render/GLEWDevice.h>
 namespace vrv
 {
-	Application::Application(int width, int height, 
-							const std::string& title,GraphicsWindow::WINDOWFLAG flag)
-	{
-		myDevice = new GLEWDevice();
-		myDevice->initialize();
-		myWindow = myDevice->createWindow(width, height, title, flag);
-	}
 
-	Application::~Application()
-	{
-		delete myWindow;
+	Application::Application()
+		: myMainWindow(0)
+	{	
+		myDevice = new GLEWDevice();
 	}
 
 	void Application::run()
 	{
-		while (!myWindow->isClosed())
+		myMainWindow->show();
+		while (!myMainWindow->shouldClose())
 		{
-			myWindow->pollEvents();
-			myWindow->swapBuffers();
+			myMainWindow->pullEvents();
+			myMainWindow->swapBuffer();
 		}
+	}
+
+	void Application::initialize(int _width, int _height, const std::string& _title)
+	{
+		myDevice->initialize();
+		WindowConfiguration config(_width, _height, _title);
+		myMainWindow = GLEWDevice::instance().createGraphcisWindow(config);
 	}
 }

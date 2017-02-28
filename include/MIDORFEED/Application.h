@@ -1,8 +1,5 @@
 #pragma once
-
 #include<string>
-#include<Render/GraphicsWindow.h>
-
 namespace vrv
 {
 	class Device;
@@ -11,16 +8,14 @@ namespace vrv
 	class Application
 	{
 	public:
-
-		Application(int width, int height, const std::string& title, 
-					GraphicsWindow::WINDOWFLAG flag = GraphicsWindow::WINDOWED);
-
-		~Application();
+		Application();
 
 		virtual void run();
 
+		virtual void initialize(int width, int height, const std::string& title);
+
 	protected:
 		Device* myDevice;
-		GraphicsWindow* myWindow;
+		GraphicsWindow* myMainWindow;
 	};
 }
