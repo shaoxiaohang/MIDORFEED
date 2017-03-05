@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <Render/GLFWGraphicsWindow.h>
+#include <Render/ShaderProgram.h>
 
 namespace vrv
 {
@@ -20,7 +21,7 @@ namespace vrv
 	{
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		return true;
@@ -47,5 +48,10 @@ namespace vrv
 			delete window;
 			return 0;
 		}
+	}
+
+	ShaderProgram* GLEWDevice::createShaderProgram(const std::string& vertFile, const std::string& fragFile)
+	{
+		return new ShaderProgram(vertFile, fragFile);
 	}
 }

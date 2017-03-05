@@ -11,6 +11,7 @@ namespace vrv
 
 	public:
 		virtual GraphicsWindow* createGraphcisWindow(WindowConfiguration cofig);
+		virtual ShaderProgram* createShaderProgram(const std::string& vertFile, const std::string& fragFile);
 	protected:
 		GLEWDevice();
 		virtual bool initialize();

@@ -1,6 +1,7 @@
 #include<MIDORFEED/Application.h>
 #include<Render/GLFWGraphicsWindow.h>
 #include<Render/GLEWDevice.h>
+#include<Render/ShaderProgram.h>
 namespace vrv
 {
 
@@ -25,5 +26,7 @@ namespace vrv
 		myDevice->initialize();
 		WindowConfiguration config(_width, _height, _title);
 		myMainWindow = GLEWDevice::instance().createGraphcisWindow(config);
+		ShaderProgram* shader = GLEWDevice::instance().createShaderProgram("test.vert", "test.frag");
+		shader->link();
 	}
 }

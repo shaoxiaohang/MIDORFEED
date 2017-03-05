@@ -31,6 +31,9 @@ namespace vrv
 
 		DepthTest(bool enabled);
 
+		bool operator<(const DepthTest& depth);
+		bool operator>(const DepthTest& depth);
+
 		virtual void apply();
 		virtual unsigned int toGLEnum();
 
@@ -51,6 +54,9 @@ namespace vrv
 
 		void apply();
 		void applyIfChanged(const RenderState& state);
+
+		void setDepthTest(DepthTest depthTest);
+		DepthTest& depthTest();
 
 	protected:
 		DepthTest myDepthTest;

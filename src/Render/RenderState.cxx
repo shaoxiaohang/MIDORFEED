@@ -29,6 +29,27 @@ namespace vrv
 	{
 
 	}
+
+	bool DepthTest::operator<(const DepthTest& depth)
+	{
+		if (myEnabled != depth.enabled())
+		{
+			//sort depth disable state in front
+			return !myEnabled;
+		}
+
+		if (myDepthTestFunction != depth.depthTestFunction())
+		{
+			return myDepthTestFunction<depth.depthTestFunction();
+		}
+
+		return true;
+	}
+
+	bool DepthTest::operator>(const DepthTest& depth)
+	{
+		return !((*this) < (depth));
+	}
 	void DepthTest::apply()
 	{
 		GLenum depthTest = toGLEnum();
@@ -93,8 +114,15 @@ namespace vrv
 
 	RenderState::RenderState()
 		: myDepthTest(true)
-	{
+	{}
 
+	void RenderState::setDepthTest(DepthTest depthTest)
+	{
+		myDepthTest = depthTest;
+	}
+	DepthTest& RenderState::depthTest()
+	{
+		return myDepthTest;
 	}
 
 	void RenderState::apply()
