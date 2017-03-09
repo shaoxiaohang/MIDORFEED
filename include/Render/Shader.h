@@ -15,8 +15,9 @@ namespace vrv
 
 		Shader(ShaderType type,const std::string& fileName);
 		unsigned int createShader();
-		static bool checkCompileStatus(unsigned int id);
+		static bool checkCompileStatus(unsigned int id,std::string& error);
 		static void addShaderUniformConstant(const std::string& name, float value);
+		const std::string name();
 
 	protected:
 		unsigned int toGLEnum();
@@ -24,6 +25,7 @@ namespace vrv
 	protected:
 		ShaderType myType;
 		std::string mySource;
+		const std::string& myFileName;
 		static bool myInitialized;
 		static ConstantsMap myConstansMap;
 	};

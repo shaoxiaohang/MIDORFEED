@@ -7,6 +7,6 @@ namespace vrv
 		void operator=(const ClassName&);
 
 #define VRV_ERROR(message)\
-		std::cout <<__FILE__<<__LINE__<<__FUNCTION__<< message << std::endl;
+		std::cout <<__FILE__<<"  "<<__LINE__<<"  ERROR "<<__FUNCTION__<<"***"<<message<<"***"<< std::endl;
 
 }

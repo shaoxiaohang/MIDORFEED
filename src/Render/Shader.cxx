@@ -10,6 +10,7 @@ namespace vrv
 
 	Shader::Shader(ShaderType type, const std::string& fileName)
 		: myType(type)
+		, myFileName(fileName)
 	{
 		if (!myInitialized)
 		{
@@ -21,9 +22,6 @@ namespace vrv
 		}
 		std::ifstream shaderFile;
 		shaderFile.open(fileName.c_str());
-		bool failed2 = shaderFile.good();
-		int a = shaderFile.failbit;
-		char c = shaderFile.get();
 		std::stringstream shaderStream;
 		shaderStream << shaderFile.rdbuf();
 		shaderFile.close();
@@ -35,15 +33,16 @@ namespace vrv
 	{
 		unsigned int id = glCreateShader(toGLEnum());
 		std::size_t pos = mySource.find_first_of("\n\t");
-		const std::string& firstLine = mySource.substr(0, pos);
+		const std::string& firstLine = mySource.substr(0, pos+1);
 
 		bool hasGLVersionDefine = false;
 		if (firstLine.find("#version") != std::string::npos)
 		{
 			hasGLVersionDefine = true;
+			mySource = mySource.substr(pos+1);
 		}
 
-		static const std::string version = "#version 420";
+		static const std::string version = "#version 330\n\n";
 		std::string finalString = version;
 		ConstantsMap::const_iterator itor = myConstansMap.begin();
 		for (; itor != myConstansMap.end(); ++itor)
@@ -52,19 +51,40 @@ namespace vrv
 			ss << "#define	" << itor->first << "	" << itor->second << std::endl;
 			finalString += ss.str();
 		}
-
+		finalString += "\n";
 		finalString += mySource;
-
+		std::ofstream ofs;
+		if (myType == VertexShader)
+		{
+			ofs.open("output.vert");
+		}
+		else
+		{
+			ofs.open("output.frag");
+		}
+		
+		ofs << finalString;
+		ofs.close();
 		const GLchar* src = finalString.c_str();
 		glShaderSource(id, 1, &src, 0);
 		return id;
 	}
 
-	bool Shader::checkCompileStatus(unsigned int id)
+	bool Shader::checkCompileStatus(unsigned int id, std::string& error)
 	{
 		int res;
 		glGetShaderiv(id, GL_COMPILE_STATUS, &res);
-		return (res == GL_TRUE) ? true : false;
+		if (res != GL_TRUE)
+		{
+			int infoLength = 0;
+			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &infoLength);
+			char* str = new char[infoLength];
+			glGetShaderInfoLog(id, infoLength, 0, str);
+			error = str;
+			delete[] str;
+			return false;
+		}
+		return true;		
 	}
 
 	void Shader::addShaderUniformConstant(const std::string& name, float value)
@@ -73,6 +93,11 @@ namespace vrv
 		{
 			myConstansMap.insert(std::make_pair(name, value));
 		}
+	}
+
+	const std::string Shader::name()
+	{
+		return myFileName;
 	}
 
 	unsigned int Shader::toGLEnum()

@@ -1,6 +1,7 @@
 #include <Render/ShaderProgram.h>
 #include <Render/Shader.h>
 #include <Core/UsefulMarco.h>
+#include <sstream>
 #include <GL/glew.h>
 namespace vrv
 {
@@ -32,11 +33,21 @@ namespace vrv
 		return true;
 	}
 
-	bool ShaderProgram::checkProgramLinkStatus(unsigned int id)
+	bool ShaderProgram::checkProgramLinkStatus(unsigned int id, std::string& error)
 	{
 		int res;
 		glGetProgramiv(id, GL_LINK_STATUS, &res);
-		return (res == GL_TRUE)? true:false;
+		if (res != GL_TRUE)
+		{
+			int infoLengh;
+			glGetProgramiv(id, GL_INFO_LOG_LENGTH, &infoLengh);
+			char* info = new char[infoLengh];
+			glGetProgramInfoLog(id, infoLengh, &infoLengh, info);
+			error = info;
+			delete[] info;
+			return false;
+		}
+		return true;
 	}
 
 	void ShaderProgram::link()
@@ -44,22 +55,32 @@ namespace vrv
 		myID = glCreateProgram();
 		myVertID = myVertShader->createShader();
 		myFragID = myFragShader->createShader();
-		glAttachShader(GL_VERTEX_SHADER, myVertID);
-		glAttachShader(GL_FRAGMENT_SHADER, myFragID);
 		glCompileShader(myVertID);
-		if (!Shader::checkCompileStatus(myVertID))
+		std::string info;
+		if (!Shader::checkCompileStatus(myVertID, info))
 		{
-			VRV_ERROR("vertex shader compiling failed");
+			std::stringstream ss;
+			ss << myVertShader->name() << " comiling failed" << std::endl;
+			ss << info << std::endl;
+			VRV_ERROR(ss.str());
 		}
 		glCompileShader(myFragID);
-		if (!Shader::checkCompileStatus(myFragID))
+		if (!Shader::checkCompileStatus(myFragID,info))
 		{
-			VRV_ERROR("fragment shader compiling failed");
+			std::stringstream ss;
+			ss << myFragShader->name() << " comiling failed" << std::endl;
+			ss << info << std::endl;
+			VRV_ERROR(ss.str());
 		}
+		glAttachShader(GL_VERTEX_SHADER, myVertID);
+		glAttachShader(GL_FRAGMENT_SHADER, myFragID);
 		glLinkProgram(myID);
-		if (!checkProgramLinkStatus(myID))
+		if (!checkProgramLinkStatus(myID,info))
 		{
-			VRV_ERROR("shader program link failed");
+			std::stringstream ss;
+			ss << "shader program"<< " comiling failed" << std::endl;
+			ss << info << std::endl;
+			VRV_ERROR(ss.str());
 		}
 	}
 }

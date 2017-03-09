@@ -12,7 +12,7 @@ namespace vrv
 		bool operator< (const ShaderProgram& pro);
 		bool operator> (const ShaderProgram& pro);
 
-		static bool checkProgramLinkStatus(unsigned int id);
+		static bool checkProgramLinkStatus(unsigned int id,std::string& error);
 		void link();
 	protected:
 		unsigned int myID;
