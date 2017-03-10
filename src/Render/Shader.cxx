@@ -5,7 +5,7 @@
 #include <GL/glew.h>
 namespace vrv
 {
-	
+
 
 	ShaderAttribute::ShaderAttribute(std::string name, unsigned int location)
 		: myName(name)
@@ -22,6 +22,39 @@ namespace vrv
 		return myName;
 	}
 
+
+	ShaderAttributeInt::ShaderAttributeInt(std::string name, unsigned int location)
+		: ShaderAttribute(name, location)
+	{}
+	std::string ShaderAttributeInt::typeToString()
+	{
+		return "int";
+	}
+
+	ShaderAttributefloat::ShaderAttributefloat(std::string name, unsigned int location)
+		: ShaderAttribute(name, location)
+	{}
+	std::string ShaderAttributefloat::typeToString()
+	{
+		return "float";
+	}
+
+	ShaderAttributeVector3f::ShaderAttributeVector3f(std::string name, unsigned int location)
+		: ShaderAttribute(name, location)
+	{}
+	std::string ShaderAttributeVector3f::typeToString()
+	{
+		return "vec3";
+	}
+
+	ShaderAttributeVector4f::ShaderAttributeVector4f(std::string name, unsigned int location)
+		: ShaderAttribute(name, location)
+	{}
+	std::string ShaderAttributeVector4f::typeToString()
+	{
+		return "vec4";
+	}
+
 	Shader::ConstantsMap Shader::myConstansMap;
 	bool Shader::myConstantsMapInitialized = false;
 
@@ -29,7 +62,7 @@ namespace vrv
 		: myType(type)
 		, myFileName(fileName)
 		, myInitialized(false)
-		, myIsCompiled(false)		
+		, myIsCompiled(false)
 	{
 		if (!myConstantsMapInitialized)
 		{
@@ -39,14 +72,14 @@ namespace vrv
 			addShaderUniformConstant("vrv_halfPi", 1.5707963267949f);
 			myConstantsMapInitialized = true;
 		}
-		//std::ifstream shaderFile;
-		//shaderFile.open(fileName.c_str());
-		//std::stringstream shaderStream;
-		//shaderStream << shaderFile.rdbuf();
-		//shaderFile.close();
-		//mySource = shaderStream.str();
+		std::ifstream shaderFile;
+		shaderFile.open(fileName.c_str());
+		std::stringstream shaderStream;
+		shaderStream << shaderFile.rdbuf();
+		shaderFile.close();
+		mySource = shaderStream.str();
 
-		mySource = "void main()\n{\n}\n";
+		//mySource = "void main()\n{\n}\n";
 	}
 
 	void Shader::addVertexAttribute(ShaderAttribute* attribute)
@@ -88,18 +121,32 @@ namespace vrv
 			for (; itor2 != myVertexAttributesMap.end(); ++itor2)
 			{
 				std::stringstream ss;
-				ss << "in " << itor2->second->typeToString() << " " << itor2->first << std::endl;
+				ss << "in " << itor2->second->typeToString() << " " << itor2->first << ";" << std::endl;
 				finalString += ss.str();
 			}
-			
+
 			finalString += "\n";
 			finalString += mySource;
+			std::ofstream os;
+			if (myType == VertexShader)
+			{
+				os.open("output.vert");
+				os << finalString;
+				os.close();
+			}
+			else if (myType == FragmentShader)
+			{
+				os.open("output.frag");
+				os << finalString;
+				os.close();
+			}
+
 			const GLchar* src = finalString.c_str();
 			glShaderSource(myID, 1, &src, 0);
 
 			myInitialized = true;
 		}
-		
+
 	}
 
 	void Shader::compile()

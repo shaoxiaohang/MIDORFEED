@@ -18,25 +18,33 @@ namespace vrv
 		unsigned int myLocation;
 	};
 
-	template <typename T>
-	class ShaderAttributeImpl : public ShaderAttribute
+	class ShaderAttributeInt : public ShaderAttribute
 	{
 	public:
-		ShaderAttributeImpl(std::string name,unsigned int location)
-			: ShaderAttribute(name, location)
-		{}
-		virtual std::string typeToString()
-		{
-			return typeid(T).name();
-		}
-	protected:
-		T myType;
+		ShaderAttributeInt(std::string name, unsigned int location);
+		std::string typeToString();
 	};
 
-	typedef ShaderAttributeImpl<int> ShaderAttributeInt;
-	typedef ShaderAttributeImpl<float> ShaderAttributefloat;
-	typedef ShaderAttributeImpl<Vector3f> ShaderAttributeVector3f;
-	typedef ShaderAttributeImpl<Vector4f> ShaderAttributeVector4f;
+	class ShaderAttributefloat : public ShaderAttribute
+	{
+	public:
+		ShaderAttributefloat(std::string name, unsigned int location);
+		std::string typeToString();
+	};
+
+	class ShaderAttributeVector3f : public ShaderAttribute
+	{
+	public:
+		ShaderAttributeVector3f(std::string name, unsigned int location);
+		std::string typeToString();
+	};
+
+	class ShaderAttributeVector4f : public ShaderAttribute
+	{
+	public:
+		ShaderAttributeVector4f(std::string name, unsigned int location);
+		std::string typeToString();
+	};
 
 	class Shader
 	{
