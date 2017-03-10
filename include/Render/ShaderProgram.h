@@ -12,13 +12,13 @@ namespace vrv
 		bool operator< (const ShaderProgram& pro);
 		bool operator> (const ShaderProgram& pro);
 
+		Shader* vertexShader();
+		Shader* fragmentShader();
 		static bool checkProgramLinkStatus(unsigned int id,std::string& error);
 		void link();
 	protected:
 		unsigned int myID;
 		Shader* myVertShader;
 		Shader* myFragShader;
-		unsigned int myVertID;
-		unsigned int myFragID;
 	};
 }

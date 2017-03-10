@@ -5,69 +5,110 @@
 #include <GL/glew.h>
 namespace vrv
 {
+	
+
+	ShaderAttribute::ShaderAttribute(std::string name, unsigned int location)
+		: myName(name)
+		, myLocation(location)
+	{}
+
+	unsigned int ShaderAttribute::location()
+	{
+		return myLocation;
+	}
+
+	const std::string& ShaderAttribute::name()
+	{
+		return myName;
+	}
+
 	Shader::ConstantsMap Shader::myConstansMap;
-	bool Shader::myInitialized = false;
+	bool Shader::myConstantsMapInitialized = false;
 
 	Shader::Shader(ShaderType type, const std::string& fileName)
 		: myType(type)
 		, myFileName(fileName)
+		, myInitialized(false)
+		, myIsCompiled(false)		
 	{
-		if (!myInitialized)
+		if (!myConstantsMapInitialized)
 		{
 			addShaderUniformConstant("vrv_pi", 3.14159265358979f);
 			addShaderUniformConstant("vrv_oneOverPi", 0.318309886183791f);
 			addShaderUniformConstant("vrv_twoPi", 6.28318530717959f);
 			addShaderUniformConstant("vrv_halfPi", 1.5707963267949f);
-			myInitialized = true;
+			myConstantsMapInitialized = true;
 		}
-		std::ifstream shaderFile;
-		shaderFile.open(fileName.c_str());
-		std::stringstream shaderStream;
-		shaderStream << shaderFile.rdbuf();
-		shaderFile.close();
-		mySource = shaderStream.str();
+		//std::ifstream shaderFile;
+		//shaderFile.open(fileName.c_str());
+		//std::stringstream shaderStream;
+		//shaderStream << shaderFile.rdbuf();
+		//shaderFile.close();
+		//mySource = shaderStream.str();
 
+		mySource = "void main()\n{\n}\n";
 	}
 
-	unsigned int Shader::createShader()
+	void Shader::addVertexAttribute(ShaderAttribute* attribute)
 	{
-		unsigned int id = glCreateShader(toGLEnum());
-		std::size_t pos = mySource.find_first_of("\n\t");
-		const std::string& firstLine = mySource.substr(0, pos+1);
+		if (attribute)
+		{
+			if (myVertexAttributesMap.find(attribute->name()) == myVertexAttributesMap.end())
+			{
+				myVertexAttributesMap.insert(std::make_pair(attribute->name(), attribute));
+			}
+		}
+	}
 
-		bool hasGLVersionDefine = false;
-		if (firstLine.find("#version") != std::string::npos)
+	void Shader::initialize()
+	{
+		if (!myInitialized)
 		{
-			hasGLVersionDefine = true;
-			mySource = mySource.substr(pos+1);
-		}
+			myID = glCreateShader(toGLEnum());
+			std::size_t pos = mySource.find_first_of("\n\t");
+			const std::string& firstLine = mySource.substr(0, pos + 1);
 
-		static const std::string version = "#version 330\n\n";
-		std::string finalString = version;
-		ConstantsMap::const_iterator itor = myConstansMap.begin();
-		for (; itor != myConstansMap.end(); ++itor)
-		{
-			std::stringstream ss;
-			ss << "#define	" << itor->first << "	" << itor->second << std::endl;
-			finalString += ss.str();
-		}
-		finalString += "\n";
-		finalString += mySource;
-		std::ofstream ofs;
-		if (myType == VertexShader)
-		{
-			ofs.open("output.vert");
-		}
-		else
-		{
-			ofs.open("output.frag");
+			bool hasGLVersionDefine = false;
+			if (firstLine.find("#version") != std::string::npos)
+			{
+				hasGLVersionDefine = true;
+				mySource = mySource.substr(pos + 1);
+			}
+
+			static const std::string version = "#version 330\n\n";
+			std::string finalString = version;
+			ConstantsMap::const_iterator itor1 = myConstansMap.begin();
+			for (; itor1 != myConstansMap.end(); ++itor1)
+			{
+				std::stringstream ss;
+				ss << "#define	" << itor1->first << "	" << itor1->second << std::endl;
+				finalString += ss.str();
+			}
+			VertexAttributesMap::const_iterator itor2 = myVertexAttributesMap.begin();
+			for (; itor2 != myVertexAttributesMap.end(); ++itor2)
+			{
+				std::stringstream ss;
+				ss << "in " << itor2->second->typeToString() << " " << itor2->first << std::endl;
+				finalString += ss.str();
+			}
+			
+			finalString += "\n";
+			finalString += mySource;
+			const GLchar* src = finalString.c_str();
+			glShaderSource(myID, 1, &src, 0);
+
+			myInitialized = true;
 		}
 		
-		ofs << finalString;
-		ofs.close();
-		const GLchar* src = finalString.c_str();
-		glShaderSource(id, 1, &src, 0);
-		return id;
+	}
+
+	void Shader::compile()
+	{
+		if (!myIsCompiled)
+		{
+			glCompileShader(myID);
+			myIsCompiled = true;
+		}
 	}
 
 	bool Shader::checkCompileStatus(unsigned int id, std::string& error)
@@ -84,7 +125,7 @@ namespace vrv
 			delete[] str;
 			return false;
 		}
-		return true;		
+		return true;
 	}
 
 	void Shader::addShaderUniformConstant(const std::string& name, float value)
@@ -98,6 +139,11 @@ namespace vrv
 	const std::string Shader::name()
 	{
 		return myFileName;
+	}
+
+	unsigned int Shader::ID()
+	{
+		return myID;
 	}
 
 	unsigned int Shader::toGLEnum()

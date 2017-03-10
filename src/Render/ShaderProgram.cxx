@@ -9,6 +9,8 @@ namespace vrv
 	{
 		myVertShader = new Shader(Shader::VertexShader, vertFile);
 		myFragShader = new Shader(Shader::FragmentShader, fragFile);
+		myVertShader->addVertexAttribute(new ShaderAttributeInt("alpha",0));
+		myVertShader->addVertexAttribute(new ShaderAttributeVector3f("position", 1));
 	}
 
 	ShaderProgram::ShaderProgram(const Shader* vert, const Shader* frag)
@@ -22,6 +24,16 @@ namespace vrv
 		delete myVertShader;
 		delete myFragShader;
 		glDeleteProgram(myID);
+	}
+
+	Shader* ShaderProgram::vertexShader()
+	{
+		return myVertShader;
+	}
+
+	Shader* ShaderProgram::fragmentShader()
+	{
+		return myFragShader;
 	}
 
 	bool ShaderProgram::operator < (const ShaderProgram& pro)
@@ -53,27 +65,27 @@ namespace vrv
 	void ShaderProgram::link()
 	{
 		myID = glCreateProgram();
-		myVertID = myVertShader->createShader();
-		myFragID = myFragShader->createShader();
-		glCompileShader(myVertID);
+		myVertShader->initialize();
+		myFragShader->initialize();
+		myVertShader->compile();
 		std::string info;
-		if (!Shader::checkCompileStatus(myVertID, info))
+		if (!Shader::checkCompileStatus(myVertShader->ID(), info))
 		{
 			std::stringstream ss;
 			ss << myVertShader->name() << " comiling failed" << std::endl;
 			ss << info << std::endl;
 			VRV_ERROR(ss.str());
 		}
-		glCompileShader(myFragID);
-		if (!Shader::checkCompileStatus(myFragID,info))
+		myFragShader->compile();
+		if (!Shader::checkCompileStatus(myFragShader->ID(), info))
 		{
 			std::stringstream ss;
 			ss << myFragShader->name() << " comiling failed" << std::endl;
 			ss << info << std::endl;
 			VRV_ERROR(ss.str());
 		}
-		glAttachShader(myID, myVertID);
-		glAttachShader(myID, myFragID);
+		glAttachShader(myID, myVertShader->ID());
+		glAttachShader(myID, myFragShader->ID());
 		glLinkProgram(myID);
 		if (!checkProgramLinkStatus(myID,info))
 		{
