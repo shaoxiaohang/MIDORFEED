@@ -72,8 +72,8 @@ namespace vrv
 			ss << info << std::endl;
 			VRV_ERROR(ss.str());
 		}
-		glAttachShader(GL_VERTEX_SHADER, myVertID);
-		glAttachShader(GL_FRAGMENT_SHADER, myFragID);
+		glAttachShader(myID, myVertID);
+		glAttachShader(myID, myFragID);
 		glLinkProgram(myID);
 		if (!checkProgramLinkStatus(myID,info))
 		{

@@ -5,6 +5,7 @@
 
 #include <Render/GLFWGraphicsWindow.h>
 #include <Render/ShaderProgram.h>
+#include <Core/UsefulMarco.h>
 
 namespace vrv
 {
@@ -35,10 +36,14 @@ namespace vrv
 			if (!myGLEWInitialized)
 			{
 				window->makeContexCurrent();
-				glewExperimental = true;
+				glewExperimental = GL_TRUE;
 				if (glewInit() == GLEW_OK)
 				{
 					myGLEWInitialized = true;
+				}
+				else
+				{
+					VRV_ERROR("glew initialized failed!")
 				}
 			}
 			return window;
