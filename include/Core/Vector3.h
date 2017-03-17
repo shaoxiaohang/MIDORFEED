@@ -7,7 +7,7 @@ namespace vrv
 	{
 	public:
 		Vector3(){}
-		Vector3(T _x, T _y, T _z, T _w)
+		Vector3(T _x, T _y, T _z)
 			: x(_x)
 			, y(_y)
 			, z(_z)
