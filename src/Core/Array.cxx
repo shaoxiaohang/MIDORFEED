@@ -14,6 +14,11 @@ namespace vrv
 			myBaseTypeCount = 1;
 			mySizeInBytes = mySize*myBaseTypeCount*sizeof(int);
 			break;
+		case vrv::Array::UNSIGNED_INT:
+			glType = GL_UNSIGNED_INT;
+			myBaseTypeCount = 1;
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(int);
+			break;
 		case vrv::Array::FLOAT:
 			glType = GL_FLOAT;
 			myBaseTypeCount = 1;
@@ -58,6 +63,11 @@ namespace vrv
 		return mySizeInBytes;
 	}
 
+	Array::DataType Array::dataType()
+	{
+		return myDataType;
+	}
+
 	ArrayInt::ArrayInt(unsigned int size)
 		: Array(Array::INT,size)
 	{
@@ -70,6 +80,22 @@ namespace vrv
 	}
 
 	int& ArrayInt::operator[](unsigned int i)
+	{
+		return myData[i];
+	}
+
+	ArrayUnsignedInt::ArrayUnsignedInt(unsigned int size)
+		: Array(Array::UNSIGNED_INT, size)
+	{
+		myData.resize(size);
+	}
+
+	const void* ArrayUnsignedInt::dataPointer() const
+	{
+		return &myData[0];
+	}
+
+	unsigned int& ArrayUnsignedInt::operator[](unsigned int i)
 	{
 		return myData[i];
 	}

@@ -64,6 +64,11 @@ namespace vrv
 		}
 	}
 
+	Drawable::Drawable()
+		: myBuildGeometry(false)
+		, myDrawState(0)
+	{}
+
 	DrawState* Drawable::drawState()
 	{
 		return myDrawState;
@@ -76,11 +81,6 @@ namespace vrv
 
 	void Drawable::drawImplementation()
 	{
-		if (myBuildGeometry == false)
-		{
-			buildGeometry();
-			myBuildGeometry = true;
-		}
 		myDrawState->bind();
 		for (unsigned int i = 0; i < myPrimitiveSets.size();++i)
 		{
@@ -106,9 +106,40 @@ namespace vrv
 		myPrimitiveSets.push_back(PrimitiveSet(pri, start, cout));
 	}
 
-	void Drawable::addPrimitiveSet(Primitive pri, unsigned int cout, PrimitiveSet::IndexType indexType)
+	void Drawable::addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType)
 	{
-		myPrimitiveSets.push_back(PrimitiveSet(pri, cout, indexType));
+		PrimitiveSet::IndexType type;
+		switch (indexType)
+		{
+		case vrv::Array::INT:
+		case vrv::Array::UNSIGNED_INT:
+			type = PrimitiveSet::IndexType::UNSIGNED_INT;
+			break;
+		case vrv::Array::FLOAT:
+			break;
+		case vrv::Array::VEC2F:
+			break;
+		case vrv::Array::VEC3F:
+			break;
+		case vrv::Array::VEC4F:
+			break;
+		case vrv::Array::MAT3F:
+			break;
+		case vrv::Array::MAT4F:
+			break;
+		default:
+			break;
+		}
+		myPrimitiveSets.push_back(PrimitiveSet(pri, cout, type));
+	}
+
+	void Drawable::buildGeometryIfNeeded()
+	{
+		if (!myBuildGeometry)
+		{
+			buildGeometry();
+			myBuildGeometry = true;
+		}
 	}
 
 	void Drawable::createDrawState(VertexArrayObject* vao, Program* shader)

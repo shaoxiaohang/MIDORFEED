@@ -11,17 +11,8 @@ namespace vrv
 		myAttributes.push_back(vertexAttri);
 	}
 
-	void VertexBufferObject::bindVAO(VertexArrayObject* vao)
+	VertexBufferObject::VertexAttributesVector& VertexBufferObject::attributes()
 	{
-		vao->bind();
-		bind();
-		VertexAttributesVector::iterator begin = myAttributes.begin();
-		VertexAttributesVector::iterator end = myAttributes.end();
-		for (; begin != end; ++begin)
-		{
-			vao->bindVertexAttribute(*begin);
-		}
-		unbind();
-		vao->unbind();
+		return myAttributes;
 	}
 }

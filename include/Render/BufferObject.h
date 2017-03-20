@@ -24,8 +24,8 @@ namespace vrv
 		BufferObject(BufferTargetType type,BufferUsage usage = STATIC_DRAW);
 		~BufferObject();
 		virtual void copyFromSystemMemory(const Array* array);
-		virtual void bind();
-		virtual void unbind();
+		virtual void bind() ;
+		virtual void unbind() ;
 	protected:
 		BufferTargetType myType;
 		BufferUsage myUsage;

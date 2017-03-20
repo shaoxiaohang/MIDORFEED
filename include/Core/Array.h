@@ -13,6 +13,7 @@ namespace vrv
 		enum DataType
 		{
 			INT,
+			UNSIGNED_INT,
 			FLOAT,
 			VEC2F,
 			VEC3F,
@@ -24,6 +25,7 @@ namespace vrv
 		unsigned int size() const;
 		unsigned int sizeInBytes() const;
 		virtual const void* dataPointer() const = 0;
+		DataType dataType();
 	protected:
 		DataType myDataType;
 		unsigned int mySize;
@@ -40,6 +42,16 @@ namespace vrv
 		int& operator[](unsigned int i);
 	protected:
 		std::vector<int> myData;
+	};
+
+	class ArrayUnsignedInt : public Array
+	{
+	public:
+		ArrayUnsignedInt(unsigned int size);
+		virtual const void* dataPointer() const;
+		unsigned int& operator[](unsigned int i);
+	protected:
+		std::vector<unsigned int> myData;
 	};
 
 	class ArrayFloat : public Array

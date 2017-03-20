@@ -14,6 +14,7 @@ namespace vrv
 
 	void Context::draw(Drawable* drawable)
 	{
+		drawable->buildGeometryIfNeeded();
 		myCachedRenderState->applyIfChanged(drawable->drawState()->renderState());
 		drawable->drawImplementation();
 	}

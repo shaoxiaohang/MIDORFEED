@@ -4,6 +4,7 @@
 namespace vrv
 {
 	class VertexBufferObject;
+	class IndexBufferObject;
 	class VertexAttribute;
 	class VertexArrayObject
 	{
@@ -11,12 +12,16 @@ namespace vrv
 		VertexArrayObject();
 		void bind();
 		void unbind();
-		void bindVertexAttribute(VertexAttribute* att);
 		void enableVertexAttribute(unsigned int i);
 		void disableVertexAttribute(unsigned int i);
 		void bindVertexBufferObject(VertexBufferObject* vbo);
+		void bindIndexBufferObject(IndexBufferObject* ibo);
+		IndexBufferObject* indexBufferObject();
+	protected:
+		void bindVertexAttribute(VertexAttribute* att);
 	protected:
 		unsigned int myID;
 		std::vector<VertexBufferObject*> myVertexBufferObjects;
+		IndexBufferObject* myIndexBufferObject;
 	};
 }

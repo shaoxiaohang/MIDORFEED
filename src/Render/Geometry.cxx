@@ -2,6 +2,7 @@
 #include<Render/VertexArrayObject.h>
 #include<Render/VertexAttribute.h>
 #include<Render/VertexBufferObject.h>
+#include<Render/IndexBufferObject.h>
 #include<Render/Scene.h>
 namespace vrv
 {
@@ -35,10 +36,17 @@ namespace vrv
 		{
 			VertexArrayObject* vao = new VertexArrayObject();
 			VertexBufferObject* vbo = new VertexBufferObject();
+			IndexBufferObject* ibo = 0;
+			vbo->addVertexAttribute(new VertexAttributeVector3f("pos",0));
+			vbo->copyFromSystemMemory(myVertexArray);
+			vao->bindVertexBufferObject(vbo);
 			if (myIndexArray)
 			{
-				
+				ibo = new IndexBufferObject();
+				ibo->copyFromSystemMemory(myIndexArray);
+				vao->bindIndexBufferObject(ibo);
 			}
+			createDrawState(vao, Scene::instance().defaultProgram());
 		}
 	}
 }

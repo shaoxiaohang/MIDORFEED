@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <Core/Array.h>
 namespace vrv
 {
 	class DrawState;
@@ -10,6 +11,7 @@ namespace vrv
 	class Drawable
 	{
 	public:
+		Drawable();
 		enum Primitive
 		{
 			POINTS,
@@ -44,10 +46,11 @@ namespace vrv
 		};
 	public:
 		DrawState* drawState();
-		const DrawState* drawState() const;
+		const DrawState* drawState() const;	
 		virtual void drawImplementation();
 		void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
-		void addPrimitiveSet(Primitive pri, unsigned int cout, PrimitiveSet::IndexType indexType);
+		void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType);
+		virtual void buildGeometryIfNeeded();
 		struct SortDrawable
 		{
 			bool operator()(const Drawable* left, const Drawable* right);

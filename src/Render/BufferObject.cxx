@@ -45,7 +45,6 @@ namespace vrv
 		//TODO cache the current bind target id in context
 		bind();
 		glBufferData(myGLType, array->sizeInBytes(), array->dataPointer(), myGLUsage);
-		unbind();
 	}
 
 	void BufferObject::bind()
