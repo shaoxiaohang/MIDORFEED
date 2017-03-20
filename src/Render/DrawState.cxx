@@ -1,6 +1,7 @@
 #include <Render/DrawState.h>
 #include <Render/RenderState.h>
 #include <Render/Program.h>
+#include <Render/VertexArrayObject.h>
 namespace vrv
 {
 	DrawState::DrawState(RenderState* state, VertexArrayObject* vao, Program* shader)
@@ -53,6 +54,18 @@ namespace vrv
 	Program* DrawState::program() const 
 	{
 		return myProgram;
+	}
+
+	void DrawState::bind()
+	{
+		myVertexArrayObject->bind();
+		myProgram->use();
+	}
+
+	void DrawState::unbind()
+	{
+		myVertexArrayObject->unbind();
+		myProgram->unuse();
 	}
 
 	bool DrawState::operator< (const DrawState& state) const

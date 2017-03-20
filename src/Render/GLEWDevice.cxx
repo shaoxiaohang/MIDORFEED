@@ -46,6 +46,10 @@ namespace vrv
 					VRV_ERROR("glew initialized failed!")
 				}
 			}
+			if (myGLEWInitialized)
+			{
+				window->createContext();
+			}
 			return window;
 		}
 		else

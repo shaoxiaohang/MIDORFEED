@@ -25,6 +25,9 @@ namespace vrv
 
 		bool operator < (const DrawState& state) const;
 
+		void bind();
+		void unbind();
+
 	protected:
 		RenderState* myRenderState;
 		VertexArrayObject* myVertexArrayObject;

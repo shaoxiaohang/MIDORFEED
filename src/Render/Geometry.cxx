@@ -17,6 +17,7 @@ namespace vrv
 		myVertexArray = array;
 		VertexArrayObject* vao = new VertexArrayObject();
 		VertexBufferObject* vbo = new VertexBufferObject();
+		vbo->copyFromSystemMemory(array);
 		vbo->addVertexAttribute(new VertexAttributeVector3f("pos",Geometry::VertexAttLocation::POSITION));
 		vao->bindVertexBufferObject(vbo);
 		createDrawState(vao, Scene::instance().defaultProgram());

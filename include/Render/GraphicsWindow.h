@@ -25,6 +25,7 @@ namespace vrv
 		virtual void makeContexCurrent() = 0;
 		virtual void pullEvents() = 0;
 		virtual Context* context();
+		virtual void createContext();
 
 	protected:
 

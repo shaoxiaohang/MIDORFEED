@@ -3,7 +3,6 @@
 #include <Core/Array.h>
 namespace vrv
 {
-	class VertexBufferObject;
 	class VertexAttribute
 	{
 	public:
@@ -25,7 +24,6 @@ namespace vrv
 		bool myNormalized;
 		unsigned int myStride;
 		unsigned int myOffset;
-		VertexBufferObject* myBufferObject;
 	};
 
 	class VertexAttributeInt : public VertexAttribute

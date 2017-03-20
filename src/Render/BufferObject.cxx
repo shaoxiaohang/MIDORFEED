@@ -18,6 +18,20 @@ namespace vrv
 		default:
 			break;
 		}
+		switch (myUsage)
+		{
+		case vrv::BufferObject::STATIC_DRAW:
+			myGLUsage = GL_STATIC_DRAW;
+			break;
+		case vrv::BufferObject::DYNAMIC_DRAW:
+			myGLUsage = GL_DYNAMIC_DRAW;
+			break;
+		case vrv::BufferObject::STREAM_DRAW:
+			myGLUsage = GL_STREAM_DRAW;
+			break;
+		default:
+			break;
+		}
 		glGenBuffers(1, &myID);
 	}
 
@@ -30,7 +44,7 @@ namespace vrv
 	{
 		//TODO cache the current bind target id in context
 		bind();
-		glBufferData(myGLType, array->sizeInBytes(), array->dataPointer(), myUsage);
+		glBufferData(myGLType, array->sizeInBytes(), array->dataPointer(), myGLUsage);
 		unbind();
 	}
 
@@ -44,5 +58,5 @@ namespace vrv
 		glBindBuffer(myGLType, 0);
 	}
 
-	
+
 }

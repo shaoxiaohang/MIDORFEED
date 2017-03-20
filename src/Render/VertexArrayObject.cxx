@@ -23,15 +23,11 @@ namespace vrv
 	}
 	void VertexArrayObject::enableVertexAttribute(unsigned int i)
 	{
-		bind();
 		glEnableVertexAttribArray(i);
-		unbind();
 	}
 	void VertexArrayObject::disableVertexAttribute(unsigned int i)
 	{
-		bind();
 		glDisableVertexAttribArray(i);
-		unbind();
 	}
 
 	void VertexArrayObject::bindVertexBufferObject(VertexBufferObject* vbo)

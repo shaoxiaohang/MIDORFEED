@@ -10,6 +10,7 @@ namespace vrv
 
 	Node::Node(const std::string& name)
 		: myName(name)
+		, myParent(0)
 	{
 
 	}

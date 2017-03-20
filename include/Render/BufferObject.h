@@ -29,6 +29,7 @@ namespace vrv
 	protected:
 		BufferTargetType myType;
 		BufferUsage myUsage;
+		unsigned int myGLUsage;
 		unsigned int myGLType;
 		unsigned int myID;
 	};

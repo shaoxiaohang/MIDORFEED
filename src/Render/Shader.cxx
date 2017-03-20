@@ -25,6 +25,10 @@ namespace vrv
 		}
 		std::ifstream shaderFile;
 		shaderFile.open(fileName.c_str());
+		if (shaderFile.fail())
+		{
+			VRV_ERROR("failt to open " + fileName);
+		}
 		std::stringstream shaderStream;
 		shaderStream << shaderFile.rdbuf();
 		shaderFile.close();

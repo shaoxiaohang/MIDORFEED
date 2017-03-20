@@ -2,12 +2,14 @@
 #include <Render/RenderState.h>
 #include <Render/Drawable.h>
 #include <Render/DrawState.h>
+#include <Render/ClearState.h>
 namespace vrv
 {
 	Context::Context()
 		: myCachedRenderState(new RenderState())
+		, myCachedClearState(new ClearState())
 	{
-		forceSynRenderState();
+		forceSynGL();
 	}
 
 	void Context::draw(Drawable* drawable)
@@ -16,8 +18,15 @@ namespace vrv
 		drawable->drawImplementation();
 	}
 
-	void Context::forceSynRenderState()
+	void Context::forceSynGL()
 	{
 		myCachedRenderState->apply();
+		myCachedClearState->apply();
+	}
+
+	void Context::clear(ClearState* clear)
+	{
+		myCachedClearState->applyIfChanged(*clear);
+		myCachedClearState->clear();
 	}
 }

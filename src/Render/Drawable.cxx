@@ -1,5 +1,7 @@
 #include <Render/Drawable.h>
 #include <Render/DrawState.h>
+#include <Render/Program.h>
+#include <Render/VertexArrayObject.h>
 #include <GL/glew.h>
 namespace vrv
 {
@@ -44,10 +46,12 @@ namespace vrv
 
 	void Drawable::drawImplementation()
 	{
+		myDrawState->bind();
 		for (unsigned int i = 0; i < myPrimitiveSets.size();++i)
 		{
 			glDrawArrays(myPrimitiveSets[i].myGLType, myPrimitiveSets[i].myStart, myPrimitiveSets[i].myCount);
 		}
+		myDrawState->unbind();
 	}
 	
 	void Drawable::addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout)

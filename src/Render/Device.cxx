@@ -2,7 +2,5 @@
 namespace vrv
 {
 	Device::Device()
-	{
-
-	}
+	{}
 }

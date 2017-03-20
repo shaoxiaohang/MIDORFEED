@@ -1,5 +1,5 @@
 #version 330
-in vec pos;
+layout (location = 0) in vec3 pos;
 
 void main()
 {

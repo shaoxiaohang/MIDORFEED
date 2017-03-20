@@ -61,7 +61,7 @@ namespace vrv
 	ArrayInt::ArrayInt(unsigned int size)
 		: Array(Array::INT,size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	const void* ArrayInt::dataPointer() const
@@ -77,7 +77,7 @@ namespace vrv
 	ArrayFloat::ArrayFloat(unsigned int size)
 		: Array(Array::FLOAT, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	const void* ArrayFloat::dataPointer() const
@@ -93,7 +93,7 @@ namespace vrv
 	ArrayVec2::ArrayVec2(unsigned int size)
 		: Array(Array::VEC2F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	const void* ArrayVec2::dataPointer() const
@@ -109,7 +109,7 @@ namespace vrv
 	ArrayVec3::ArrayVec3(unsigned int size)
 		: Array(Array::VEC3F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	const void* ArrayVec3::dataPointer() const
@@ -125,7 +125,7 @@ namespace vrv
 	ArrayVec4::ArrayVec4(unsigned int size)
 		: Array(Array::VEC4F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	const void* ArrayVec4::dataPointer() const
@@ -141,7 +141,7 @@ namespace vrv
 	ArrayMat3::ArrayMat3(unsigned int size)
 		: Array(Array::MAT3F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	const void* ArrayMat3::dataPointer() const
@@ -157,7 +157,7 @@ namespace vrv
 	ArrayMat4::ArrayMat4(unsigned int size)
 		: Array(Array::MAT4F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	const void* ArrayMat4::dataPointer() const

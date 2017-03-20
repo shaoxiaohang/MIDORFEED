@@ -9,6 +9,7 @@ namespace vrv
 	class Drawable;
 	class Program;
 	class Context;
+	class ClearState;
 	class Scene : public Singleton<Scene>
 	{
 	public:
@@ -27,6 +28,7 @@ namespace vrv
 		Node* myRoot;
 		Program* myDefaultProgram;
 		Context* myContext;
+		ClearState* myClearState;
 		RenderList myRenderlist;
 	};
 }

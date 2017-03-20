@@ -49,7 +49,6 @@ namespace vrv
 	bool GLFWGraphicsWindow::initialize()
 	{
 		myGLFWwindow = glfwCreateWindow(myConfiguration.width, myConfiguration.height, myConfiguration.title.c_str(), 0, 0);
-		myContext = new Context();
 		return myGLFWwindow ? true : false;
 	}
 }

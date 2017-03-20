@@ -25,6 +25,8 @@ namespace vrv
 		static bool checkProgramLinkStatus(unsigned int id,std::string& error);
 		static Uniform* createUniform(std::string name, Uniform::UniformType type);
 		void updateUniforms();
+		void use();
+		void unuse();
 	protected:
 		void populateUniforms();
 		void populateAutomaticUniforms();

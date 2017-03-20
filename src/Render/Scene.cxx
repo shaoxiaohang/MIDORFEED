@@ -4,6 +4,7 @@
 #include <Render/GLEWDevice.h>
 #include <Render/Program.h>
 #include <Render/Context.h>
+#include <Render/ClearState.h>
 #include <algorithm>
 namespace vrv
 {
@@ -13,8 +14,9 @@ namespace vrv
 		: myContext(context)
 		, myRoot(0)
 	{
-		myDefaultProgram = GLEWDevice::instance().createProgram("../data/shader/default.vert", "./data/shader/default.frag");
+		myDefaultProgram = GLEWDevice::instance().createProgram("../data/shader/default.vert", "../data/shader/default.frag");
 		myDefaultProgram->link();
+		myClearState = new ClearState();
 	}
 
 	void Scene::setSceneData(Node* root)
@@ -44,6 +46,7 @@ namespace vrv
 
 	void Scene::renderScene()
 	{
+		myContext->clear(myClearState);
 		cullTraverse();
 		std::sort(myRenderlist.begin(), myRenderlist.end(), Drawable::SortDrawable());
 		RenderList::iterator itor = myRenderlist.begin();

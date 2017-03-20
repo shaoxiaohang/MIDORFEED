@@ -16,6 +16,7 @@ int main(int argc, char** argv)
 	pos[2] = Vector3f(0, 0.5, 0);
 	triangle->setVertexArray(&pos);
 	triangle->addPrimitiveSet(Drawable::TRIANGLES, 0, 3);
+	node->addDrawable(triangle);
 
 	viewer->setSceneData(node);
 	viewer->run();

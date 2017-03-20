@@ -8,6 +8,7 @@ namespace vrv
 		, myType(type)
 		, myNormalized(false)
 		, myStride(0)
+		, myOffset(0)
 	{
 		switch (myType)
 		{

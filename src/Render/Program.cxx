@@ -117,6 +117,16 @@ namespace vrv
 		}
 	}
 
+	void Program::use()
+	{
+		glUseProgram(myID);
+	}
+
+	void Program::unuse()
+	{
+		glUseProgram(0);
+	}
+
 	void Program::link()
 	{
 		myID = glCreateProgram();

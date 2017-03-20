@@ -1,5 +1,5 @@
 #include<Render/GraphicsWindow.h>
-
+#include<Render/Context.h>
 namespace vrv
 {
 	WindowConfiguration::WindowConfiguration(int _width, int _height, const std::string& _title)
@@ -16,6 +16,11 @@ namespace vrv
 	Context* GraphicsWindow::context()
 	{
 		return myContext;
+	}
+
+	void GraphicsWindow::createContext()
+	{
+		myContext = new Context();
 	}
 }
 
