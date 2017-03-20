@@ -24,7 +24,8 @@ namespace vrv
 		virtual void setVertexArray(Array* array);
 		virtual void setNomralArray(Array* array, VertexBinding binding = PerVertex);
 		virtual void setIndexArray(Array* array);
-
+	protected:
+		virtual void buildGeometry();
 	protected:
 		Array* myVertexArray;
 		Array* myNormalArray;

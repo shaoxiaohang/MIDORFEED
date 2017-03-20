@@ -4,6 +4,12 @@
 #include <Render/VertexArrayObject.h>
 namespace vrv
 {
+	DrawState::DrawState()
+		: myRenderState(0)
+		, myVertexArrayObject(0)
+		, myProgram(0)
+	{}
+
 	DrawState::DrawState(RenderState* state, VertexArrayObject* vao, Program* shader)
 		: myRenderState(state)
 		, myVertexArrayObject(vao)

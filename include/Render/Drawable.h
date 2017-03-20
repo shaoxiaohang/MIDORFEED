@@ -19,25 +19,44 @@ namespace vrv
 		};
 		struct PrimitiveSet
 		{
+			enum RenderApproach
+			{
+				DRAW_ARRAYS,
+				DRAW_ELEMENTS
+			};
+			enum IndexType
+			{
+				UNSIGNED_BYTE,
+				UNSIGNED_SHORT,
+				UNSIGNED_INT
+			};
 			PrimitiveSet(Primitive pri, unsigned int start, unsigned int count);
+			PrimitiveSet(Primitive pri, unsigned int count, IndexType type = UNSIGNED_INT);
 			Primitive myPrimitive;
 			unsigned int myStart;
 			unsigned int myCount;
-			unsigned int myGLType;
+			unsigned int myGLPrimitiveType;
+			IndexType myIndexType;
+			unsigned int myGLIndexType;
+			RenderApproach myRenderApproach;
+			void mapToGLPrimitiveType();
+			void mapToGLIndexType();
 		};
 	public:
-		Drawable();
 		DrawState* drawState();
 		const DrawState* drawState() const;
 		virtual void drawImplementation();
 		void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
+		void addPrimitiveSet(Primitive pri, unsigned int cout, PrimitiveSet::IndexType indexType);
 		struct SortDrawable
 		{
 			bool operator()(const Drawable* left, const Drawable* right);
 		};
 	protected:
 		void createDrawState(VertexArrayObject* vao, Program* shader);
+		virtual void buildGeometry() = 0;
 	protected:
+		bool myBuildGeometry;
 		DrawState* myDrawState;
 		std::vector<PrimitiveSet> myPrimitiveSets;
 	};
