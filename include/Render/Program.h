@@ -2,28 +2,28 @@
 #include<string>
 #include<vector>
 #include<map>
-#include<Render/ShaderUniform.h>
+#include<Render/Uniform.h>
 namespace vrv
 {
 	class Shader;
-	class ShaderProgram
+	class Program
 	{
 	public:
-		typedef std::map<std::string, ShaderUniform*> UniformMap;
+		typedef std::map<std::string, Uniform*> UniformMap;
 		typedef std::map<std::string, AutomaticUniform*> AutomaticUniformMap;
 		typedef std::map<std::string, AutomaticUniformFactory*> AutomaticUniformFactoryMap;
 	public:
-		ShaderProgram(const std::string& vertFile, const std::string& fragFile);
-		ShaderProgram(const Shader* vert, const Shader* frag);
-		~ShaderProgram();
-		bool operator< (const ShaderProgram& pro);
-		bool operator> (const ShaderProgram& pro);
+		Program(const std::string& vertFile, const std::string& fragFile);
+		Program(const Shader* vert, const Shader* frag);
+		~Program();
+		bool operator< (const Program& pro);
+		bool operator> (const Program& pro);
 
 		Shader* vertexShader();
 		Shader* fragmentShader();
 		void link();
 		static bool checkProgramLinkStatus(unsigned int id,std::string& error);
-		static ShaderUniform* createUniform(std::string name, ShaderUniform::UniformType type);
+		static Uniform* createUniform(std::string name, Uniform::UniformType type);
 		void updateUniforms();
 	protected:
 		void populateUniforms();

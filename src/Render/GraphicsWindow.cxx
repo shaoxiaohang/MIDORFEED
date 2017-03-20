@@ -12,5 +12,10 @@ namespace vrv
 		: myConfiguration(configuration)
 		, myContext(0)
 	{}
+
+	Context* GraphicsWindow::context()
+	{
+		return myContext;
+	}
 }
 

@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <Render/GLFWGraphicsWindow.h>
-#include <Render/ShaderProgram.h>
+#include <Render/Program.h>
 #include <Core/UsefulMarco.h>
 
 namespace vrv
@@ -55,8 +55,8 @@ namespace vrv
 		}
 	}
 
-	ShaderProgram* GLEWDevice::createShaderProgram(const std::string& vertFile, const std::string& fragFile)
+	Program* GLEWDevice::createProgram(const std::string& vertFile, const std::string& fragFile)
 	{
-		return new ShaderProgram(vertFile, fragFile);
+		return new Program(vertFile, fragFile);
 	}
 }

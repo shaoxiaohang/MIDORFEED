@@ -24,6 +24,7 @@ namespace vrv
 		virtual void swapBuffer() = 0;
 		virtual void makeContexCurrent() = 0;
 		virtual void pullEvents() = 0;
+		virtual Context* context();
 
 	protected:
 

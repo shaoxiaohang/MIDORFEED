@@ -130,11 +130,11 @@ namespace vrv
 		myDepthTest.apply();
 	}
 
-	void RenderState::applyIfChanged(const RenderState& state)
+	void RenderState::applyIfChanged(RenderState* state)
 	{
-		if (myDepthTest != state.myDepthTest)
+		if (myDepthTest != state->myDepthTest)
 		{
-			myDepthTest = state.myDepthTest;
+			myDepthTest = state->myDepthTest;
 			myDepthTest.apply();
 		}
 	}

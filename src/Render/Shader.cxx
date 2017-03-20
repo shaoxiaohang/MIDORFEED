@@ -1,4 +1,5 @@
 #include <Render/Shader.h>
+#include <Render/VertexAttribute.h>
 #include <Core/UsefulMarco.h>
 #include <fstream>
 #include <sstream>
@@ -16,10 +17,10 @@ namespace vrv
 	{
 		if (!myConstantsMapInitialized)
 		{
-			addShaderUniformConstant("vrv_pi", 3.14159265358979f);
-			addShaderUniformConstant("vrv_oneOverPi", 0.318309886183791f);
-			addShaderUniformConstant("vrv_twoPi", 6.28318530717959f);
-			addShaderUniformConstant("vrv_halfPi", 1.5707963267949f);
+			addUniformConstant("vrv_pi", 3.14159265358979f);
+			addUniformConstant("vrv_oneOverPi", 0.318309886183791f);
+			addUniformConstant("vrv_twoPi", 6.28318530717959f);
+			addUniformConstant("vrv_halfPi", 1.5707963267949f);
 			myConstantsMapInitialized = true;
 		}
 		std::ifstream shaderFile;
@@ -32,7 +33,7 @@ namespace vrv
 		//mySource = "void main()\n{\n}\n";
 	}
 
-	void Shader::addVertexAttribute(ShaderAttribute* attribute)
+	void Shader::addVertexAttribute(VertexAttribute* attribute)
 	{
 		if (attribute)
 		{
@@ -71,7 +72,7 @@ namespace vrv
 			for (; itor2 != myVertexAttributesMap.end(); ++itor2)
 			{
 				std::stringstream ss;
-				ss << "in " << itor2->second->typeToGLString() << " " << itor2->first << ";" << std::endl;
+				ss << "in " << itor2->second->typeToGLSL() << " " << itor2->first << ";" << std::endl;
 				finalString += ss.str();
 			}
 
@@ -80,13 +81,13 @@ namespace vrv
 			std::ofstream os;
 			if (myType == VertexShader)
 			{
-				os.open("output.vert");
+				os.open("../userdata/output.vert");
 				os << finalString;
 				os.close();
 			}
 			else if (myType == FragmentShader)
 			{
-				os.open("output.frag");
+				os.open("../userdata/output.frag");
 				os << finalString;
 				os.close();
 			}
@@ -125,7 +126,7 @@ namespace vrv
 		return true;
 	}
 
-	void Shader::addShaderUniformConstant(const std::string& name, float value)
+	void Shader::addUniformConstant(const std::string& name, float value)
 	{
 		if (myConstansMap.find(name) == myConstansMap.end())
 		{

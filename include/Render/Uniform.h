@@ -8,8 +8,8 @@
 #include <Core/Matrix4.h>
 namespace vrv
 {
-	class ShaderProgram;
-	class ShaderUniform
+	class Program;
+	class Uniform
 	{
 	public:
 		enum UniformType
@@ -24,7 +24,7 @@ namespace vrv
 			FLOAT_MAT4
 		};
 		static UniformType mapGLToUniformType(unsigned int glenum);
-		ShaderUniform(const std::string& name, UniformType type);
+		Uniform(const std::string& name, UniformType type);
 		bool isDirty();	
 		virtual void synGL() = 0;
 
@@ -54,10 +54,10 @@ namespace vrv
 	};
 
 
-	class ShaderUniformBool : public ShaderUniform
+	class UniformBool : public Uniform
 	{
 	public:
-		ShaderUniformBool(const std::string& name);
+		UniformBool(const std::string& name);
 		bool set(bool value);
 		bool get(bool& value);
 		void synGL();
@@ -65,10 +65,10 @@ namespace vrv
 		bool myValue;
 	};
 
-	class ShaderUniformInt : public ShaderUniform
+	class UniformInt : public Uniform
 	{
 	public:
-		ShaderUniformInt(const std::string& name);
+		UniformInt(const std::string& name);
 		bool set(int value);
 		bool get(int& value);
 		void synGL();
@@ -76,10 +76,10 @@ namespace vrv
 		int myValue;
 	};
 
-	class ShaderUniformFloat : public ShaderUniform
+	class UniformFloat : public Uniform
 	{
 	public:
-		ShaderUniformFloat(const std::string& name);
+		UniformFloat(const std::string& name);
 		bool set(float value);
 		bool get(float& value);
 		void synGL();
@@ -87,10 +87,10 @@ namespace vrv
 		float myValue;
 	};
 
-	class ShaderUniformVec2f : public ShaderUniform
+	class UniformVec2f : public Uniform
 	{
 	public:
-		ShaderUniformVec2f(const std::string& name);
+		UniformVec2f(const std::string& name);
 		bool set(Vector2f value);
 		bool get(Vector2f& value);
 		void synGL();
@@ -98,10 +98,10 @@ namespace vrv
 		Vector2f myValue;
 	};
 
-	class ShaderUniformVec3f : public ShaderUniform
+	class UniformVec3f : public Uniform
 	{
 	public:
-		ShaderUniformVec3f(const std::string& name);
+		UniformVec3f(const std::string& name);
 		bool set(Vector3f value);
 		bool get(Vector3f& value);
 		void synGL();
@@ -109,10 +109,10 @@ namespace vrv
 		Vector3f myValue;
 	};
 
-	class ShaderUniformVec4f : public ShaderUniform
+	class UniformVec4f : public Uniform
 	{
 	public:
-		ShaderUniformVec4f(const std::string& name);
+		UniformVec4f(const std::string& name);
 		bool set(Vector4f value);
 		bool get(Vector4f& value);
 		void synGL();
@@ -120,10 +120,10 @@ namespace vrv
 		Vector4f myValue;
 	};
 
-	class ShaderUniformMat3f : public ShaderUniform
+	class UniformMat3f : public Uniform
 	{
 	public:
-		ShaderUniformMat3f(const std::string& name);
+		UniformMat3f(const std::string& name);
 		bool set(Matrix3f value);
 		bool get(Matrix3f& value);
 		void synGL();
@@ -131,10 +131,10 @@ namespace vrv
 		Matrix3f myValue;
 	};
 
-	class ShaderUniformMat4f : public ShaderUniform
+	class UniformMat4f : public Uniform
 	{
 	public:
-		ShaderUniformMat4f(const std::string& name);
+		UniformMat4f(const std::string& name);
 		bool set(Matrix4f value);
 		bool get(Matrix4f& value);
 		void synGL();
@@ -148,7 +148,7 @@ namespace vrv
 		AutomaticUniform(const std::string& name);
 		virtual void synGL() = 0;
 	protected:
-		ShaderUniform* myUniform;
+		Uniform* myUniform;
 		const std::string& myName;
 	};
 

@@ -2,12 +2,13 @@
 
 namespace vrv
 {
+	class Drawable;
 	class RenderState;
 	class Context
 	{
 	public:
 		Context();
-		void draw(const RenderState& renderState);
+		void draw(Drawable* renderState);
 		void forceSynRenderState();
 
 	protected:

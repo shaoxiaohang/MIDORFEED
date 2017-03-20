@@ -4,12 +4,12 @@
 #include <map>
 namespace vrv
 {
-	class ShaderAttribute;
+	class VertexAttribute;
 	class Shader
 	{
 	public:
 		typedef std::map<std::string, float> ConstantsMap;
-		typedef std::map<std::string, ShaderAttribute*> VertexAttributesMap;
+		typedef std::map<std::string, VertexAttribute*> VertexAttributesMap;
 
 		enum ShaderType
 		{
@@ -20,9 +20,9 @@ namespace vrv
 		Shader(ShaderType type,const std::string& fileName);
 		void initialize();
 		void compile();
-		virtual void addVertexAttribute(ShaderAttribute* attribute);
+		virtual void addVertexAttribute(VertexAttribute* attribute);
 		static bool checkCompileStatus(unsigned int id,std::string& error);
-		static void addShaderUniformConstant(const std::string& name, float value);
+		static void addUniformConstant(const std::string& name, float value);
 		const std::string name();
 		unsigned int ID();
 

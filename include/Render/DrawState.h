@@ -3,29 +3,32 @@
 namespace vrv
 {
 	class RenderState;
-	class VertexArray;
-	class ShaderProgram;
+	class VertexArrayObject;
+	class Program;
 	class DrawState
 	{
 	public:
-		DrawState(RenderState* state, VertexArray* vao, ShaderProgram* shader);
+		DrawState(RenderState* state, VertexArrayObject* vao, Program* shader);
+		DrawState(VertexArrayObject* vao, Program* shader);
 
 		void setRenderState(RenderState*);
 		RenderState* renderState();
 		RenderState* renderState() const;
 
-		void setVertexArray(VertexArray*);
-		VertexArray* vertexArray();
-		VertexArray* vertexArray() const;
+		void setVertexArrayObject(VertexArrayObject*);
+		VertexArrayObject* vertexArrayObject();
+		VertexArrayObject* vertexArrayObject() const;
 
-		void setShaderProgram(ShaderProgram*);
-		ShaderProgram* shaderProgram();
-		ShaderProgram* shaderProgram() const;
+		void setProgram(Program*);
+		Program* program();
+		Program* program() const;
+
+		bool operator < (const DrawState& state) const;
 
 	protected:
 		RenderState* myRenderState;
-		VertexArray* myVertexArray;
-		ShaderProgram* myShaderProgram;
+		VertexArrayObject* myVertexArrayObject;
+		Program* myProgram;
 	};
 
 	struct SortDrawState

@@ -7,11 +7,11 @@ namespace vrv
 {
 	class GLEWDevice : public Device, public Singleton<GLEWDevice>
 	{
-		friend class Application;
+		friend class Viewer;
 
 	public:
 		virtual GraphicsWindow* createGraphcisWindow(WindowConfiguration cofig);
-		virtual ShaderProgram* createShaderProgram(const std::string& vertFile, const std::string& fragFile);
+		virtual Program* createProgram(const std::string& vertFile, const std::string& fragFile);
 	protected:
 		GLEWDevice();
 		virtual bool initialize();

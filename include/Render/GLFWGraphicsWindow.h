@@ -6,6 +6,7 @@ struct GLFWwindow;
 
 namespace vrv
 {
+	class Context;
 	class GLFWGraphicsWindow : public GraphicsWindow
 	{
 		friend class GLEWDevice;
@@ -25,7 +26,7 @@ namespace vrv
 		virtual bool initialize();
 
 	protected:
-
+		Context* myContext;
 		GLFWwindow* myGLFWwindow;
 	};
 }

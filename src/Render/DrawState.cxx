@@ -1,13 +1,20 @@
 #include <Render/DrawState.h>
 #include <Render/RenderState.h>
-#include <Render/ShaderProgram.h>
+#include <Render/Program.h>
 namespace vrv
 {
-	DrawState::DrawState(RenderState* state, VertexArray* vao, ShaderProgram* shader)
+	DrawState::DrawState(RenderState* state, VertexArrayObject* vao, Program* shader)
 		: myRenderState(state)
-		, myVertexArray(vao)
-		, myShaderProgram(shader)
+		, myVertexArrayObject(vao)
+		, myProgram(shader)
 	{}
+
+	DrawState::DrawState(VertexArrayObject* vao, Program* shader)
+		: myVertexArrayObject(vao)
+		, myProgram(shader)
+	{
+		myRenderState = new RenderState();
+	}
 
 	void DrawState::setRenderState(RenderState* state)
 	{
@@ -22,45 +29,45 @@ namespace vrv
 		return myRenderState;
 	}
 
-	void DrawState::setVertexArray(VertexArray* vao)
+	void DrawState::setVertexArrayObject(VertexArrayObject* vao)
 	{
-		myVertexArray = vao;
+		myVertexArrayObject = vao;
 	}
-	VertexArray* DrawState::vertexArray()
+	VertexArrayObject* DrawState::vertexArrayObject()
 	{
-		return myVertexArray;
+		return myVertexArrayObject;
 	}
-	VertexArray* DrawState::vertexArray() const
+	VertexArrayObject* DrawState::vertexArrayObject() const
 	{
-		return myVertexArray;
-	}
-
-	void DrawState::setShaderProgram(ShaderProgram* shader)
-	{
-		myShaderProgram = shader;
-	}
-	ShaderProgram* DrawState::shaderProgram()
-	{
-		return myShaderProgram;
-	}
-	ShaderProgram* DrawState::shaderProgram() const 
-	{
-		return myShaderProgram;
+		return myVertexArrayObject;
 	}
 
-	bool SortDrawState::operator()(const DrawState& left, const DrawState& right)
+	void DrawState::setProgram(Program* shader)
 	{
-		if (*(left.shaderProgram()) < *(right.shaderProgram()))
+		myProgram = shader;
+	}
+	Program* DrawState::program()
+	{
+		return myProgram;
+	}
+	Program* DrawState::program() const 
+	{
+		return myProgram;
+	}
+
+	bool DrawState::operator< (const DrawState& state) const
+	{
+		if (*(myProgram) < *(state.program()))
 		{
 			return true;
 		}
-		if (*(left.shaderProgram()) > *(right.shaderProgram()))
+		if (*(myProgram) > *(state.program()))
 		{
 			return false;
 		}
-		
-		RenderState& leftRenderState = *(left.renderState());
-		RenderState& rightRenderState = *(right.renderState());
+
+		RenderState& leftRenderState = *myRenderState;
+		RenderState& rightRenderState = *(state.renderState());
 
 		if (leftRenderState.depthTest() < rightRenderState.depthTest())
 		{
@@ -72,4 +79,5 @@ namespace vrv
 		}
 		return true;
 	}
+
 }

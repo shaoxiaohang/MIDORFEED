@@ -1,14 +1,15 @@
-#include <Render/ShaderProgram.h>
+#include <Render/Program.h>
 #include <Render/Shader.h>
-#include <Render/ShaderAttribute.h>
+#include <Render/VertexAttribute.h>
 #include <Core/UsefulMarco.h>
 #include <sstream>
 #include <GL/glew.h>
 namespace vrv
 {
-	bool ShaderProgram::myAutomaticUniformsFactoryInitialized = false;
+	bool Program::myAutomaticUniformsFactoryInitialized = false;
+	Program::AutomaticUniformFactoryMap Program::myAutomaticUniformFactories;
 
-	ShaderProgram::ShaderProgram(const std::string& vertFile, const std::string& fragFile)
+	Program::Program(const std::string& vertFile, const std::string& fragFile)
 	{
 		if (myAutomaticUniformsFactoryInitialized == false)
 		{
@@ -17,43 +18,41 @@ namespace vrv
 		}
 		myVertShader = new Shader(Shader::VertexShader, vertFile);
 		myFragShader = new Shader(Shader::FragmentShader, fragFile);
-		myVertShader->addVertexAttribute(new ShaderAttributeInt("alpha",0));
-		myVertShader->addVertexAttribute(new ShaderAttributeVector3f("position", 1));
 	}
 
-	ShaderProgram::ShaderProgram(const Shader* vert, const Shader* frag)
+	Program::Program(const Shader* vert, const Shader* frag)
 	{
 		myVertShader = new Shader(*vert);
 		myFragShader = new Shader(*frag);
 	}
 
-	ShaderProgram::~ShaderProgram()
+	Program::~Program()
 	{
 		delete myVertShader;
 		delete myFragShader;
 		glDeleteProgram(myID);
 	}
 
-	Shader* ShaderProgram::vertexShader()
+	Shader* Program::vertexShader()
 	{
 		return myVertShader;
 	}
 
-	Shader* ShaderProgram::fragmentShader()
+	Shader* Program::fragmentShader()
 	{
 		return myFragShader;
 	}
 
-	bool ShaderProgram::operator < (const ShaderProgram& pro)
+	bool Program::operator < (const Program& pro)
 	{
 		return true;
 	}
-	bool ShaderProgram::operator > (const ShaderProgram& pro)
+	bool Program::operator > (const Program& pro)
 	{
 		return true;
 	}
 
-	bool ShaderProgram::checkProgramLinkStatus(unsigned int id, std::string& error)
+	bool Program::checkProgramLinkStatus(unsigned int id, std::string& error)
 	{
 		int res;
 		glGetProgramiv(id, GL_LINK_STATUS, &res);
@@ -70,47 +69,47 @@ namespace vrv
 		return true;
 	}
 
-	ShaderUniform* ShaderProgram::createUniform(std::string name, ShaderUniform::UniformType type)
+	Uniform* Program::createUniform(std::string name, Uniform::UniformType type)
 	{
 		switch (type)
 		{
-		case vrv::ShaderUniform::FLOAT:
-			return new ShaderUniformFloat(name);
+		case vrv::Uniform::FLOAT:
+			return new UniformFloat(name);
 			break;
-		case vrv::ShaderUniform::FLOAT_VEC2:
-			return new ShaderUniformVec2f(name);
+		case vrv::Uniform::FLOAT_VEC2:
+			return new UniformVec2f(name);
 			break;
-		case vrv::ShaderUniform::FLOAT_VEC3:
-			return new ShaderUniformVec3f(name);
+		case vrv::Uniform::FLOAT_VEC3:
+			return new UniformVec3f(name);
 			break;
-		case vrv::ShaderUniform::FLOAT_VEC4:
-			return new ShaderUniformVec4f(name);
+		case vrv::Uniform::FLOAT_VEC4:
+			return new UniformVec4f(name);
 			break;
-		case vrv::ShaderUniform::INT:
-			return new ShaderUniformInt(name);
+		case vrv::Uniform::INT:
+			return new UniformInt(name);
 			break;
-		case vrv::ShaderUniform::BOOL:
-			return new ShaderUniformBool(name);
+		case vrv::Uniform::BOOL:
+			return new UniformBool(name);
 			break;
-		case vrv::ShaderUniform::FLOAT_MAT3:
-			return new ShaderUniformMat3f(name);
+		case vrv::Uniform::FLOAT_MAT3:
+			return new UniformMat3f(name);
 			break;
-		case vrv::ShaderUniform::FLOAT_MAT4:
-			return new ShaderUniformMat4f(name);
+		case vrv::Uniform::FLOAT_MAT4:
+			return new UniformMat4f(name);
 			break;
 		default:
-			return new ShaderUniformFloat(name);
+			return new UniformFloat(name);
 			break;
 		}
 	}
 
-	void ShaderProgram::updateUniforms()
+	void Program::updateUniforms()
 	{
 		UniformMap::iterator ibegin = myUniformsMap.begin();
 		UniformMap::iterator iend = myUniformsMap.end();
 		for (; ibegin != iend; ++ibegin)
 		{
-			ShaderUniform* uniform = ibegin->second;
+			Uniform* uniform = ibegin->second;
 			if (uniform && uniform->isDirty())
 			{
 				uniform->synGL();
@@ -118,7 +117,7 @@ namespace vrv
 		}
 	}
 
-	void ShaderProgram::link()
+	void Program::link()
 	{
 		myID = glCreateProgram();
 		myVertShader->initialize();
@@ -153,7 +152,7 @@ namespace vrv
 		populateUniforms();
 	}
 
-	void ShaderProgram::populateUniforms()
+	void Program::populateUniforms()
 	{
 		clearUniforms();
 		int totalUniforms = 0;
@@ -172,12 +171,12 @@ namespace vrv
 			for (unsigned int i = 0; i < totalUniforms;++i)
 			{
 				glGetActiveUniform(myID, i, maxNameLength, NULL, &uniformSize, &uniformType, uniformName);
-				myUniformsMap.insert(std::make_pair(uniformName, createUniform(uniformName, ShaderUniform::mapGLToUniformType(uniformType))));
+				myUniformsMap.insert(std::make_pair(uniformName, createUniform(uniformName, Uniform::mapGLToUniformType(uniformType))));
 			}
 		}
 	}
 
-	void ShaderProgram::populateAutomaticUniforms()
+	void Program::populateAutomaticUniforms()
 	{
 		UniformMap::iterator ibegin = myUniformsMap.begin();
 		UniformMap::iterator iend = myUniformsMap.end();
@@ -193,7 +192,7 @@ namespace vrv
 		}
 	}
 
-	void ShaderProgram::clearUniforms()
+	void Program::clearUniforms()
 	{
 		UniformMap::iterator ibegin = myUniformsMap.begin();
 		UniformMap::iterator iend = myUniformsMap.end();
@@ -207,7 +206,7 @@ namespace vrv
 		myUniformsMap.clear();
 	}
 
-	void ShaderProgram::registerAutomaticUniformFactories()
+	void Program::registerAutomaticUniformFactories()
 	{
 		myAutomaticUniformFactories.insert(std::make_pair("vrv_view_matrix", new CameraViewMatrixUniformFactory()));
 	}

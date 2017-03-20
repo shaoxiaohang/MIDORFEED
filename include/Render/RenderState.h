@@ -53,7 +53,7 @@ namespace vrv
 		RenderState();
 
 		void apply();
-		void applyIfChanged(const RenderState& state);
+		void applyIfChanged(RenderState* state);
 
 		void setDepthTest(DepthTest depthTest);
 		DepthTest& depthTest();

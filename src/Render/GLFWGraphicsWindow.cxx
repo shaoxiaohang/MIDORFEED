@@ -1,10 +1,12 @@
 #include <Render/GLFWGraphicsWindow.h>
+#include <Render/Context.h>
 #include <GLFW/glfw3.h>
 namespace vrv
 {
 	GLFWGraphicsWindow::GLFWGraphicsWindow(WindowConfiguration config)
 		: GraphicsWindow(config)
 		, myGLFWwindow(0)
+		, myContext(0)
 	{
 		//
 	}
@@ -47,7 +49,7 @@ namespace vrv
 	bool GLFWGraphicsWindow::initialize()
 	{
 		myGLFWwindow = glfwCreateWindow(myConfiguration.width, myConfiguration.height, myConfiguration.title.c_str(), 0, 0);
-		glfwHideWindow(myGLFWwindow);
+		myContext = new Context();
 		return myGLFWwindow ? true : false;
 	}
 }

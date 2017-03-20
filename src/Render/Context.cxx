@@ -1,5 +1,7 @@
 #include <Render/Context.h>
 #include <Render/RenderState.h>
+#include <Render/Drawable.h>
+#include <Render/DrawState.h>
 namespace vrv
 {
 	Context::Context()
@@ -8,9 +10,10 @@ namespace vrv
 		forceSynRenderState();
 	}
 
-	void Context::draw(const RenderState& renderState)
+	void Context::draw(Drawable* drawable)
 	{
-		myCachedRenderState->applyIfChanged(renderState);
+		myCachedRenderState->applyIfChanged(drawable->drawState()->renderState());
+		drawable->drawImplementation();
 	}
 
 	void Context::forceSynRenderState()
