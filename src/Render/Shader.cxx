@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <GL/glew.h>
+//#define SHADERFROMFILE 
 namespace vrv
 {
 	Shader::ConstantsMap Shader::myConstansMap;
@@ -23,6 +24,7 @@ namespace vrv
 			addUniformConstant("vrv_halfPi", 1.5707963267949f);
 			myConstantsMapInitialized = true;
 		}
+#ifdef SHADERFROMFILE
 		std::ifstream shaderFile;
 		shaderFile.open(fileName.c_str());
 		if (shaderFile.fail())
@@ -33,8 +35,16 @@ namespace vrv
 		shaderStream << shaderFile.rdbuf();
 		shaderFile.close();
 		mySource = shaderStream.str();
-
-		//mySource = "void main()\n{\n}\n";
+#else
+		if (myType == VertexShader)
+		{
+			mySource = "layout (location = 0) in vec3 pos;\nvoid main()\n{\ngl_Position = vec4(pos,1);\n}\n";
+		}
+		if (myType == FragmentShader)
+		{
+			mySource = "out vec4 color;\nvoid main()\n{\ncolor = vec4(1,0,0,1);\n}\n";
+		}
+#endif
 	}
 
 	void Shader::addVertexAttribute(VertexAttribute* attribute)
@@ -82,6 +92,7 @@ namespace vrv
 
 			finalString += "\n";
 			finalString += mySource;
+#ifdef SHADERFROMFILE
 			std::ofstream os;
 			if (myType == VertexShader)
 			{
@@ -95,7 +106,9 @@ namespace vrv
 				os << finalString;
 				os.close();
 			}
-
+#else
+			std::cout << finalString << std::endl;
+#endif
 			const GLchar* src = finalString.c_str();
 			glShaderSource(myID, 1, &src, 0);
 
