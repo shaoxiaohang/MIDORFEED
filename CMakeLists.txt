@@ -1,20 +1,34 @@
 cmake_minimum_required (VERSION 2.6)
-project (MIDORFEED)
+set(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "add a postfix for Debug mode, usually d on windows")
+project (DVA)
 file(GLOB CoreSources "include/Core/*.h" "src/Core/*.cxx")
 file(GLOB RenderSources "include/Render/*.h" "src/Render/*.cxx")
-file(GLOB MIDORFEEDSources "include/MIDORFEED/*.h" "src/MIDORFEED/*.cxx")
+file(GLOB DVASources "src/App/*.cxx")
+
+#find QtCore
+find_path(QT_INCLUDE_DIR QtCore/QtCore
+PATHS
+$ENV{QT_ROOT}/include
+)
+find_path(QT_LIB_DIR Qt5Core.lib
+PATHS
+$ENV{QT_ROOT}/lib
+)
+
+include_directories(include)
+add_executable(DVA ${DVASources})
+set_target_properties(DVA PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
+
 add_library(Core STATIC ${CoreSources})
 add_library(Render STATIC ${RenderSources})
-include_directories(include)
-include_directories(libs/glew/include)
-include_directories(libs/glfw/include)
-include_directories(libs/freeImage/include)
-add_executable(MIDORFEED ${MIDORFEEDSources})
-target_link_libraries(MIDORFEED Core Render)
-set(GLEWLIBDIR ${PROJECT_SOURCE_DIR}/libs/glew/lib/Debug)
-set(GLFWLIBDIR ${PROJECT_SOURCE_DIR}/libs/glfw/lib/Debug)
-set(FREEIMAGELIBDIR ${PROJECT_SOURCE_DIR}/libs/freeImage/lib/Debug)
-target_link_libraries(Render opengl32.lib)
-target_link_libraries(Render ${GLEWLIBDIR}/glew32sd.lib)
-target_link_libraries(Render ${GLFWLIBDIR}/glfw3.lib)
-target_link_libraries(Render ${FREEIMAGELIBDIR}/FreeImaged.lib)
+
+target_include_directories(Render PUBLIC ${QT_INCLUDE_DIR})
+
+target_link_libraries(DVA Core Render)
+target_link_libraries(Render
+debug Qt5Core${CMAKE_DEBUG_POSTFIX} optimized Qt5Core
+debug Qt5Widgets${CMAKE_DEBUG_POSTFIX} optimized Qt5Widgets
+debug Qt5Gui${CMAKE_DEBUG_POSTFIX} optimized Qt5Gui
+Core
+opengl32.lib
+)
