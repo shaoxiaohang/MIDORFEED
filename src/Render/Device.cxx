@@ -1,6 +1,6 @@
-#include <Render/Device.h>
-namespace vrv
-{
-	Device::Device()
-	{}
-}
+//#include <Render/Device.h>
+//namespace vrv
+//{
+//	Device::Device()
+//	{}
+//}

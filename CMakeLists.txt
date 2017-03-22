@@ -16,6 +16,8 @@ $ENV{QT_ROOT}/lib
 )
 
 include_directories(include)
+link_directories(${QT_LIB_DIR})
+
 add_executable(DVA ${DVASources})
 set_target_properties(DVA PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
 
