@@ -1,8 +1,11 @@
-#include<QtCore/QCoreApplication>
-#include<iostream>
-int main(int argc, char** argv)
+#include "CoreQt/mainwindow.h"
+#include <QtWidgets/QApplication>
+
+int main(int argc, char *argv[])
 {
-	QCoreApplication a(argc, argv);
-	std::cout << "hello world";
+	QApplication a(argc, argv);
+	MainWindow w;
+	w.show();
+
 	return a.exec();
 }
