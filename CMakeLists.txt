@@ -4,7 +4,7 @@ set(CMAKE_PREFIX_PATH "C:\\Qt\\5.8\\msvc2013_64\\")
 project (DVA)
 file(GLOB CoreSources "include/Core/*.h" "src/Core/*.cxx")
 file(GLOB RenderSources "include/Render/*.h" "src/Render/*.cxx")
-file(GLOB CoreQtSources "include/CoreQt/*.h" "src/CoreQt/*.cpp")
+file(GLOB CoreQtSources "include/CoreQt/*.h" "src/CoreQt/*.cxx" "src/CoreQt/*.cpp")
 file(GLOB DVASources "src/App/*.cxx")
 file(GLOB CoreQt_moc_src "include/CoreQt/*.h")
 file(GLOB CoreQt_form_src "src/CoreQt/*.ui")
@@ -13,7 +13,6 @@ file(GLOB CoreQt_form_src "src/CoreQt/*.ui")
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 
-#find_package(OpenGL)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -36,6 +35,7 @@ target_link_libraries(DVA Core Render CoreQt )
 target_link_libraries(Render
 Core
 opengl32.lib
+Qt5::OpenGL
 )
 
 add_custom_command(TARGET DVA

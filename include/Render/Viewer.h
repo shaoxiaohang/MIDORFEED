@@ -1,27 +1,30 @@
-//#pragma once
-//#include<string>
-//#include<vector>
-//#include<stack>
-//namespace vrv
-//{
-//	class Node;
-//	class Device;
-//	class GraphicsWindow;
-//	class Scene;
-//	class Viewer
-//	{
-//	public:
-//		
-//	public:
-//		Viewer();
-//		virtual void run();
-//		virtual void initialize(int width, int height, const std::string& title);
-//		virtual void setSceneData(Node* node);
-//	protected:
-//		virtual void onTick();
-//	protected:
-//		Device* myDevice;
-//		GraphicsWindow* myMainWindow;
-//		Scene* myScene;
-//	};
-//}
+#pragma once
+#include<string>
+#include<vector>
+#include<stack>
+
+
+class QApplication;
+namespace vrv
+{
+	class Node;
+	class Device;
+	class QtMainWindow;
+	class Scene;
+	class Viewer
+	{
+	public:
+		
+	public:
+		Viewer(int &argc, char **argv);
+		virtual void run();
+		virtual void initialize(int width, int height, const std::string& title);
+		virtual void setSceneData(Node* node);
+		virtual void onTick();
+	protected:
+		Device* myDevice;
+		QtMainWindow* myMainWindow;
+		Scene* myScene;
+		QApplication* myQtApplication;
+	};
+}

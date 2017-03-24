@@ -9,4 +9,6 @@ namespace vrv
 #define VRV_ERROR(message)\
 		std::cout <<__FILE__<<"  "<<__LINE__<<"  ERROR "<<__FUNCTION__<<"***"<<message<<"***"<< std::endl;
 
+#define VRV_INFO(message)\
+	std::cout <<"VRV INFO:  " << message<< std::endl;
 }
