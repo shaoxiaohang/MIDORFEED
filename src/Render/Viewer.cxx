@@ -1,5 +1,5 @@
 #include <Render/Viewer.h>
-#include <Render/QtMainWindow.h>
+#include <CoreQt/QtMainWindow.h>
 #include <Render/Scene.h>
 #include <Render/QtContext.h>
 #include <QApplication>

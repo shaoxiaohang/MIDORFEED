@@ -1,7 +1,7 @@
 #include <Render/QtContext.h>
 #include <QOpenGLContext>
 #include <Core/UsefulMarco.h>
-#include <Render/QtMainWindow.h>
+#include <CoreQt/QtMainWindow.h>
 namespace vrv
 {
 	QtContext* QtContext::myInstance = 0;

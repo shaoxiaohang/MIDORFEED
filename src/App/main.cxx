@@ -27,5 +27,6 @@ int main(int argc, char** argv)
 
 	viewer->setSceneData(node);
 	viewer->run();
+	
 	return 0;
 }
