@@ -1,6 +1,6 @@
 #include <Render/QtContext.h>
 #include <QOpenGLContext>
-#include <Core/UsefulMarco.h>
+#include <Core/Utility.h>
 #include <CoreQt/QtMainWindow.h>
 namespace vrv
 {
@@ -9,6 +9,7 @@ namespace vrv
 		: QOpenGLExtraFunctions()
 		, myQtOpenGLContext(0)
 	{
+		initializeOpenGLMaps();
 		createQtOpenGLContext(format);
 	}
 
@@ -22,6 +23,19 @@ namespace vrv
 		{
 			VRV_ERROR("Failed to create QtOpenGLContext")
 		}
+	}
+
+	void QtContext::initializeOpenGLMaps()
+	{
+		//initialize the texture unit map)
+		myTextureUnits.resize(MAXIMUM_TEXTURE_UNITS);
+		for (int i = 0; i < MAXIMUM_TEXTURE_UNITS; ++i)
+		{
+			myTextureUnits[i].first = false;
+			myTextureUnits[i].second = 0;
+		}
+
+		myTextureTargetBindings[GL_TEXTURE_2D] = 0;
 	}
 
 	QOpenGLContext* QtContext::qtContext()
@@ -44,4 +58,17 @@ namespace vrv
 	{
 		myQtOpenGLContext->swapBuffers(window);
 	}
+
+	//GL Fucntions
+	//////////////////////////////////////////////////////////////////////////
+	void QtContext::glBindTexture(GLenum target, GLuint texture)
+	{
+		if (myTextureTargetBindings[target] != texture)
+		{
+			myTextureTargetBindings[target] = texture;
+			QOpenGLExtraFunctions::glBindTexture(target, texture);
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
 }

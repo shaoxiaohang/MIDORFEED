@@ -2,6 +2,7 @@
 #include<Core/Node.h>
 #include<Render/Array.h>
 #include<Render/Geometry.h>
+#include<Render/Texture2D.h>
 using namespace vrv;
 int main(int argc, char** argv)
 {
@@ -15,14 +16,16 @@ int main(int argc, char** argv)
 	pos[1] = Vector3f(0.5, -0.5, 0);
 	pos[2] = Vector3f(0.5, 0.5, 0);
 	pos[3] = Vector3f(-0.5, 0.5, 0);
-	ArrayUnsignedInt index(3);
-	index[0] = 0;
-	index[1] = 2;
-	index[2] = 3;
-	triangle->setVertexArray(&pos);
+	ArrayVec2 st(4);
+	st[0] = Vector2f(0, 0);
+	st[1] = Vector2f(1, 0);
+	st[2] = Vector2f(1, 1);
+	st[3] = Vector2f(0, 1);
+	triangle->setVertex(&pos);
 	triangle->addPrimitiveSet(Drawable::TRIANGLES, 0, 3);
-	triangle->addPrimitiveSet(Drawable::TRIANGLES, 3, index.dataType());
-	triangle->setIndexArray(&index);
+	triangle->setTextureCoordinate(&st);
+	Texture2D* texture = new Texture2D("../data/image/wall.jpg");
+	triangle->setTexture2D(texture, 0);
 	node->addDrawable(triangle);
 
 	viewer->setSceneData(node);

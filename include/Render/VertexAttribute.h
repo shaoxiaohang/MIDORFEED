@@ -40,6 +40,13 @@ namespace vrv
 		std::string typeToGLSL();
 	};
 
+	class VertexAttributeVector2f : public VertexAttribute
+	{
+	public:
+		VertexAttributeVector2f(std::string name, unsigned int location);
+		std::string typeToGLSL();
+	};
+
 	class VertexAttributeVector3f : public VertexAttribute
 	{
 	public:

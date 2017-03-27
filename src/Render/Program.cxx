@@ -1,7 +1,7 @@
 #include <Render/Program.h>
 #include <Render/Shader.h>
 #include <Render/VertexAttribute.h>
-#include <Core/UsefulMarco.h>
+#include <Core/Utility.h>
 #include <sstream>
 #include <Render/QtContext.h>
 namespace vrv
@@ -100,6 +100,18 @@ namespace vrv
 		default:
 			return new UniformFloat(name);
 			break;
+		}
+	}
+
+	Uniform* Program::getUniform(std::string name)
+	{
+		if (myUniformsMap.find(name) != myUniformsMap.end())
+		{
+			return myUniformsMap[name];
+		}
+		if (myAutomaticUniformsMap.find(name) != myAutomaticUniformsMap.end())
+		{
+			return myAutomaticUniformsMap[name];
 		}
 	}
 

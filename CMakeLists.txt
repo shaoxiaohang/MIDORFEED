@@ -13,7 +13,6 @@ file(GLOB CoreQt_form_src "src/CoreQt/*.ui")
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

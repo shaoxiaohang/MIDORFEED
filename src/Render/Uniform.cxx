@@ -27,6 +27,9 @@ namespace vrv
 		}
 	}
 
+	Uniform::Uniform()
+	{}
+
 	Uniform::Uniform(const std::string& name, UniformType type)
 		: myName(name)
 		, myType(type)
@@ -110,7 +113,11 @@ namespace vrv
 	{}
 	bool UniformBool::set(bool value)
 	{
-		myValue = value;
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
 		return true;
 	}
 	bool UniformBool::get(bool& value)
@@ -128,7 +135,11 @@ namespace vrv
 	{}
 	bool UniformInt::set(int value)
 	{
-		myValue = value;
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
 		return true;
 	}
 	bool UniformInt::get(int& value)
@@ -146,7 +157,11 @@ namespace vrv
 	{}
 	bool UniformFloat::set(float value)
 	{
-		myValue = value;
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
 		return true;
 	}
 	bool UniformFloat::get(float& value)
@@ -164,7 +179,11 @@ namespace vrv
 	{}
 	bool UniformVec2f::set(Vector2f value)
 	{
-		myValue = value;
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
 		return true;
 	}
 	bool UniformVec2f::get(Vector2f& value)
@@ -182,7 +201,11 @@ namespace vrv
 	{}
 	bool UniformVec3f::set(Vector3f value)
 	{
-		myValue = value;
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
 		return true;
 	}
 	bool UniformVec3f::get(Vector3f& value)
@@ -200,7 +223,11 @@ namespace vrv
 	{}
 	bool UniformVec4f::set(Vector4f value)
 	{
-		myValue = value;
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
 		return true;
 	}
 	bool UniformVec4f::get(Vector4f& value)
@@ -218,7 +245,11 @@ namespace vrv
 	{}
 	bool UniformMat3f::set(Matrix3f value)
 	{
-		myValue = value;
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
 		return true;
 	}
 	bool UniformMat3f::get(Matrix3f& value)
@@ -236,7 +267,11 @@ namespace vrv
 	{}
 	bool UniformMat4f::set(Matrix4f value)
 	{
-		myValue = value;
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
 		return true;
 	}
 	bool UniformMat4f::get(Matrix4f& value)
@@ -253,7 +288,6 @@ namespace vrv
 
 	AutomaticUniform::AutomaticUniform(const std::string& name)
 		: myName(name)
-		, myUniform(0)
 	{}
 
 	AutomaticUniformFactory::AutomaticUniformFactory(const std::string& name)

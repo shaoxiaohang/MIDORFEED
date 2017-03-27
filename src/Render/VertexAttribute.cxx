@@ -88,6 +88,15 @@ namespace vrv
 		return "float";
 	}
 
+	VertexAttributeVector2f::VertexAttributeVector2f(std::string name, unsigned int location)
+		: VertexAttribute(name, Array::VEC2F, location)
+	{}
+
+	std::string VertexAttributeVector2f::typeToGLSL()
+	{
+		return "vec2";
+	}
+
 	VertexAttributeVector3f::VertexAttributeVector3f(std::string name, unsigned int location)
 		: VertexAttribute(name, Array::VEC3F, location)
 	{}

@@ -1,5 +1,5 @@
 #pragma once
-#include <Core/UsefulMarco.h>
+#include <Core/Utility.h>
 #include <cassert>
 namespace vrv
 {

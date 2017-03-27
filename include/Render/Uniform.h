@@ -24,6 +24,7 @@ namespace vrv
 			FLOAT_MAT4
 		};
 		static UniformType mapGLToUniformType(unsigned int glenum);
+		Uniform();
 		Uniform(const std::string& name, UniformType type);
 		bool isDirty();	
 		virtual void synGL() = 0;
@@ -49,7 +50,7 @@ namespace vrv
 	protected:
 		UniformType myType;
 		int myLocation;
-		const std::string& myName;
+		std::string myName;
 		bool myIsDirty;
 	};
 
@@ -142,14 +143,13 @@ namespace vrv
 		Matrix4f myValue;
 	};
 
-	class AutomaticUniform
+	class AutomaticUniform : public Uniform
 	{
 	public:
 		AutomaticUniform(const std::string& name);
 		virtual void synGL() = 0;
 	protected:
-		Uniform* myUniform;
-		const std::string& myName;
+		std::string myName;
 	};
 
 	class AutomaticUniformFactory

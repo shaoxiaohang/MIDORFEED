@@ -14,20 +14,30 @@ namespace vrv
 		, myIndexArray(0)
 	{}
 
-	void Geometry::setVertexArray(Array* array)
+	void Geometry::setVertex(Array* array)
 	{
 		myVertexArray = array;
 	}
 
-	void Geometry::setNomralArray(Array* array, VertexBinding binding)
+	void Geometry::setNomral(Array* array, VertexBinding binding)
 	{
 		myNormalArray = array;
 		myNormalBinding = binding;
 	}
 
-	void Geometry::setIndexArray(Array* array)
+	void Geometry::setIndex(Array* array)
 	{
 		myIndexArray = array;
+	}
+
+	void Geometry::setTextureCoordinate(Array* array)
+	{
+		myTextureCoordinateArray = array;
+	}
+
+	void Geometry::setTexture2D(Texture2D* texture, unsigned int i)
+	{
+		myTextureMap[i] = texture;
 	}
 
 	void Geometry::buildGeometry()
@@ -35,18 +45,25 @@ namespace vrv
 		if (!myBuildGeometry)
 		{
 			VertexArrayObject* vao = new VertexArrayObject();
-			VertexBufferObject* vbo = new VertexBufferObject();
-			IndexBufferObject* ibo = 0;
-			vbo->addVertexAttribute(new VertexAttributeVector3f("pos",0));
-			vbo->copyFromSystemMemory(myVertexArray);
-			vao->bindVertexBufferObject(vbo);
+			VertexBufferObject* vbo_pos = new VertexBufferObject();
+			vbo_pos->addVertexAttribute(new VertexAttributeVector3f("pos", 0));
+			vbo_pos->copyFromSystemMemory(myVertexArray);
+			vao->bindVertexBufferObject(vbo_pos);
 			if (myIndexArray)
 			{
-				ibo = new IndexBufferObject();
+				IndexBufferObject* ibo = new IndexBufferObject();
 				ibo->copyFromSystemMemory(myIndexArray);
 				vao->bindIndexBufferObject(ibo);
 			}
+			if (myTextureCoordinateArray)
+			{
+				VertexBufferObject* vbo_st = new VertexBufferObject();
+				vbo_st->addVertexAttribute(new VertexAttributeVector2f("st", 1));
+				vbo_st->copyFromSystemMemory(myTextureCoordinateArray);
+				vao->bindVertexBufferObject(vbo_st);
+			}
 			createDrawState(vao, Scene::instance().defaultProgram());
+			myBuildGeometry = true;
 		}
 	}
 }

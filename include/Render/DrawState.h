@@ -28,6 +28,8 @@ namespace vrv
 		void bind();
 		void unbind();
 
+		virtual void update();
+
 	protected:
 		RenderState* myRenderState;
 		VertexArrayObject* myVertexArrayObject;

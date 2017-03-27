@@ -26,6 +26,7 @@ namespace vrv
 		format.setGreenBufferSize(myConfiguration.greenBufferSize);
 		format.setBlueBufferSize(myConfiguration.blueBufferSize);
 		format.setAlphaBufferSize(myConfiguration.alphaBufferSize);
+		format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
 		setFormat(format);
 
 		QOpenGLWindow::show();
@@ -100,8 +101,12 @@ namespace vrv
 		}
 		myContext->makeCurrent(this);
 		myViewer->onTick();
-		//myContext->swapBuffer(this);
+	
 		myContext->glFlush();
+
+		
+
+		//myContext->swapBuffer(this);
 	}
 }
 

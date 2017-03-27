@@ -56,6 +56,14 @@ namespace vrv
 		return myProgram;
 	}
 
+	void DrawState::update()
+	{
+		if (myProgram)
+		{
+			myProgram->updateUniforms();
+		}
+	}
+
 	void DrawState::bind()
 	{
 		myVertexArrayObject->bind();

@@ -141,7 +141,6 @@ namespace vrv
 		if (!myBuildGeometry)
 		{
 			buildGeometry();
-			myBuildGeometry = true;
 		}
 	}
 

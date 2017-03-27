@@ -23,6 +23,19 @@ namespace vrv
 			m[3] = a01; m[4] = a11; m[5] = a21;
 			m[6] = a02; m[7] = a12; m[8] = a22;
 		}
+
+		bool operator != (const Matrix3& r)
+		{
+			return !(*this == r);
+		}
+
+		bool operator == (const Matrix3& r)
+		{
+			return m[0] == r.m[0] && m[1] == r.m[1] && m[2] == r.m[2] &&
+				m[3] == r.m[3] && m[4] == r.m[4] && m[5] == r.m[5] &&
+				m[6] == r.m[6] && m[7] == r.m[7] && m[8] == r.m[8];
+		}
+
 	T* m;
 	};
 	
