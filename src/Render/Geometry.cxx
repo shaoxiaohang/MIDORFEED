@@ -4,6 +4,10 @@
 #include<Render/VertexBufferObject.h>
 #include<Render/IndexBufferObject.h>
 #include<Render/Scene.h>
+#include<Render/Uniform.h>
+#include<Render/Program.h>
+#include<Render/QtContext.h>
+#include<Render/Texture2D.h>
 namespace vrv
 {
 	Geometry::Geometry()
@@ -62,7 +66,19 @@ namespace vrv
 				vbo_st->copyFromSystemMemory(myTextureCoordinateArray);
 				vao->bindVertexBufferObject(vbo_st);
 			}
-			createDrawState(vao, Scene::instance().defaultProgram());
+			Program* defaultProgram = Scene::instance().defaultProgram();
+			for (int i = 0; i < myTextureMap.size(); i++)
+			{
+				QtContext::instance().glActiveTexture(GL_TEXTURE0 + i);
+				QtContext::instance().glBindTexture(GL_TEXTURE_2D, myTextureMap[i]->id());
+				std::string samplerName = "texture" + std::to_string(i);
+				Uniform* uniform = defaultProgram->getUniform(samplerName);
+				if (uniform)
+				{
+					uniform->set(i);
+				}
+			}
+			createDrawState(vao, defaultProgram);
 			myBuildGeometry = true;
 		}
 	}

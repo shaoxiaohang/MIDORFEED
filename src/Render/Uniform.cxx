@@ -22,6 +22,8 @@ namespace vrv
 			return FLOAT_MAT3;
 		case GL_FLOAT_MAT4:
 			return FLOAT_MAT4;
+		case GL_SAMPLER_2D:
+			return SAMPLER_2D;
 		default:
 			break;
 		}
@@ -30,11 +32,17 @@ namespace vrv
 	Uniform::Uniform()
 	{}
 
-	Uniform::Uniform(const std::string& name, UniformType type)
+	Uniform::Uniform(const std::string& name, UniformType type, int location)
 		: myName(name)
 		, myType(type)
 		, myIsDirty(true)
+		, myLocation(location)
 	{}
+
+	void Uniform::synGL()
+	{
+		myIsDirty = false;
+	}
 
 	bool Uniform::isDirty()
 	{
@@ -108,8 +116,8 @@ namespace vrv
 	}
 
 
-	UniformBool::UniformBool(const std::string& name)
-		:Uniform(name, Uniform::BOOL)
+	UniformBool::UniformBool(const std::string& name,int location)
+		:Uniform(name, Uniform::BOOL, location)
 	{}
 	bool UniformBool::set(bool value)
 	{
@@ -127,11 +135,12 @@ namespace vrv
 	}
 	void UniformBool::synGL()
 	{
+		Uniform::synGL();
 		QtContext::instance().glUniform1i(myLocation, myValue);
 	}
 
-	UniformInt::UniformInt(const std::string& name)
-		:Uniform(name, Uniform::INT)
+	UniformInt::UniformInt(const std::string& name, int location)
+		:Uniform(name, Uniform::INT, location)
 	{}
 	bool UniformInt::set(int value)
 	{
@@ -149,11 +158,12 @@ namespace vrv
 	}
 	void UniformInt::synGL()
 	{
+		Uniform::synGL();
 		QtContext::instance().glUniform1i(myLocation, myValue);
 	}
 
-	UniformFloat::UniformFloat(const std::string& name)
-		:Uniform(name, Uniform::FLOAT)
+	UniformFloat::UniformFloat(const std::string& name, int location)
+		:Uniform(name, Uniform::FLOAT, location)
 	{}
 	bool UniformFloat::set(float value)
 	{
@@ -171,11 +181,12 @@ namespace vrv
 	}
 	void UniformFloat::synGL()
 	{
+		Uniform::synGL();
 		QtContext::instance().glUniform1f(myLocation, myValue);
 	}
 
-	UniformVec2f::UniformVec2f(const std::string& name)
-		:Uniform(name, Uniform::FLOAT_VEC2)
+	UniformVec2f::UniformVec2f(const std::string& name, int location)
+		:Uniform(name, Uniform::FLOAT_VEC2, location)
 	{}
 	bool UniformVec2f::set(Vector2f value)
 	{
@@ -193,11 +204,12 @@ namespace vrv
 	}
 	void UniformVec2f::synGL()
 	{
+		Uniform::synGL();
 		QtContext::instance().glUniform2f(myLocation, myValue.x, myValue.y);
 	}
 
-	UniformVec3f::UniformVec3f(const std::string& name)
-		:Uniform(name, Uniform::FLOAT_VEC3)
+	UniformVec3f::UniformVec3f(const std::string& name, int location)
+		:Uniform(name, Uniform::FLOAT_VEC3, location)
 	{}
 	bool UniformVec3f::set(Vector3f value)
 	{
@@ -215,11 +227,12 @@ namespace vrv
 	}
 	void UniformVec3f::synGL()
 	{
+		Uniform::synGL();
 		QtContext::instance().glUniform3f(myLocation, myValue.x, myValue.y, myValue.z);
 	}
 
-	UniformVec4f::UniformVec4f(const std::string& name)
-		:Uniform(name, Uniform::FLOAT_VEC4)
+	UniformVec4f::UniformVec4f(const std::string& name, int location)
+		:Uniform(name, Uniform::FLOAT_VEC4, location)
 	{}
 	bool UniformVec4f::set(Vector4f value)
 	{
@@ -237,11 +250,12 @@ namespace vrv
 	}
 	void UniformVec4f::synGL()
 	{
+		Uniform::synGL();
 		QtContext::instance().glUniform4f(myLocation, myValue.x, myValue.y, myValue.z, myValue.w);
 	}
 
-	UniformMat3f::UniformMat3f(const std::string& name)
-		:Uniform(name, Uniform::FLOAT_MAT3)
+	UniformMat3f::UniformMat3f(const std::string& name, int location)
+		:Uniform(name, Uniform::FLOAT_MAT3, location)
 	{}
 	bool UniformMat3f::set(Matrix3f value)
 	{
@@ -259,11 +273,12 @@ namespace vrv
 	}
 	void UniformMat3f::synGL()
 	{
+		Uniform::synGL();
 		QtContext::instance().glUniformMatrix3fv(myLocation, 1, false, myValue.m);
 	}
 
-	UniformMat4f::UniformMat4f(const std::string& name)
-		:Uniform(name, Uniform::FLOAT_MAT4)
+	UniformMat4f::UniformMat4f(const std::string& name, int location)
+		:Uniform(name, Uniform::FLOAT_MAT4, location)
 	{}
 	bool UniformMat4f::set(Matrix4f value)
 	{
@@ -281,21 +296,25 @@ namespace vrv
 	}
 	void UniformMat4f::synGL()
 	{
+		Uniform::synGL();
 		QtContext::instance().glUniformMatrix4fv(myLocation, 1, false, myValue.m);
-		myIsDirty = false;
 	}
 
 
-	AutomaticUniform::AutomaticUniform(const std::string& name)
-		: myName(name)
+	AutomaticUniform::AutomaticUniform(const std::string& name, UniformType type)
+		: Uniform(name,type, -1)
+	{}
+
+	AutomaticUniform::AutomaticUniform(const std::string& name, UniformType type, int location)
+		: Uniform(name,type, location)
 	{}
 
 	AutomaticUniformFactory::AutomaticUniformFactory(const std::string& name)
 		: myName(name)
 	{}
 
-	CameraViewMatrixUniform::CameraViewMatrixUniform(const std::string& name)
-		: AutomaticUniform(name)
+	CameraViewMatrixUniform::CameraViewMatrixUniform(const std::string& name, int location)
+		: AutomaticUniform(name,Uniform::FLOAT_MAT4,location)
 	{}
 
 	void CameraViewMatrixUniform::synGL()
@@ -310,6 +329,6 @@ namespace vrv
 
 	AutomaticUniform* CameraViewMatrixUniformFactory::create()
 	{
-		return new CameraViewMatrixUniform(myName);
+		return new CameraViewMatrixUniform(myName, Uniform::FLOAT_MAT4);
 	}
 }

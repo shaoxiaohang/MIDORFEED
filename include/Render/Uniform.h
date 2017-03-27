@@ -21,13 +21,14 @@ namespace vrv
 			INT,
 			BOOL,
 			FLOAT_MAT3,
-			FLOAT_MAT4
+			FLOAT_MAT4,
+			SAMPLER_2D
 		};
 		static UniformType mapGLToUniformType(unsigned int glenum);
 		Uniform();
-		Uniform(const std::string& name, UniformType type);
+		Uniform(const std::string& name, UniformType type, int location);
 		bool isDirty();	
-		virtual void synGL() = 0;
+		virtual void synGL();
 
 		virtual bool set(bool value);
 		virtual bool set(int value);
@@ -58,7 +59,7 @@ namespace vrv
 	class UniformBool : public Uniform
 	{
 	public:
-		UniformBool(const std::string& name);
+		UniformBool(const std::string& name, int location);
 		bool set(bool value);
 		bool get(bool& value);
 		void synGL();
@@ -69,7 +70,7 @@ namespace vrv
 	class UniformInt : public Uniform
 	{
 	public:
-		UniformInt(const std::string& name);
+		UniformInt(const std::string& name, int location);
 		bool set(int value);
 		bool get(int& value);
 		void synGL();
@@ -80,7 +81,7 @@ namespace vrv
 	class UniformFloat : public Uniform
 	{
 	public:
-		UniformFloat(const std::string& name);
+		UniformFloat(const std::string& name, int location);
 		bool set(float value);
 		bool get(float& value);
 		void synGL();
@@ -91,7 +92,7 @@ namespace vrv
 	class UniformVec2f : public Uniform
 	{
 	public:
-		UniformVec2f(const std::string& name);
+		UniformVec2f(const std::string& name, int location);
 		bool set(Vector2f value);
 		bool get(Vector2f& value);
 		void synGL();
@@ -102,7 +103,7 @@ namespace vrv
 	class UniformVec3f : public Uniform
 	{
 	public:
-		UniformVec3f(const std::string& name);
+		UniformVec3f(const std::string& name, int location);
 		bool set(Vector3f value);
 		bool get(Vector3f& value);
 		void synGL();
@@ -113,7 +114,7 @@ namespace vrv
 	class UniformVec4f : public Uniform
 	{
 	public:
-		UniformVec4f(const std::string& name);
+		UniformVec4f(const std::string& name, int location);
 		bool set(Vector4f value);
 		bool get(Vector4f& value);
 		void synGL();
@@ -124,7 +125,7 @@ namespace vrv
 	class UniformMat3f : public Uniform
 	{
 	public:
-		UniformMat3f(const std::string& name);
+		UniformMat3f(const std::string& name, int location);
 		bool set(Matrix3f value);
 		bool get(Matrix3f& value);
 		void synGL();
@@ -135,7 +136,7 @@ namespace vrv
 	class UniformMat4f : public Uniform
 	{
 	public:
-		UniformMat4f(const std::string& name);
+		UniformMat4f(const std::string& name, int location);
 		bool set(Matrix4f value);
 		bool get(Matrix4f& value);
 		void synGL();
@@ -146,10 +147,8 @@ namespace vrv
 	class AutomaticUniform : public Uniform
 	{
 	public:
-		AutomaticUniform(const std::string& name);
-		virtual void synGL() = 0;
-	protected:
-		std::string myName;
+		AutomaticUniform(const std::string& name, UniformType type);
+		AutomaticUniform(const std::string& name, UniformType type, int location);
 	};
 
 	class AutomaticUniformFactory
@@ -167,7 +166,7 @@ namespace vrv
 		friend class CameraViewMatrixUniformFactory;
 		virtual void synGL();
 	protected:
-		CameraViewMatrixUniform(const std::string& name);	
+		CameraViewMatrixUniform(const std::string& name, int location);
 	};
 
 	class CameraViewMatrixUniformFactory : public AutomaticUniformFactory

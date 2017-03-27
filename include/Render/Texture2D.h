@@ -22,6 +22,7 @@ namespace vrv
 		void bindToPoint(unsigned int bindingPoint);
 		void bind();
 		void unbind();
+		unsigned int id();
 	protected:
 		void initialize();
 	protected:

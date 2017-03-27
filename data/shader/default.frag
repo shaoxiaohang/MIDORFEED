@@ -1,6 +1,8 @@
 #version 300
 out vec4 color;
+in vec2 texture_st;
+uniform sampler2D texture0;
 void main()
 {
-	color = vec4(1,0,0,1);
+	color = texture2D(texture0,texture_st);
 }

@@ -54,12 +54,12 @@ namespace vrv
 			VRV_ERROR("Failed to load image" + myFileName)
 			break;
 		case QImage::Format_RGB32:
-			myInternalFormat = IF_RGB32F;
-			myInternalFormatGL = GL_RGB32F;
+			myInternalFormat = IF_RGB;
+			myInternalFormatGL = GL_RGB;
 			myPixelFormat = PF_RGB;
 			myPixelFormatGL = GL_RGB;
-			myDataType = FLOAT;
-			myDataTypeGL = GL_FLOAT;
+			myDataType = UNSIGNED_BYTE;
+			myDataTypeGL = GL_UNSIGNED_BYTE;
 			break;
 		case QImage::Format_ARGB32:
 			myInternalFormat = IF_RGBA32F;

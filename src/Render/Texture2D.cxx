@@ -49,4 +49,9 @@ namespace vrv
 	{
 		QtContext::instance().glBindTexture(GL_TEXTURE_2D, 0);
 	}
+
+	unsigned int Texture2D::id()
+	{
+		return myID;
+	}
 }

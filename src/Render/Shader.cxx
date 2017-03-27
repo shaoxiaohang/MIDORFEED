@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <Render/QtContext.h>
-//#define SHADERFROMFILE 
+#define SHADERFROMFILE 
 namespace vrv
 {
 	Shader::ConstantsMap Shader::myConstansMap;

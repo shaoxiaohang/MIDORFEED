@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 	st[2] = Vector2f(1, 1);
 	st[3] = Vector2f(0, 1);
 	triangle->setVertex(&pos);
-	triangle->addPrimitiveSet(Drawable::TRIANGLES, 0, 3);
+	triangle->addPrimitiveSet(Drawable::QUADS, 0, 4);
 	triangle->setTextureCoordinate(&st);
 	Texture2D* texture = new Texture2D("../data/image/wall.jpg");
 	triangle->setTexture2D(texture, 0);

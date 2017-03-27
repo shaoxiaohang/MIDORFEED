@@ -23,7 +23,7 @@ namespace vrv
 		Shader* fragmentShader();
 		void link();
 		static bool checkProgramLinkStatus(unsigned int id,std::string& error);
-		static Uniform* createUniform(std::string name, Uniform::UniformType type);
+		static Uniform* createUniform(std::string name, Uniform::UniformType type, int location);
 		Uniform* getUniform(std::string name);
 		void updateUniforms();
 		void use();

@@ -69,36 +69,39 @@ namespace vrv
 		return true;
 	}
 
-	Uniform* Program::createUniform(std::string name, Uniform::UniformType type)
+	Uniform* Program::createUniform(std::string name, Uniform::UniformType type,int location)
 	{
 		switch (type)
 		{
 		case vrv::Uniform::FLOAT:
-			return new UniformFloat(name);
+			return new UniformFloat(name, location);
 			break;
 		case vrv::Uniform::FLOAT_VEC2:
-			return new UniformVec2f(name);
+			return new UniformVec2f(name, location);
 			break;
 		case vrv::Uniform::FLOAT_VEC3:
-			return new UniformVec3f(name);
+			return new UniformVec3f(name, location);
 			break;
 		case vrv::Uniform::FLOAT_VEC4:
-			return new UniformVec4f(name);
+			return new UniformVec4f(name, location);
 			break;
 		case vrv::Uniform::INT:
-			return new UniformInt(name);
+			return new UniformInt(name, location);
 			break;
 		case vrv::Uniform::BOOL:
-			return new UniformBool(name);
+			return new UniformBool(name, location);
 			break;
 		case vrv::Uniform::FLOAT_MAT3:
-			return new UniformMat3f(name);
+			return new UniformMat3f(name, location);
 			break;
 		case vrv::Uniform::FLOAT_MAT4:
-			return new UniformMat4f(name);
+			return new UniformMat4f(name, location);
+			break;
+		case vrv::Uniform::SAMPLER_2D:
+			return new UniformInt(name, location);
 			break;
 		default:
-			return new UniformFloat(name);
+			return new UniformFloat(name, location);
 			break;
 		}
 	}
@@ -113,10 +116,12 @@ namespace vrv
 		{
 			return myAutomaticUniformsMap[name];
 		}
+		return 0;
 	}
 
 	void Program::updateUniforms()
 	{
+		use();
 		UniformMap::iterator ibegin = myUniformsMap.begin();
 		UniformMap::iterator iend = myUniformsMap.end();
 		for (; ibegin != iend; ++ibegin)
@@ -190,10 +195,12 @@ namespace vrv
 			int uniformSize;
 			GLenum uniformType;
 			char* uniformName = new char[maxNameLength];
+			int location = -1;
 			for (unsigned int i = 0; i < totalUniforms;++i)
 			{
 				QtContext::instance().glGetActiveUniform(myID, i, maxNameLength, NULL, &uniformSize, &uniformType, uniformName);
-				myUniformsMap.insert(std::make_pair(uniformName, createUniform(uniformName, Uniform::mapGLToUniformType(uniformType))));
+				location = QtContext::instance().glGetUniformLocation(myID, uniformName);
+				myUniformsMap.insert(std::make_pair(uniformName, createUniform(uniformName, Uniform::mapGLToUniformType(uniformType), location)));
 			}
 		}
 	}
