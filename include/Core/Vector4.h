@@ -1,5 +1,5 @@
 #pragma once
-
+#include <Core/Vector3.h>
 namespace vrv
 {
 	template<typename T>
@@ -12,6 +12,11 @@ namespace vrv
 			, y(_y)
 			, z(_z)
 			, w(_w){}
+		Vector4(Vector3 vec3, T w)
+			: x(vec3.x)
+			, y(vec3.y)
+			, z(vec3.z)
+			, w(w){}
 
 		void operator =(const Vector4<T>& right)
 		{
@@ -54,6 +59,11 @@ namespace vrv
 			z -= right.z;
 			w -= right.w;
 			return *this;
+		}
+
+		Vector4 operator / (float d)
+		{
+			return Vector4<T>(x / d, y / d, z / d, w / d);
 		}
 
 
