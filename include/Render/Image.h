@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-class QImage;
+struct FIBITMAP;
 namespace vrv
 {
 	class Image
@@ -49,6 +49,6 @@ namespace vrv
 		unsigned int myInternalFormatGL;
 		unsigned int myPixelFormatGL;
 		unsigned int myDataTypeGL;
-		QImage* myQImage;
+		FIBITMAP* myFIImage;
 	};
 }

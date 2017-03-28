@@ -101,12 +101,8 @@ namespace vrv
 		}
 		myContext->makeCurrent(this);
 		myViewer->onTick();
-	
-		//myContext->glFlush();
 
-		
-
-		myContext->swapBuffer(this);
+		//myContext->swapBuffer(this);
 	}
 }
 

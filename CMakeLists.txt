@@ -9,6 +9,20 @@ file(GLOB DVASources "src/App/*.cxx")
 file(GLOB CoreQt_moc_src "include/CoreQt/*.h")
 file(GLOB CoreQt_form_src "src/CoreQt/*.ui")
 
+#find include directory by looking for certain header file
+find_path(FREEIMAGE_INCLUDE_DIR FreeImage.h
+PATHS
+$ENV{FREEIMAGE_ROOT}/x64
+)
+
+#find library directory by looking for certain library file
+find_path(FREEIMAGE_LIB_DIR FreeImaged.lib
+PATHS
+$ENV{FREEIMAGE_ROOT}/x64
+)
+#apply them to following projects
+include_directories(${FREEIMAGE_INCLUDE_DIR})
+link_directories(${FREEIMAGE_LIB_DIR})
 
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
@@ -35,6 +49,7 @@ target_link_libraries(Render
 Core
 opengl32.lib
 Qt5::OpenGL
+FreeImaged.lib
 )
 
 add_custom_command(TARGET DVA

@@ -15,9 +15,10 @@ namespace vrv
 	std::cout <<"VRV INFO:  " << message<< std::endl;
 
 #define MAXIMUM_TEXTURE_UNITS 16
-	namespace Utility
+	class Utility
 	{
-		/*std::string getExtension(const std::string& fileName)
+	public:
+		static std::string getExtension(const std::string& fileName)
 		{
 			std::size_t p = fileName.find_last_of(".");
 			if (p != fileName.npos)
@@ -30,7 +31,7 @@ namespace vrv
 			}		
 		}
 
-		std::string getExtensionWithLowercase(const std::string& fileName)
+		static std::string getExtensionWithLowercase(const std::string& fileName)
 		{
 			std::size_t p = fileName.find_last_of(".");
 			if (p != fileName.npos)
@@ -43,6 +44,6 @@ namespace vrv
 			{
 				return "";
 			}
-		}*/
-	}
+		}
+	};
 }

@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <Render/QtContext.h>
-#define SHADERFROMFILE 
+//#define SHADERFROMFILE 
 namespace vrv
 {
 	Shader::ConstantsMap Shader::myConstansMap;
@@ -38,12 +38,12 @@ namespace vrv
 #else
 		if (myType == VertexShader)
 		{
-			mySource = "layout (location = 0) in vec3 pos;\n layout (location = 1)in vec2 st;\n out vec2 tex_st;\n"
+			mySource = "layout (location = 0) in vec3 pos;\n layout (location = 1) in vec2 st;\n out vec2 tex_st;\n"
 				"void main()\n{\ngl_Position = vec4(pos,1);\n tex_st = st;\n}\n";
 		}
 		if (myType == FragmentShader)
 		{
-			mySource = "uniform sampler2D texture0;\n in vec2 tex_st;\n out vec4 color;\nvoid main()\n{\ncolor = texture(texture0,tex_st)\n}\n";
+			mySource = "uniform sampler2D texture0;\n in vec2 tex_st;\n out vec4 color;\nvoid main()\n{\ncolor = texture(texture0,tex_st);\n}\n";
 		}
 #endif
 	}

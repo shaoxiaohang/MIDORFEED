@@ -1,13 +1,15 @@
 #include <Render/Image.h>
 #include <Core/Utility.h>
-#include <QtWidgets/QOpenGLWidget>
+#include <windows.h>
+#include <FreeImage.h>
+#include <Render/QtContext.h>
 namespace vrv
 {
 	Image::Image(const std::string& file)
 		: myFileName(file)
 		, myWidth(0)
 		, myHeight(0)
-		, myQImage(0)
+		, myFIImage(0)
 	{
 		initialize();
 	}
@@ -39,50 +41,71 @@ namespace vrv
 
 	unsigned char* Image::dataPointer()
 	{
-		return myQImage->bits();
+		return FreeImage_GetBits(myFIImage);
 	}
 
 	void Image::initialize()
 	{
-		myQImage = new QImage(myFileName.c_str());
-		myWidth = myQImage->width();
-		myHeight = myQImage->height();
-		QImage::Format format = myQImage->format();
-		switch (format)
+		FREE_IMAGE_FORMAT format;
+		std::string ext = Utility::getExtensionWithLowercase(myFileName);
+		if (ext.compare("jpg") == 0 || ext.compare("jpeg") == 0)
 		{
-		case QImage::Format_Invalid:
-			VRV_ERROR("Failed to load image" + myFileName)
-			break;
-		case QImage::Format_RGB32:
+			format = FIF_JPEG;
+		}
+		else if (ext.compare("bmp") == 0)
+		{
+			format = FIF_BMP;
+		}
+		else if (ext.compare("png") == 0)
+		{
+			format = FIF_PNG;
+		}
+		else
+		{
+			VRV_ERROR("Image with extentsion" + ext + "is not supported!")
+			return;
+		}
+
+		myFIImage = FreeImage_Load(format, myFileName.c_str());
+		if (!myFIImage)
+		{
+			VRV_ERROR("Failed to open image" + myFileName)
+		}
+		myWidth  = FreeImage_GetWidth(myFIImage);
+		myHeight = FreeImage_GetHeight(myFIImage);
+		FREE_IMAGE_COLOR_TYPE colorType = FreeImage_GetColorType(myFIImage);
+		switch (colorType)
+		{
+		case FIC_RGB:
 			myInternalFormat = IF_RGB;
 			myInternalFormatGL = GL_RGB;
 			myPixelFormat = PF_RGB;
-			myPixelFormatGL = GL_RGB;
-			myDataType = UNSIGNED_BYTE;
-			myDataTypeGL = GL_UNSIGNED_BYTE;
+			myPixelFormatGL = GL_BGR;
 			break;
-		case QImage::Format_ARGB32:
-			myInternalFormat = IF_RGBA32F;
-			myInternalFormatGL = GL_RGBA32F;
-			myPixelFormat = PF_RGBA;
-			myPixelFormatGL = GL_RGBA;
-			myDataType = FLOAT;
-			myDataTypeGL = GL_FLOAT;
-		case QImage::Format_RGB888:
-			myInternalFormat = IF_RGB;
-			myInternalFormatGL = GL_RGB;
-			myPixelFormat = PF_RGB;
-			myPixelFormatGL = GL_RGB;
-			myDataType = UNSIGNED_BYTE;
-			myDataTypeGL = GL_UNSIGNED_BYTE;
-			break;
-		case QImage::Format_RGBA8888:
+		case FIC_RGBALPHA:
 			myInternalFormat = IF_RGBA;
 			myInternalFormatGL = GL_RGBA;
 			myPixelFormat = PF_RGBA;
-			myPixelFormatGL = GL_RGBA;
+			myPixelFormatGL = GL_BGRA;
+		default:
+			break;
+		}
+		FREE_IMAGE_TYPE imageType = FreeImage_GetImageType(myFIImage);
+		switch (imageType)
+		{
+		case FIT_UNKNOWN:
+			break;
+		case FIT_BITMAP:
 			myDataType = UNSIGNED_BYTE;
 			myDataTypeGL = GL_UNSIGNED_BYTE;
+			break;
+		case FIT_RGBF:
+			myDataType = FLOAT;
+			myDataTypeGL = GL_FLOAT;
+			break;
+		case FIT_RGBAF:
+			myDataType = FLOAT;
+			myDataTypeGL = GL_FLOAT;
 			break;
 		default:
 			break;
