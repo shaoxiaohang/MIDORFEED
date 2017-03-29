@@ -3,6 +3,9 @@
 #include<Render/Array.h>
 #include<Render/Geometry.h>
 #include<Render/Texture2D.h>
+#include<Core/Matrix4.h>
+#include<Core/Vector3.h>
+#include<Core/Vector4.h>
 using namespace vrv;
 int main(int argc, char** argv)
 {

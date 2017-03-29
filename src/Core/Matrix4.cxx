@@ -44,9 +44,18 @@ namespace vrv
 						0, 0, 0, 1);
 	}
 
+	Matrix4f Matrix4f::makeScale(value_type x, value_type y, value_type z)
+	{
+		return Matrix4f(x, 0, 0, 0,
+						0, y, 0, 0,
+						0, 0, z, 0,
+						0, 0, 0, 1);
+	}
+
 	Vector3f Matrix4f::operator*(const Vector3f& vec)
 	{
-		Vector4f vec4 = (*this)*Vector4f()
+		Vector4f vec4 = (*this)*Vector4f(vec,1);
+		return vec4;
 	}
 
 	Vector4f Matrix4f::operator*(const Vector4f& vec)
@@ -54,6 +63,7 @@ namespace vrv
 		float x = vec.x;
 		float y = vec.y;
 		float z = vec.z;
+		float w = vec.w;
 		return Vector4f(m[0] * x + m[1] * y + m[2] * z + m[3]*w, m[4] * x + m[5] * y + m[6] * z + m[7]*w,
 			m[8] * x + m[9] * y + m[10] * z + m[11]*w, m[12] * x + m[13] * y + m[14] * z + m[15]*w);
 	}

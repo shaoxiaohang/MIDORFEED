@@ -16,6 +16,7 @@ namespace vrv
 		bool operator != (const Matrix4f& r);
 		bool operator == (const Matrix4f& r);
 		static Matrix4f makeTranslate(value_type x, value_type y, value_type z);
+		static Matrix4f makeScale(value_type x, value_type y, value_type z);
 		Vector3f operator*(const Vector3f& vec);
 		Vector4f operator*(const Vector4f& vec);
 	public:

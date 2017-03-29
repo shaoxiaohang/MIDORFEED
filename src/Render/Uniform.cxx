@@ -297,7 +297,7 @@ namespace vrv
 	void UniformMat4f::synGL()
 	{
 		Uniform::synGL();
-		QtContext::instance().glUniformMatrix4fv(myLocation, 1, false, myValue.m);
+		QtContext::instance().glUniformMatrix4fv(myLocation, 1, false, &myValue.m[0]);
 	}
 
 

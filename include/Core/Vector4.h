@@ -12,12 +12,20 @@ namespace vrv
 			, y(_y)
 			, z(_z)
 			, w(_w){}
-		Vector4(Vector3 vec3, T w)
+		Vector4(Vector3<T> vec3, T w)
 			: x(vec3.x)
 			, y(vec3.y)
 			, z(vec3.z)
 			, w(w){}
-
+		Vector4(Vector3<T> vec3)
+			: x(vec3.x)
+			, y(vec3.y)
+			, z(vec3.z)
+			, w(1){}
+		operator Vector3<T>()
+		{
+			return Vector3<T>(x, y, z);
+		}
 		void operator =(const Vector4<T>& right)
 		{
 			x = right.x;
