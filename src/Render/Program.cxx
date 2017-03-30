@@ -112,11 +112,18 @@ namespace vrv
 		{
 			return myUniformsMap[name];
 		}
-		if (myAutomaticUniformsMap.find(name) != myAutomaticUniformsMap.end())
-		{
-			return myAutomaticUniformsMap[name];
-		}
 		return 0;
+	}
+
+	void Program::updateAutomaticUniforms(Scene* scene)
+	{
+		AutomaticUniformMap::iterator ibegin = myAutomaticUniformsMap.begin();
+		AutomaticUniformMap::iterator iend   = myAutomaticUniformsMap.end();
+		for (; ibegin != iend; ++ibegin)
+		{
+			AutomaticUniform* automaticUniform = ibegin->second;
+			automaticUniform->synGL(scene);
+		}
 	}
 
 	void Program::updateUniforms()
@@ -177,6 +184,7 @@ namespace vrv
 			VRV_ERROR(ss.str());
 		}
 		populateUniforms();
+		populateAutomaticUniforms();
 	}
 
 	void Program::populateUniforms()
@@ -216,7 +224,7 @@ namespace vrv
 			AutomaticUniformFactoryMap::iterator factoryItor = myAutomaticUniformFactories.find(name);
 			if (factoryItor != myAutomaticUniformFactories.end())
 			{
-				myAutomaticUniformsMap.insert(std::make_pair(name, factoryItor->second->create()));
+				myAutomaticUniformsMap.insert(std::make_pair(name, factoryItor->second->create(ibegin->second)));
 			}
 		}
 	}
@@ -238,5 +246,6 @@ namespace vrv
 	void Program::registerAutomaticUniformFactories()
 	{
 		myAutomaticUniformFactories.insert(std::make_pair("vrv_view_matrix", new CameraViewMatrixUniformFactory()));
+		myAutomaticUniformFactories.insert(std::make_pair("vrv_proj_matrix", new CameraProjMatrixUniformFactory()));
 	}
 }

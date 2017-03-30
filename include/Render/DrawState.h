@@ -5,6 +5,7 @@ namespace vrv
 	class RenderState;
 	class VertexArrayObject;
 	class Program;
+	class Scene;
 	class DrawState
 	{
 	public:
@@ -28,7 +29,7 @@ namespace vrv
 		void bind();
 		void unbind();
 
-		virtual void update();
+		virtual void update(Scene* scene);
 
 	protected:
 		RenderState* myRenderState;

@@ -38,8 +38,9 @@ namespace vrv
 #else
 		if (myType == VertexShader)
 		{
-			mySource = "layout (location = 0) in vec3 pos;\n layout (location = 1) in vec2 st;\n out vec2 tex_st;\n"
-				"void main()\n{\ngl_Position = vec4(pos,1);\n tex_st = st;\n}\n";
+			mySource = "layout (location = 0) in vec3 pos;\n layout (location = 1) in vec2 st;\n uniform mat4 vrv_view_matrix;\n"
+				"uniform mat4 vrv_proj_matrix;\n out vec2 tex_st;\n"
+				"void main()\n{\ngl_Position = vrv_proj_matrix*vrv_view_matrix*vec4(pos,1);\n tex_st = st;\n}\n";
 		}
 		if (myType == FragmentShader)
 		{

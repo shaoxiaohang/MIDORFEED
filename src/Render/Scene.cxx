@@ -4,6 +4,7 @@
 #include <Render/Program.h>
 #include <Render/Context.h>
 #include <Render/ClearState.h>
+#include <Render/Camera.h>
 #include <algorithm>
 namespace vrv
 {
@@ -13,9 +14,11 @@ namespace vrv
 		: myContext(context)
 		, myRoot(0)
 	{
+		myContext->setScene(this);
 		myDefaultProgram = new Program("../data/shader/default.vert", "../data/shader/default.frag");
 		myDefaultProgram->link();
 		myClearState = new ClearState();
+		myMasterCamera = new Camera();
 	}
 
 	void Scene::setSceneData(Node* root)
@@ -59,6 +62,11 @@ namespace vrv
 	Program* Scene::defaultProgram()
 	{
 		return myDefaultProgram;
+	}
+
+	Camera* Scene::masterCamera()
+	{
+		return myMasterCamera;
 	}
 
 	void Scene::addDrawableToRender(Node* node)

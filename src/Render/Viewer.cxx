@@ -34,4 +34,9 @@ namespace vrv
 		myScene->setSceneData(root);
 	}
 
+	Camera* Viewer::masterCamera()
+	{
+		return myScene->masterCamera();
+	}
+
 }

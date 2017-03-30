@@ -4,8 +4,10 @@
 #include<Render/Geometry.h>
 #include<Render/Texture2D.h>
 #include<Core/Matrix4.h>
+#include<Core/Matrix3.h>
 #include<Core/Vector3.h>
 #include<Core/Vector4.h>
+#include<Render/Camera.h>
 using namespace vrv;
 int main(int argc, char** argv)
 {
@@ -15,10 +17,10 @@ int main(int argc, char** argv)
 	Node* node = new Node("root");
 	Geometry* triangle = new Geometry();
 	ArrayVec3 pos(4);
-	pos[0] = Vector3f(-0.5, -0.5, 0);
-	pos[1] = Vector3f(0.5, -0.5, 0);
-	pos[2] = Vector3f(0.5, 0.5, 0);
-	pos[3] = Vector3f(-0.5, 0.5, 0);
+	pos[0] = Vector3f(0, 0, 0);
+	pos[1] = Vector3f(800, 0, 0);
+	pos[2] = Vector3f(800, 600, 0);
+	pos[3] = Vector3f(0, 600, 0);
 	ArrayVec2 st(4);
 	st[0] = Vector2f(0, 0);
 	st[1] = Vector2f(1, 0);
@@ -29,9 +31,10 @@ int main(int argc, char** argv)
 	triangle->setTextureCoordinate(&st);
 	Texture2D* texture = new Texture2D("../data/image/wall.jpg");
 	triangle->setTexture2D(texture, 0);
-	node->addDrawable(triangle);
+	node->addDrawable(triangle);   
 
 	viewer->setSceneData(node);
+	viewer->masterCamera()->setProjectionMatroxAsOrtho2D(0, 800, 0, 600);
 	viewer->run();
 	
 	return 0;

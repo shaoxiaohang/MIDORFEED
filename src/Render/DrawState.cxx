@@ -56,10 +56,11 @@ namespace vrv
 		return myProgram;
 	}
 
-	void DrawState::update()
+	void DrawState::update(Scene* scene)
 	{
 		if (myProgram)
 		{
+			myProgram->updateAutomaticUniforms(scene);
 			myProgram->updateUniforms();
 		}
 	}

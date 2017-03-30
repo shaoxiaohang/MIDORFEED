@@ -9,6 +9,7 @@
 namespace vrv
 {
 	class Program;
+	class Scene;
 	class Uniform
 	{
 	public:
@@ -29,6 +30,7 @@ namespace vrv
 		Uniform(const std::string& name, UniformType type, int location);
 		bool isDirty();	
 		virtual void synGL();
+		int location();
 
 		virtual bool set(bool value);
 		virtual bool set(int value);
@@ -144,18 +146,20 @@ namespace vrv
 		Matrix4f myValue;
 	};
 
-	class AutomaticUniform : public Uniform
+	class AutomaticUniform
 	{
 	public:
-		AutomaticUniform(const std::string& name, UniformType type);
-		AutomaticUniform(const std::string& name, UniformType type, int location);
+		AutomaticUniform(Uniform* uniform);
+		virtual void synGL(Scene* scene) = 0;
+	protected:
+		Uniform* myUniform;
 	};
 
 	class AutomaticUniformFactory
 	{
 	public:
 		AutomaticUniformFactory(const std::string& name);
-		virtual AutomaticUniform* create() = 0;
+		virtual AutomaticUniform* create(Uniform* uniform) = 0;
 	protected:
 		const std::string& myName;
 	};
@@ -164,16 +168,32 @@ namespace vrv
 	{
 	public:
 		friend class CameraViewMatrixUniformFactory;
-		virtual void synGL();
+		virtual void synGL(Scene* scene);
 	protected:
-		CameraViewMatrixUniform(const std::string& name, int location);
+		CameraViewMatrixUniform(Uniform* uniform);
 	};
 
 	class CameraViewMatrixUniformFactory : public AutomaticUniformFactory
 	{
 	public:
 		CameraViewMatrixUniformFactory();
-		virtual AutomaticUniform* create();
+		virtual AutomaticUniform* create(Uniform* uniform);
+	};
+
+	class CameraProjMatrixUniform : public AutomaticUniform
+	{
+	public:
+		friend class CameraProjMatrixUniformFactory;
+		virtual void synGL(Scene* scene);
+	protected:
+		CameraProjMatrixUniform(Uniform* uniform);
+	};
+
+	class CameraProjMatrixUniformFactory : public AutomaticUniformFactory
+	{
+	public:
+		CameraProjMatrixUniformFactory();
+		virtual AutomaticUniform* create(Uniform* uniform);
 	};
 
 }

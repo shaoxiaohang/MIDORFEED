@@ -11,6 +11,7 @@ namespace vrv
 	class Device;
 	class QtMainWindow;
 	class Scene;
+	class Camera;
 	class Viewer
 	{
 	public:
@@ -21,6 +22,7 @@ namespace vrv
 		virtual void initialize(int width, int height, const std::string& title);
 		virtual void setSceneData(Node* node);
 		virtual void onTick();
+		virtual Camera* masterCamera();
 	protected:
 		Device* myDevice;
 		QtMainWindow* myMainWindow;

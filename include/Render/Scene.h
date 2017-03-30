@@ -19,6 +19,7 @@ namespace vrv
 		void setSceneData(Node* root);
 		virtual void renderScene();
 		Program* defaultProgram();
+		Camera* masterCamera();
 	protected:
 		virtual void cullTraverse();
 		virtual void DFS(std::stack<Node*>& stack, Node* node);	

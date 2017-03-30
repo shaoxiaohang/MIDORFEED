@@ -19,6 +19,11 @@ namespace vrv
 		static Matrix4f makeScale(value_type x, value_type y, value_type z);
 		Vector3f operator*(const Vector3f& vec);
 		Vector4f operator*(const Vector4f& vec);
+		Matrix4f operator*(const Matrix4f& r);
+		static Matrix4f makeWindowingTransformation(value_type l1, value_type b1,value_type n1,
+													value_type r1, value_type t1, value_type f1,
+													value_type l2, value_type b2, value_type n2,
+													value_type r2, value_type t2, value_type f2);
 	public:
 		std::vector<float> m;
 	};

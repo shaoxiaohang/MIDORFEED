@@ -1,5 +1,7 @@
 #include<Render/Uniform.h>
 #include<Render/QtContext.h>
+#include<Render/Scene.h>
+#include<Render/Camera.h>
 namespace vrv
 {
 	Uniform::UniformType Uniform::mapGLToUniformType(unsigned int glenum)
@@ -42,6 +44,11 @@ namespace vrv
 	void Uniform::synGL()
 	{
 		myIsDirty = false;
+	}
+
+	int Uniform::location()
+	{
+		return myLocation;
 	}
 
 	bool Uniform::isDirty()
@@ -274,7 +281,7 @@ namespace vrv
 	void UniformMat3f::synGL()
 	{
 		Uniform::synGL();
-		QtContext::instance().glUniformMatrix3fv(myLocation, 1, false, myValue.m);
+		QtContext::instance().glUniformMatrix3fv(myLocation, 1, false, &myValue.m[0]);
 	}
 
 	UniformMat4f::UniformMat4f(const std::string& name, int location)
@@ -301,34 +308,62 @@ namespace vrv
 	}
 
 
-	AutomaticUniform::AutomaticUniform(const std::string& name, UniformType type)
-		: Uniform(name,type, -1)
-	{}
-
-	AutomaticUniform::AutomaticUniform(const std::string& name, UniformType type, int location)
-		: Uniform(name,type, location)
+	AutomaticUniform::AutomaticUniform(Uniform* uniform)
+		: myUniform(uniform)
 	{}
 
 	AutomaticUniformFactory::AutomaticUniformFactory(const std::string& name)
 		: myName(name)
 	{}
 
-	CameraViewMatrixUniform::CameraViewMatrixUniform(const std::string& name, int location)
-		: AutomaticUniform(name,Uniform::FLOAT_MAT4,location)
+	CameraViewMatrixUniform::CameraViewMatrixUniform(Uniform* uniform)
+		: AutomaticUniform(uniform)
 	{}
 
-	void CameraViewMatrixUniform::synGL()
+	void CameraViewMatrixUniform::synGL(Scene* scene)
 	{
-
+		if (scene)
+		{
+			if (scene->masterCamera())
+			{
+				myUniform->set(scene->masterCamera()->getViewMatrix());
+			}
+		}
 	}
 
 	CameraViewMatrixUniformFactory::CameraViewMatrixUniformFactory()
 		: AutomaticUniformFactory("vrv_view_matrix")
+	{}
+
+	AutomaticUniform* CameraViewMatrixUniformFactory::create(Uniform* uniform)
 	{
+		return new CameraViewMatrixUniform(uniform);
 	}
 
-	AutomaticUniform* CameraViewMatrixUniformFactory::create()
+	CameraProjMatrixUniform::CameraProjMatrixUniform(Uniform* uniform)
+		: AutomaticUniform(uniform)
 	{
-		return new CameraViewMatrixUniform(myName, Uniform::FLOAT_MAT4);
+
 	}
+
+	void CameraProjMatrixUniform::synGL(Scene* scene)
+	{
+		if (scene)
+		{
+			if (scene->masterCamera())
+			{
+				myUniform->set(scene->masterCamera()->projectionMatrix());
+			}
+		}
+	}
+
+	CameraProjMatrixUniformFactory::CameraProjMatrixUniformFactory()
+		: AutomaticUniformFactory("vrv_proj_matrix")
+	{}
+    
+	AutomaticUniform* CameraProjMatrixUniformFactory::create(Uniform* uniform)
+	{
+		return new CameraProjMatrixUniform(uniform);
+	}
+	
 }

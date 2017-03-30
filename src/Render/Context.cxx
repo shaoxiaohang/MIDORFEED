@@ -8,6 +8,7 @@ namespace vrv
 	Context::Context()
 		: myCachedRenderState(new RenderState())
 		, myCachedClearState(new ClearState())
+		, myScene(0)
 	{
 	
 	}
@@ -16,7 +17,7 @@ namespace vrv
 	{
 		drawable->buildGeometryIfNeeded();
 		myCachedRenderState->applyIfChanged(drawable->drawState()->renderState());
-		drawable->drawState()->update();
+		drawable->drawState()->update(myScene);
 		drawable->drawImplementation();
 	}
 
@@ -30,5 +31,10 @@ namespace vrv
 	{
 		myCachedClearState->applyIfChanged(*clear);
 		myCachedClearState->clear();
+	}
+
+	void Context::setScene(Scene* scene)
+	{
+		myScene = scene;
 	}
 }
