@@ -2,6 +2,7 @@
 #include <Render/QtContext.h>
 #include <Render/Viewer.h>
 #include <QTimer>
+#include <QKeyEvent>
 namespace vrv
 {
 	QtMainWindow::QtMainWindow(Viewer* viewer, WindowConfiguration configuration)
@@ -46,7 +47,7 @@ namespace vrv
 
 	void QtMainWindow::updateTick()
 	{
-
+		myViewer->onUpdateTick();
 	}
 
 	void QtMainWindow::renderTick()
@@ -83,6 +84,20 @@ namespace vrv
 		this->update();
 	}
 
+	bool QtMainWindow::event(QEvent* event)
+	{
+		switch (event->type())
+		{
+		case QEvent::KeyPress:
+		{
+			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+			return myViewer->handleKeyEvent(keyEvent);
+		}
+		default:
+			return QOpenGLWindow::event(event);
+		}
+	}
+
 	void QtMainWindow::initializeGL()
 	{
 		resizeGL(this->width(), this->height());
@@ -100,9 +115,9 @@ namespace vrv
 			return;
 		}
 		myContext->makeCurrent(this);
-		myViewer->onTick();
+		myViewer->onRenderTick();
 
-		//myContext->swapBuffer(this);
+		myContext->swapBuffer(this);
 	}
 }
 

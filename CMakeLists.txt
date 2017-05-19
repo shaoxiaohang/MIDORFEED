@@ -20,9 +20,23 @@ find_path(FREEIMAGE_LIB_DIR FreeImaged.lib
 PATHS
 $ENV{FREEIMAGE_ROOT}/x64
 )
+
+#find include directory by looking for certain header file
+find_path(BOOST_INCLUDE_DIR boost/signals2.hpp
+PATHS
+$ENV{BOOST_ROOT}/include/boost-1_63
+)
+
+#find library directory by looking for certain library file
+find_path(BOOST_LIB_DIR boost_atomic-vc120-mt-1_63.lib
+PATHS
+$ENV{BOOST_ROOT}/lib/
+)
 #apply them to following projects
 include_directories(${FREEIMAGE_INCLUDE_DIR})
 link_directories(${FREEIMAGE_LIB_DIR})
+include_directories(${BOOST_INCLUDE_DIR})
+link_directories(${BOOST_LIB_DIR})
 
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
@@ -50,6 +64,7 @@ Core
 opengl32.lib
 Qt5::OpenGL
 FreeImaged.lib
+boost_signals-vc120-mt-1_63.lib
 )
 
 add_custom_command(TARGET DVA

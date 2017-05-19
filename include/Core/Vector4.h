@@ -2,86 +2,27 @@
 #include <Core/Vector3.h>
 namespace vrv
 {
-	template<typename T>
-	class Vector4
+	class Vector4f
 	{
 	public:
-		Vector4(){}
-		Vector4(T _x, T _y, T _z, T _w)
-			: x(_x)
-			, y(_y)
-			, z(_z)
-			, w(_w){}
-		Vector4(Vector3<T> vec3, T w)
-			: x(vec3.x)
-			, y(vec3.y)
-			, z(vec3.z)
-			, w(w){}
-		Vector4(Vector3<T> vec3)
-			: x(vec3.x)
-			, y(vec3.y)
-			, z(vec3.z)
-			, w(1){}
-		operator Vector3<T>()
-		{
-			return Vector3<T>(x, y, z);
-		}
-		void operator =(const Vector4<T>& right)
-		{
-			x = right.x;
-			y = right.y;
-			z = right.z;
-			w = right.w;
-		}
+		Vector4f();
+		Vector4f(float _x, float _y, float _z, float _w);
+		Vector4f(Vector3f vec3, float w);
+		Vector4f(Vector3f vec3);
+		operator Vector3f();
+		void operator =(const Vector4f& right);
+		bool operator ==(const Vector4f& right);
+		bool operator !=(const Vector4f& right);
+		Vector4f operator +(const Vector4f& right);
+		Vector4f operator -(const Vector4f& right);
+		Vector4f operator -();
+		Vector4f operator / (float d);
 
-		bool operator ==(const Vector4<T>& right)
-		{
-			if (x == right.x && y == right.y && z == right.z && w == right.w)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		bool operator !=(const Vector4<T>& right)
-		{
-			return !((*this) == right);
-		}
-
-		T operator +(const Vector4<T>& right)
-		{
-			x += right.x;
-			y += right.y;
-			z += right.z;
-			w += right.w;
-			return *this;
-		}
-
-		T operator -(const Vector4<T>& right)
-		{
-			x -= right.x;
-			y -= right.y;
-			z -= right.z;
-			w -= right.w;
-			return *this;
-		}
-
-		Vector4 operator / (float d)
-		{
-			return Vector4<T>(x / d, y / d, z / d, w / d);
-		}
-
-
-		T x;
-		T y;
-		T z;
-		T w;
+		float x;
+		float y;
+		float z;
+		float w;
 
 	};
 
-	typedef Vector4<float> Vector4f;
-	typedef Vector4<double> Vector4d;
 }

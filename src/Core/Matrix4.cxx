@@ -1,4 +1,5 @@
 #include <Core/Matrix4.h>
+#include <Core/Utility.h>
 #include <cstring>
 namespace vrv
 {
@@ -52,7 +53,7 @@ namespace vrv
 						0, 0, 0, 1);
 	}
 
-	Vector3f Matrix4f::operator*(const Vector3f& vec)
+	Vector4f Matrix4f::operator*(const Vector3f& vec)
 	{
 		Vector4f vec4 = (*this)*Vector4f(vec,1);
 		return vec4;
@@ -83,5 +84,40 @@ namespace vrv
 		                                           value_type r2, value_type t2, value_type f2)
 	{
 		return makeTranslate(l2, b2, n2)*makeScale((r2-l2)/(r1-l1), (t2-b2)/(t1-b1),(f2-n2)/(f1-n1))*makeTranslate(-l1,-b1,-n1);
+	}
+
+	Matrix4f Matrix4f::makeProjection(value_type l, value_type r, value_type b, value_type t, value_type n, value_type f)
+	{
+		return Matrix4f(2.0f*n / (r - l), 0, (r + l) / (r - l), 0,
+						0, 2.0f*n / (t - b), (t + b) / (t - b), 0,
+						0, 0, (n + f) / (n - f), 2.0f*n*f / (n - f),
+						0, 0, -1, 0);
+
+	}
+
+	Matrix4f Matrix4f::makeProjection(value_type verticalFieldOfView, value_type ratioWDivedeH, value_type n, value_type f)
+	{
+		float tanHalfTheta = Utility::tan(verticalFieldOfView / 2.0f);
+		float t = tanHalfTheta*n;
+		float b = -t;
+		float r = ratioWDivedeH*t;
+		float l = -r;
+		return makeProjection(l, r, b, t, n, f);
+	}
+
+	Matrix4f Matrix4f::makeFrameToCanonical(Vector3f e, Vector3f u, Vector3f v, Vector3f w)
+	{
+		return Matrix4f(u.x, v.x, w.x, e.x,
+						u.y, v.y, w.y, e.y,
+						u.z, v.z, w.z, e.z,
+						0, 0, 0, 1);
+	}
+
+	Matrix4f Matrix4f::makeCanonicalToFrame(Vector3f e, Vector3f u, Vector3f v, Vector3f w)
+	{
+		return Matrix4f(u.x, u.y, u.z, 0,
+			v.x, v.y, v.z, 0,
+			w.x, w.y, w.z, 0,
+			0, 0, 0, 1) * makeTranslate(-e.x, -e.y, -e.z);
 	}
 }

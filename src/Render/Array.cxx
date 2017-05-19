@@ -2,9 +2,58 @@
 #include <Render/QtContext.h>
 namespace vrv
 {
+	Array::Array(DataType type)
+	{
+		initialize(false);
+	}
+
 	Array::Array(DataType type, unsigned int size)
 		: myDataType(type)
 		, mySize(size)
+	{
+		initialize(true);
+	}
+
+	void Array::setSize(int size)
+	{
+		mySize = size;
+		calculateSizeInBytes();
+	}
+
+	void Array::calculateSizeInBytes()
+	{
+		switch (myDataType)
+		{
+		case vrv::Array::INT:
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(int);
+			break;
+		case vrv::Array::UNSIGNED_INT:
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(unsigned int);
+			break;
+		case vrv::Array::FLOAT:
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			break;
+		case vrv::Array::VEC2F:
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			break;
+		case vrv::Array::VEC3F:
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			break;
+		case vrv::Array::VEC4F:
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			break;
+		case vrv::Array::MAT3F:
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			break;
+		case vrv::Array::MAT4F:
+			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			break;
+		default:
+			break;
+		}
+	}
+
+	void Array::initialize(bool knownSize)
 	{
 		GLenum glType;
 		switch (myDataType)
@@ -12,42 +61,66 @@ namespace vrv
 		case vrv::Array::INT:
 			glType = GL_INT;
 			myBaseTypeCount = 1;
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(int);
+			if (knownSize)
+			{
+				mySizeInBytes = mySize*myBaseTypeCount*sizeof(int);
+			}
 			break;
 		case vrv::Array::UNSIGNED_INT:
 			glType = GL_UNSIGNED_INT;
 			myBaseTypeCount = 1;
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(int);
+			if (knownSize)
+			{
+				mySizeInBytes = mySize*myBaseTypeCount*sizeof(unsigned int);
+			}
 			break;
 		case vrv::Array::FLOAT:
 			glType = GL_FLOAT;
 			myBaseTypeCount = 1;
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			if (knownSize)
+			{
+				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			}
 			break;
 		case vrv::Array::VEC2F:
 			glType = GL_FLOAT;
 			myBaseTypeCount = 2;
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			if (knownSize)
+			{
+				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			}
 			break;
 		case vrv::Array::VEC3F:
 			glType = GL_FLOAT;
 			myBaseTypeCount = 3;
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			if (knownSize)
+			{
+				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			}
 			break;
 		case vrv::Array::VEC4F:
 			glType = GL_FLOAT;
 			myBaseTypeCount = 4;
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			if (knownSize)
+			{
+				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			}
 			break;
 		case vrv::Array::MAT3F:
 			glType = GL_FLOAT;
 			myBaseTypeCount = 9;
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			if (knownSize)
+			{
+				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			}
 			break;
 		case vrv::Array::MAT4F:
 			glType = GL_FLOAT;
 			myBaseTypeCount = 16;
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			if (knownSize)
+			{
+				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			}
 			break;
 		default:
 			break;
@@ -69,7 +142,7 @@ namespace vrv
 	}
 
 	ArrayInt::ArrayInt(unsigned int size)
-		: Array(Array::INT,size)
+		: Array(Array::INT, size)
 	{
 		myData.resize(size);
 	}

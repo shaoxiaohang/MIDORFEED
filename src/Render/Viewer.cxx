@@ -1,10 +1,13 @@
 #include <Render/Viewer.h>
 #include <CoreQt/QtMainWindow.h>
 #include <Render/Scene.h>
+#include <Render/Camera.h>
 #include <Render/QtContext.h>
 #include <QApplication>
 namespace vrv
 {
+	boost::signals2::signal<void()> Viewer::signal_update;
+
 	Viewer::Viewer(int &argc, char **argv)
 		: myMainWindow(0)
 		, myScene(0)
@@ -24,7 +27,12 @@ namespace vrv
 		myScene = new Scene(myMainWindow->context());
 	}
 
-	void Viewer::onTick()
+	void Viewer::onUpdateTick()
+	{
+		//signal_update();
+	}
+
+	void Viewer::onRenderTick()
 	{
 		myScene->renderScene();
 	}
@@ -39,4 +47,8 @@ namespace vrv
 		return myScene->masterCamera();
 	}
 
+	bool Viewer::handleKeyEvent(QKeyEvent* keyEvent)
+	{
+		return myScene->masterCamera()->handleKeyEvent(keyEvent);
+	}
 }

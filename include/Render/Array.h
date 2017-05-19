@@ -21,11 +21,16 @@ namespace vrv
 			MAT3F,
 			MAT4F
 		};
+		Array(DataType type);
 		Array(DataType type,unsigned int size);
+		void setSize(int size);
 		unsigned int size() const;
 		unsigned int sizeInBytes() const;
 		virtual const void* dataPointer() const = 0;
 		DataType dataType();
+	protected:
+		void calculateSizeInBytes();
+		void initialize(bool knownSize);
 	protected:
 		DataType myDataType;
 		unsigned int mySize;

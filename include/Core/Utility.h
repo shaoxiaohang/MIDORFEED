@@ -2,6 +2,7 @@
 #include<iostream>
 #include<string>
 #include<algorithm>
+#include<cmath>
 namespace vrv
 {
 #define DISALLOW_COPY_AND_ASSIGN(ClassName)\
@@ -15,6 +16,8 @@ namespace vrv
 	std::cout <<"VRV INFO:  " << message<< std::endl;
 
 #define MAXIMUM_TEXTURE_UNITS 16
+
+#define PI 3.1415926f
 	class Utility
 	{
 	public:
@@ -44,6 +47,21 @@ namespace vrv
 			{
 				return "";
 			}
+		}
+		
+		static float degreeToRadian(float degree)
+		{
+			return PI*degree / 180.0f;
+		}
+
+		static float tan(float degree)
+		{
+			return tanf(degreeToRadian(degree));
+		}
+
+		static float sqrt(float value)
+		{
+			return sqrtf(value);
 		}
 	};
 }

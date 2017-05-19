@@ -2,13 +2,13 @@
 #include<string>
 #include<vector>
 #include<stack>
-
+#include<boost/signals2.hpp>
 
 class QApplication;
+class QKeyEvent;
 namespace vrv
 {
 	class Node;
-	class Device;
 	class QtMainWindow;
 	class Scene;
 	class Camera;
@@ -21,10 +21,13 @@ namespace vrv
 		virtual void run();
 		virtual void initialize(int width, int height, const std::string& title);
 		virtual void setSceneData(Node* node);
-		virtual void onTick();
+		virtual void onUpdateTick();
+		virtual void onRenderTick();
 		virtual Camera* masterCamera();
+		virtual bool handleKeyEvent(QKeyEvent* keyEvent);
+	public:
+	    static boost::signals2::signal<void()> signal_update;
 	protected:
-		Device* myDevice;
 		QtMainWindow* myMainWindow;
 		Scene* myScene;
 		QApplication* myQtApplication;

@@ -2,64 +2,26 @@
 
 namespace vrv
 {
-	template<typename T>
-	class Vector3
+	class Vector3f
 	{
 	public:
-		Vector3(){}
-		Vector3(T _x, T _y, T _z)
-			: x(_x)
-			, y(_y)
-			, z(_z)
-			{}
+		Vector3f();
+		Vector3f(float _x, float _y, float _z);
+		void operator =(const Vector3f& right);
+		bool operator ==(const Vector3f& right);
+		bool operator !=(const Vector3f& right);
+		Vector3f operator +(const Vector3f& right);
+		Vector3f operator -(const Vector3f& right);
+		Vector3f operator /(float mag);
+		Vector3f operator -();
+		Vector3f normalize();
 
-		void operator =(const Vector3<T>& right)
-		{
-			x = right.x;
-			y = right.y;
-			z = right.z;
-		}
+		Vector3f crossProduct(const Vector3f& right);
 
-		bool operator ==(const Vector3<T>& right)
-		{
-			if (x == right.x && y == right.y && z == right.z)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		bool operator !=(const Vector3<T>& right)
-		{
-			return !((*this) == right);
-		}
-
-		T operator +(const Vector3<T>& right)
-		{
-			x += right.x;
-			y += right.y;
-			z += right.z;
-			return *this;
-		}
-
-		T operator -(const Vector3<T>& right)
-		{
-			x -= right.x;
-			y -= right.y;
-			z -= right.z;
-			return *this;
-		}
-
-
-		T x;
-		T y;
-		T z;
+		float x;
+		float y;
+		float z;
 
 	};
 
-	typedef Vector3<float> Vector3f;
-	typedef Vector3<double> Vector3d;
 }

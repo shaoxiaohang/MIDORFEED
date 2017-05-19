@@ -1,5 +1,6 @@
 #include <Render/MainWindow.h>
 #include <QOpenGLWindow>
+#include <string>
 namespace vrv
 {
 	class Viewer;
@@ -18,13 +19,13 @@ namespace vrv
 		virtual void paintGL();
 		void paintEvent(QPaintEvent *event);
 		void resizeEvent(QResizeEvent *event);
+		bool event(QEvent* event);
 
 	protected:
 		virtual void updateTick();
 		virtual void renderTick();
 	public slots:
 	void tick();
-
 	protected:
 		QtContext* myContext;
 	};
