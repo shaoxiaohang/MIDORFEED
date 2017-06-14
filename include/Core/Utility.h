@@ -59,6 +59,16 @@ namespace vrv
 			return tanf(degreeToRadian(degree));
 		}
 
+		static float sin(float degree)
+		{
+			return sinf(degreeToRadian(degree));
+		}
+
+		static float cos(float degree)
+		{
+			return cosf(degreeToRadian(degree));
+		}
+
 		static float sqrt(float value)
 		{
 			return sqrtf(value);

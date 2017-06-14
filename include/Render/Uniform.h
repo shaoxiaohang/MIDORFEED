@@ -10,6 +10,7 @@ namespace vrv
 {
 	class Program;
 	class Scene;
+	class RenderInfo;
 	class Uniform
 	{
 	public:
@@ -150,7 +151,7 @@ namespace vrv
 	{
 	public:
 		AutomaticUniform(Uniform* uniform);
-		virtual void synGL(Scene* scene) = 0;
+		virtual void synGL(Scene* scene, RenderInfo& info) = 0;
 	protected:
 		Uniform* myUniform;
 	};
@@ -164,11 +165,59 @@ namespace vrv
 		const std::string& myName;
 	};
 
+	class ModelMatrixUniform : public AutomaticUniform
+	{
+	public:
+		friend class ModelMatrixUniformFactory;
+		virtual void synGL(Scene* scene, RenderInfo& info);
+	protected:
+		ModelMatrixUniform(Uniform* uniform);
+	};
+
+	class ModelMatrixUniformFactory : public AutomaticUniformFactory
+	{
+	public:
+		ModelMatrixUniformFactory();
+		virtual AutomaticUniform* create(Uniform* uniform);
+	};
+
+	class UseDiffuseColorUniform : public AutomaticUniform
+	{
+	public:
+		friend class UseDiffuseColorUniformFactory;
+		virtual void synGL(Scene* scene, RenderInfo& info);
+	protected:
+		UseDiffuseColorUniform(Uniform* uniform);
+	};
+
+	class UseDiffuseColorUniformFactory : public AutomaticUniformFactory
+	{
+	public:
+		UseDiffuseColorUniformFactory();
+		virtual AutomaticUniform* create(Uniform* uniform);
+	};
+
+	class DiffuseColorUniform : public AutomaticUniform
+	{
+	public:
+		friend class DiffuseColorUniformFactory;
+		virtual void synGL(Scene* scene, RenderInfo& info);
+	protected:
+		DiffuseColorUniform(Uniform* uniform);
+	};
+
+	class DiffuseColorUniformFactory : public AutomaticUniformFactory
+	{
+	public:
+		DiffuseColorUniformFactory();
+		virtual AutomaticUniform* create(Uniform* uniform);
+	};
+
 	class CameraViewMatrixUniform : public AutomaticUniform
 	{
 	public:
 		friend class CameraViewMatrixUniformFactory;
-		virtual void synGL(Scene* scene);
+		virtual void synGL(Scene* scene, RenderInfo& info);
 	protected:
 		CameraViewMatrixUniform(Uniform* uniform);
 	};
@@ -184,7 +233,7 @@ namespace vrv
 	{
 	public:
 		friend class CameraProjMatrixUniformFactory;
-		virtual void synGL(Scene* scene);
+		virtual void synGL(Scene* scene, RenderInfo& info);
 	protected:
 		CameraProjMatrixUniform(Uniform* uniform);
 	};
@@ -196,4 +245,19 @@ namespace vrv
 		virtual AutomaticUniform* create(Uniform* uniform);
 	};
 
+	class AmbientColorUniform : public AutomaticUniform
+	{
+	public:
+		friend class AmbientColorUniformFactory;
+		virtual void synGL(Scene* scene, RenderInfo& info);
+	protected:
+		AmbientColorUniform(Uniform* uniform);
+	};
+
+	class AmbientColorUniformFactory : public AutomaticUniformFactory
+	{
+	public:
+		AmbientColorUniformFactory();
+		virtual AutomaticUniform* create(Uniform* uniform);
+	};
 }

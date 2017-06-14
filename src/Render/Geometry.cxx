@@ -66,6 +66,13 @@ namespace vrv
 				vbo_st->copyFromSystemMemory(myTextureCoordinateArray);
 				vao->bindVertexBufferObject(vbo_st);
 			}
+			if (myNormalArray)
+			{
+				VertexBufferObject* vbo_normal = new VertexBufferObject();
+				vbo_normal->addVertexAttribute(new VertexAttributeVector3f("normal", 2));
+				vbo_normal->copyFromSystemMemory(myNormalArray);
+				vao->bindVertexBufferObject(vbo_normal);
+			}
 			Program* defaultProgram = Scene::instance().defaultProgram();
 			for (int i = 0; i < myTextureMap.size(); i++)
 			{

@@ -7,6 +7,7 @@ namespace vrv
 {
 	class Shader;
 	class Scene;
+	class RenderInfo;
 	class Program
 	{
 	public:
@@ -27,7 +28,7 @@ namespace vrv
 		static Uniform* createUniform(std::string name, Uniform::UniformType type, int location);
 		Uniform* getUniform(std::string name);
 		void updateUniforms();
-		void updateAutomaticUniforms(Scene* scene);
+		void updateAutomaticUniforms(Scene* scene, RenderInfo& info);
 		void use();
 		void unuse();
 	protected:

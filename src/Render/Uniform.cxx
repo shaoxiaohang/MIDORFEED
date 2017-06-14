@@ -1,7 +1,7 @@
-#include<Render/Uniform.h>
-#include<Render/QtContext.h>
-#include<Render/Scene.h>
-#include<Render/Camera.h>
+#include <Render/Uniform.h>
+#include <Render/QtContext.h>
+#include <Render/Scene.h>
+#include <Render/Camera.h>
 namespace vrv
 {
 	Uniform::UniformType Uniform::mapGLToUniformType(unsigned int glenum)
@@ -316,11 +316,65 @@ namespace vrv
 		: myName(name)
 	{}
 
+	ModelMatrixUniform::ModelMatrixUniform(Uniform* uniform)
+		: AutomaticUniform(uniform)
+	{}
+
+	void ModelMatrixUniform::synGL(Scene* scene, RenderInfo& info)
+	{
+		myUniform->set(Matrix4f::makeTranslate(info.position));
+	}
+
+	ModelMatrixUniformFactory::ModelMatrixUniformFactory()
+		: AutomaticUniformFactory("vrv_model_matrix")
+	{}
+
+	AutomaticUniform* ModelMatrixUniformFactory::create(Uniform* uniform)
+	{
+		return new ModelMatrixUniform(uniform);
+	}
+
+	UseDiffuseColorUniform::UseDiffuseColorUniform(Uniform* uniform)
+		: AutomaticUniform(uniform)
+	{}
+
+	void UseDiffuseColorUniform::synGL(Scene* scene, RenderInfo& info)
+	{
+		myUniform->set(info.useColor);
+	}
+
+	UseDiffuseColorUniformFactory::UseDiffuseColorUniformFactory()
+		: AutomaticUniformFactory("vrv_use_diffuse")
+	{}
+
+	AutomaticUniform* UseDiffuseColorUniformFactory::create(Uniform* uniform)
+	{
+		return new UseDiffuseColorUniform(uniform);
+	}
+
+	DiffuseColorUniform::DiffuseColorUniform(Uniform* uniform)
+		: AutomaticUniform(uniform)
+	{}
+
+	void DiffuseColorUniform::synGL(Scene* scene, RenderInfo& info)
+	{
+		myUniform->set(info.color);
+	}
+
+	DiffuseColorUniformFactory::DiffuseColorUniformFactory()
+		: AutomaticUniformFactory("vrv_diffuse_color")
+	{}
+
+	AutomaticUniform* DiffuseColorUniformFactory::create(Uniform* uniform)
+	{
+		return new DiffuseColorUniform(uniform);
+	}
+	
 	CameraViewMatrixUniform::CameraViewMatrixUniform(Uniform* uniform)
 		: AutomaticUniform(uniform)
 	{}
 
-	void CameraViewMatrixUniform::synGL(Scene* scene)
+	void CameraViewMatrixUniform::synGL(Scene* scene, RenderInfo& info)
 	{
 		if (scene)
 		{
@@ -342,11 +396,9 @@ namespace vrv
 
 	CameraProjMatrixUniform::CameraProjMatrixUniform(Uniform* uniform)
 		: AutomaticUniform(uniform)
-	{
+	{}
 
-	}
-
-	void CameraProjMatrixUniform::synGL(Scene* scene)
+	void CameraProjMatrixUniform::synGL(Scene* scene, RenderInfo& info)
 	{
 		if (scene)
 		{

@@ -4,16 +4,14 @@ namespace vrv
 {
 	Node::Node()
 		: myParent(0)
-	{
-
-	}
+		, myUseColor(false)
+	{}
 
 	Node::Node(const std::string& name)
 		: myName(name)
 		, myParent(0)
-	{
-
-	}
+		, myUseColor(false)
+	{}
 
 	void Node::addDrawable(Drawable* drawable)
 	{
@@ -53,6 +51,32 @@ namespace vrv
 	Drawable* Node::getDrawable(unsigned int i)
 	{
 		return myDrawables[i];
+	}
+
+	void Node::setPosition(Vector3f pos)
+	{
+		myPosition = pos;
+	}
+
+	void Node::setColor(Vector4f color)
+	{
+		myUseColor = true;
+		myColor = color;
+	}
+
+	Vector3f Node::position()
+	{
+		return myPosition;
+	}
+
+	Vector4f Node::color()
+	{
+		return myColor;
+	}
+
+	bool Node::useColor()
+	{
+		return myUseColor;
 	}
 
 	Node* Node::parent()

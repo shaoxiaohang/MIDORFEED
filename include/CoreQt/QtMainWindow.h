@@ -1,6 +1,8 @@
 #include <Render/MainWindow.h>
 #include <QOpenGLWindow>
 #include <string>
+
+class QTime;
 namespace vrv
 {
 	class Viewer;
@@ -22,11 +24,13 @@ namespace vrv
 		bool event(QEvent* event);
 
 	protected:
-		virtual void updateTick();
+		virtual void updateTick(double dt);
 		virtual void renderTick();
 	public slots:
 	void tick();
 	protected:
 		QtContext* myContext;
+		QTime* myClock;
+		int myLastFrameTime;
 	};
 }

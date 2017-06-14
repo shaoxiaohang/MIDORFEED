@@ -27,7 +27,7 @@ namespace vrv
 		myScene = new Scene(myMainWindow->context());
 	}
 
-	void Viewer::onUpdateTick()
+	void Viewer::onUpdateTick(double dt)
 	{
 		//signal_update();
 	}
@@ -50,5 +50,20 @@ namespace vrv
 	bool Viewer::handleKeyEvent(QKeyEvent* keyEvent)
 	{
 		return myScene->masterCamera()->handleKeyEvent(keyEvent);
+	}
+
+	bool Viewer::handleMouseEvent(QMouseEvent* mouseEvent)
+	{
+		return myScene->masterCamera()->handlerMouseEvent(mouseEvent);
+	}
+
+	bool Viewer::handleWheelEvent(QWheelEvent* wheelEvent)
+	{
+		return myScene->masterCamera()->handlerWheelEvent(wheelEvent);
+	}
+
+	Scene* Viewer::scene()
+	{
+		return myScene;
 	}
 }

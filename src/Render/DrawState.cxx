@@ -56,11 +56,11 @@ namespace vrv
 		return myProgram;
 	}
 
-	void DrawState::update(Scene* scene)
+	void DrawState::update(Scene* scene, RenderInfo& info)
 	{
 		if (myProgram)
 		{
-			myProgram->updateAutomaticUniforms(scene);
+			myProgram->updateAutomaticUniforms(scene, info);
 			myProgram->updateUniforms();
 		}
 	}
@@ -77,7 +77,7 @@ namespace vrv
 		myProgram->unuse();
 	}
 
-	bool DrawState::operator< (const DrawState& state) const
+	bool DrawState::operator< (DrawState& state) const
 	{
 		if (*(myProgram) < *(state.program()))
 		{

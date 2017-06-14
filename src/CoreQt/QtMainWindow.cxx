@@ -2,6 +2,7 @@
 #include <Render/QtContext.h>
 #include <Render/Viewer.h>
 #include <QTimer>
+#include <QTime>
 #include <QKeyEvent>
 namespace vrv
 {
@@ -9,6 +10,7 @@ namespace vrv
 		: MainWindow(viewer,configuration)
 		, QOpenGLWindow()
 		, myContext(0)
+		, myLastFrameTime(0)
 	{
 		initialize();
 	}
@@ -37,17 +39,25 @@ namespace vrv
 		QTimer* timer = new QTimer(this);
 		connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
 		timer->start(0);
+
+		myClock = new QTime();
 	}
 
 	void QtMainWindow::tick()
 	{
-		updateTick();
+		if (myClock->isNull())
+		{
+			myClock->start();
+		}
+		double dt = (myClock->elapsed() - myLastFrameTime) / 1000.0f;
+		myLastFrameTime = myClock->elapsed();
+		updateTick(dt);
 		renderTick();
 	}
 
-	void QtMainWindow::updateTick()
+	void QtMainWindow::updateTick(double dt)
 	{
-		myViewer->onUpdateTick();
+		myViewer->onUpdateTick(dt);
 	}
 
 	void QtMainWindow::renderTick()
@@ -92,6 +102,16 @@ namespace vrv
 		{
 			QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 			return myViewer->handleKeyEvent(keyEvent);
+		}
+		case QEvent::MouseMove:
+		{
+			QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+			return myViewer->handleMouseEvent(mouseEvent);
+		}
+		case QEvent::Wheel:
+		{
+			QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
+			return myViewer->handleWheelEvent(wheelEvent);
 		}
 		default:
 			return QOpenGLWindow::event(event);

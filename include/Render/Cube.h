@@ -11,5 +11,6 @@ namespace vrv
 		static bool myGeometryInitialized;
 		static ArrayVec3 sPosArray;
 		static ArrayVec2 sTexArray;
+		static ArrayVec3 sNormalArray;
 	};
 }

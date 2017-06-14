@@ -37,6 +37,14 @@ namespace vrv
 		       m[12] == r.m[12] && m[13] == r.m[13] && m[14] == r.m[14] && m[15] == r.m[15];
 	}
 
+	Matrix4f Matrix4f::makeTranslate(Vector3f vec)
+	{
+		return Matrix4f(1, 0, 0, vec.x,
+						0, 1, 0, vec.y,
+						0, 0, 1, vec.z,
+						0, 0, 0, 1);
+	}
+
 	Matrix4f Matrix4f::makeTranslate(value_type x, value_type y, value_type z)
 	{
 		return Matrix4f(1, 0, 0, x,
@@ -90,7 +98,7 @@ namespace vrv
 	{
 		return Matrix4f(2.0f*n / (r - l), 0, (r + l) / (r - l), 0,
 						0, 2.0f*n / (t - b), (t + b) / (t - b), 0,
-						0, 0, (n + f) / (n - f), 2.0f*n*f / (n - f),
+						0, 0, -(f + n) / (f - n), -2.0f*f*n / (f - n),
 						0, 0, -1, 0);
 
 	}

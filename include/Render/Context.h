@@ -2,7 +2,7 @@
 
 namespace vrv
 {
-	class Drawable;
+	class RenderInfo;
 	class RenderState;
 	class ClearState;
 	class MainWindow;
@@ -11,7 +11,7 @@ namespace vrv
 	{
 	public:
 		Context();
-		void draw(Drawable* renderState);
+		void draw(RenderInfo& renderInfo);
 		void forceSynGL();
 		void clear(ClearState* clear);
 		virtual void initialize() = 0;

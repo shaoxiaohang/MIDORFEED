@@ -6,6 +6,7 @@ namespace vrv
 	class VertexArrayObject;
 	class Program;
 	class Scene;
+	class RenderInfo;
 	class DrawState
 	{
 	public:
@@ -24,12 +25,12 @@ namespace vrv
 		Program* program();
 		Program* program() const;
 
-		bool operator < (const DrawState& state) const;
+		bool operator < (DrawState& state) const;
 
 		void bind();
 		void unbind();
 
-		virtual void update(Scene* scene);
+		virtual void update(Scene* scene, RenderInfo& info);
 
 	protected:
 		RenderState* myRenderState;

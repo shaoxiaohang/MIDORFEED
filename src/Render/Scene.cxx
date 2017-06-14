@@ -5,10 +5,23 @@
 #include <Render/Context.h>
 #include <Render/ClearState.h>
 #include <Render/Camera.h>
+#include <Render/DrawState.h>
 #include <algorithm>
 namespace vrv
 {
 	Scene* Scene::myInstance = 0;
+
+	RenderInfo::RenderInfo(Drawable* _drawable, Vector3f _pos, Vector4f _color, bool _useColor)
+		: drawable(_drawable)
+		, position(_pos)
+		, color(_color)
+		, useColor(_useColor)
+	{}
+
+	bool RenderInfo::SortDrawable::operator()(const RenderInfo& left, const RenderInfo& right)
+	{
+		return *(left.drawable->drawState()) < *(right.drawable->drawState());
+	}
 
 	Scene::Scene(Context* context)
 		: myContext(context)
@@ -48,14 +61,17 @@ namespace vrv
 
 	void Scene::renderScene()
 	{
-		myContext->clear(myClearState);
-		cullTraverse();
-		std::sort(myRenderlist.begin(), myRenderlist.end(), Drawable::SortDrawable());
-		RenderList::iterator itor = myRenderlist.begin();
-		RenderList::iterator end = myRenderlist.end();
-		for (; itor != end; ++itor)
+		if (myRoot)
 		{
-			myContext->draw(*itor);
+			myContext->clear(myClearState);
+			cullTraverse();
+			std::sort(myRenderlist.begin(), myRenderlist.end(), RenderInfo::SortDrawable());
+			RenderList::iterator itor = myRenderlist.begin();
+			RenderList::iterator end = myRenderlist.end();
+			for (; itor != end; ++itor)
+			{
+				myContext->draw(*itor);
+			}
 		}
 	}
 
@@ -74,7 +90,20 @@ namespace vrv
 		unsigned int numOfDrawables = node->numberOfDrawable();
 		for (unsigned int i = 0; i < numOfDrawables; ++i)
 		{
-			myRenderlist.push_back(node->getDrawable(i));
+			myRenderlist.push_back(RenderInfo(node->getDrawable(i), node->position(), node->color(), node->useColor()));
+		}
+	}
+
+	void Scene::updateLights()
+	{
+
+	}
+
+	void Scene::addLight(Light* light)
+	{
+		if (light != NULL)
+		{
+			myLights.push_back(light);
 		}
 	}
 }

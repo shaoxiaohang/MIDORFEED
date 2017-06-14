@@ -3,8 +3,9 @@
 namespace vrv
 {
 	bool Cube::myGeometryInitialized = false;
-	ArrayVec3 Cube::sPosArray = ArrayVec3(3);
-	ArrayVec2 Cube::sTexArray = ArrayVec2(3);
+	ArrayVec3 Cube::sPosArray = ArrayVec3(36);
+	ArrayVec2 Cube::sTexArray = ArrayVec2(36);
+	ArrayVec3 Cube::sNormalArray = ArrayVec3(36);
 
 	Cube::Cube()
 	{
@@ -13,7 +14,7 @@ namespace vrv
 			sPosArray[0]  = Vector3f(-0.5f, -0.5f, -0.5f);
 			sPosArray[1]  = Vector3f(0.5f, -0.5f, -0.5f);
 			sPosArray[2]  = Vector3f(0.5f, 0.5f, -0.5f);
-			/*sPosArray[3]  = Vector3f(0.5f, 0.5f, -0.5f);
+			sPosArray[3]  = Vector3f(0.5f, 0.5f, -0.5f);
 			sPosArray[4]  = Vector3f(-0.5f, 0.5f, -0.5f);
 			sPosArray[5]  = Vector3f(-0.5f, -0.5f, -0.5f);
 
@@ -50,12 +51,12 @@ namespace vrv
 			sPosArray[32] = Vector3f(0.5f, 0.5f, 0.5f);
 			sPosArray[33] = Vector3f(0.5f, 0.5f, 0.5f);
 			sPosArray[34] = Vector3f(-0.5f, 0.5f, 0.5f);
-			sPosArray[35] = Vector3f(-0.5f, 0.5f, -0.5f);*/
+			sPosArray[35] = Vector3f(-0.5f, 0.5f, -0.5f);
 
 			sTexArray[0] = Vector2f(0.0f, 0.0f);
 			sTexArray[1] = Vector2f(1.0f, 0.0f);
 			sTexArray[2] = Vector2f(1.0f, 1.0f);
-			/*sTexArray[3] = Vector2f(1.0f, 1.0f);
+			sTexArray[3] = Vector2f(1.0f, 1.0f);
 			sTexArray[4] = Vector2f(0.0f, 1.0f);
 			sTexArray[5] = Vector2f(0.0f, 0.0f);
 
@@ -92,12 +93,55 @@ namespace vrv
 			sTexArray[32] = Vector2f(1.0f, 0.0f);
 			sTexArray[33] = Vector2f(1.0f, 0.0f);
 			sTexArray[34] = Vector2f(0.0f, 0.0f);
-			sTexArray[35] = Vector2f(0.0f, 1.0f);*/
+			sTexArray[35] = Vector2f(0.0f, 1.0f);
+
+			sNormalArray[0] = Vector3f(0, 0, -1);
+			sNormalArray[1] = Vector3f(0, 0, -1);
+			sNormalArray[2] = Vector3f(0, 0, -1);
+			sNormalArray[3] = Vector3f(0, 0, -1);
+			sNormalArray[4] = Vector3f(0, 0, -1);
+			sNormalArray[5] = Vector3f(0, 0, -1);
+
+			sNormalArray[6]  = Vector3f(0, 0, 1);
+			sNormalArray[7]  = Vector3f(0, 0, 1);
+			sNormalArray[8]  = Vector3f(0, 0, 1);
+			sNormalArray[9]  = Vector3f(0, 0, 1);
+			sNormalArray[10] = Vector3f(0, 0, 1);
+			sNormalArray[11] = Vector3f(0, 0, 1);
+
+			sNormalArray[12] = Vector3f(-1, 0, 0);
+			sNormalArray[13] = Vector3f(-1, 0, 0);
+			sNormalArray[14] = Vector3f(-1, 0, 0);
+			sNormalArray[15] = Vector3f(-1, 0, 0);
+			sNormalArray[16] = Vector3f(-1, 0, 0);
+			sNormalArray[17] = Vector3f(-1, 0, 0);
+
+			sNormalArray[18] = Vector3f(1, 0, 0);
+			sNormalArray[19] = Vector3f(1, 0, 0);
+			sNormalArray[20] = Vector3f(1, 0, 0);
+			sNormalArray[21] = Vector3f(1, 0, 0);
+			sNormalArray[22] = Vector3f(1, 0, 0);
+			sNormalArray[23] = Vector3f(1, 0, 0);
+
+			sNormalArray[24] = Vector3f(0, -1, 0);
+			sNormalArray[25] = Vector3f(0, -1, 0);
+			sNormalArray[26] = Vector3f(0, -1, 0);
+			sNormalArray[27] = Vector3f(0, -1, 0);
+			sNormalArray[28] = Vector3f(0, -1, 0);
+			sNormalArray[29] = Vector3f(0, -1, 0);
+
+			sNormalArray[30] = Vector3f(0, 1, 0);
+			sNormalArray[31] = Vector3f(0, 1, 0);
+			sNormalArray[32] = Vector3f(0, 1, 0);
+			sNormalArray[33] = Vector3f(0, 1, 0);
+			sNormalArray[34] = Vector3f(0, 1, 0);
+			sNormalArray[35] = Vector3f(0, 1, 0);
 
 			myGeometryInitialized = true;
 		}
 		setVertex(&sPosArray);
 		setTextureCoordinate(&sTexArray);
-		addPrimitiveSet(Drawable::TRIANGLES, 0, 3);
+		setNomral(&sNormalArray);
+		addPrimitiveSet(Drawable::TRIANGLES, 0, 36);
 	}
 }

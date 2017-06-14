@@ -51,10 +51,6 @@ namespace vrv
 		void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
 		void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType);
 		virtual void buildGeometryIfNeeded();
-		struct SortDrawable
-		{
-			bool operator()(const Drawable* left, const Drawable* right);
-		};
 	protected:
 		void createDrawState(VertexArrayObject* vao, Program* shader);
 		virtual void buildGeometry() = 0;

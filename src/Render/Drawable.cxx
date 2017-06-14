@@ -148,10 +148,5 @@ namespace vrv
 	{
 		myDrawState = new DrawState(vao, shader);
 	}
-
-	bool Drawable::SortDrawable::operator()(const Drawable* left, const Drawable* right)
-	{
-		return *(left->drawState()) < *(right->drawState());
-	}
 	
 }

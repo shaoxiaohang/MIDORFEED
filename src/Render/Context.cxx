@@ -3,6 +3,7 @@
 #include <Render/Drawable.h>
 #include <Render/DrawState.h>
 #include <Render/ClearState.h>
+#include <Render/Scene.h>
 namespace vrv
 {
 	Context::Context()
@@ -10,15 +11,15 @@ namespace vrv
 		, myCachedClearState(new ClearState())
 		, myScene(0)
 	{
-	
+		//nop
 	}
 
-	void Context::draw(Drawable* drawable)
+	void Context::draw(RenderInfo& renderInfo)
 	{
-		drawable->buildGeometryIfNeeded();
-		myCachedRenderState->applyIfChanged(drawable->drawState()->renderState());
-		drawable->drawState()->update(myScene);
-		drawable->drawImplementation();
+		renderInfo.drawable->buildGeometryIfNeeded();
+		myCachedRenderState->applyIfChanged(renderInfo.drawable->drawState()->renderState());
+		renderInfo.drawable->drawState()->update(myScene, renderInfo);
+		renderInfo.drawable->drawImplementation();
 	}
 
 	void Context::forceSynGL()

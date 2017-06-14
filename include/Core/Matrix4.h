@@ -15,6 +15,7 @@ namespace vrv
 				 value_type a30, value_type a31, value_type a32, value_type a33);
 		bool operator != (const Matrix4f& r);
 		bool operator == (const Matrix4f& r);
+		static Matrix4f makeTranslate(Vector3f);
 		static Matrix4f makeTranslate(value_type x, value_type y, value_type z);
 		static Matrix4f makeScale(value_type x, value_type y, value_type z);
 		Vector4f operator*(const Vector3f& vec);
