@@ -6,7 +6,7 @@
 namespace vrv
 {
 	Image::Image(const std::string& file)
-		: myFileName(file)
+		: myFileName("../data/image/" + file)
 		, myWidth(0)
 		, myHeight(0)
 		, myFIImage(0)

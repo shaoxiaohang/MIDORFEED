@@ -2,23 +2,26 @@
 
 namespace vrv
 {
-	template<typename T>
-	class Vector2
+	class Vector2f
 	{
 	public:
-		Vector2(){}
-		Vector2(T _x, T _y)
+		Vector2f()
+			: x(0)
+			, y(0)
+		{}
+
+		Vector2f(float _x, float _y)
 			: x(_x)
 			, y(_y)
 		{}
 
-		void operator =(const Vector2<T>& right)
+		void operator =(const Vector2f& right)
 		{
 			x = right.x;
 			y = right.y;
 		}
 
-		bool operator ==(const Vector2<T>& right)
+		bool operator ==(const Vector2f& right)
 		{
 			if (x == right.x && y == right.y)
 			{
@@ -30,29 +33,26 @@ namespace vrv
 			}
 		}
 
-		bool operator !=(const Vector2<T>& right)
+		bool operator !=(const Vector2f& right)
 		{
 			return !((*this) == right);
 		}
 
-		T operator +(const Vector2<T>& right)
+		Vector2f operator +(const Vector2f& right)
 		{
 			x += right.x;
 			y += right.y;
 			return *this;
 		}
 
-		T operator -(const Vector2<T>& right)
+		Vector2f operator -(const Vector2f& right)
 		{
 			x -= right.x;
 			y -= right.y;
 			return *this;
 		}
 
-		T x;
-		T y;
+		float x;
+		float y;
 	};
-
-	typedef Vector2<float> Vector2f;
-	typedef Vector2<double> Vector2d;
 }

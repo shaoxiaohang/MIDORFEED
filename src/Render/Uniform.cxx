@@ -60,6 +60,12 @@ namespace vrv
 	{
 		return false;
 	}
+
+	bool Uniform::set(unsigned int value)
+	{
+		return false;
+	}
+
 	bool Uniform::set(int value)
 	{
 		return false;
@@ -90,6 +96,10 @@ namespace vrv
 	}
 
 	bool Uniform::get(bool& value)
+	{
+		return false;
+	}
+	bool Uniform::get(unsigned int& value)
 	{
 		return false;
 	}
@@ -124,7 +134,8 @@ namespace vrv
 
 
 	UniformBool::UniformBool(const std::string& name,int location)
-		:Uniform(name, Uniform::BOOL, location)
+		: Uniform(name, Uniform::BOOL, location)
+		, myValue(false)
 	{}
 	bool UniformBool::set(bool value)
 	{
@@ -147,7 +158,8 @@ namespace vrv
 	}
 
 	UniformInt::UniformInt(const std::string& name, int location)
-		:Uniform(name, Uniform::INT, location)
+		: Uniform(name, Uniform::INT, location)
+		, myValue(0)
 	{}
 	bool UniformInt::set(int value)
 	{
@@ -169,8 +181,32 @@ namespace vrv
 		QtContext::instance().glUniform1i(myLocation, myValue);
 	}
 
+	UniformUnsignedInt::UniformUnsignedInt(const std::string& name, int location)
+		: Uniform(name, Uniform::UNSIGNED_INT, location)
+	{}
+	bool UniformUnsignedInt::set(unsigned int value)
+	{
+		if (myValue != value)
+		{
+			myValue = value;
+			myIsDirty = true;
+		}
+		return true;
+	}
+	bool UniformUnsignedInt::get(unsigned int& value)
+	{
+		value = myValue;
+		return true;
+	}
+	void UniformUnsignedInt::synGL()
+	{
+		Uniform::synGL();
+		QtContext::instance().glUniform1i(myLocation, myValue);
+	}
+
 	UniformFloat::UniformFloat(const std::string& name, int location)
-		:Uniform(name, Uniform::FLOAT, location)
+		: Uniform(name, Uniform::FLOAT, location)
+		, myValue(0)
 	{}
 	bool UniformFloat::set(float value)
 	{
@@ -316,65 +352,35 @@ namespace vrv
 		: myName(name)
 	{}
 
-	ModelMatrixUniform::ModelMatrixUniform(Uniform* uniform)
+	CameraPositionUniform::CameraPositionUniform(Uniform* uniform)
 		: AutomaticUniform(uniform)
 	{}
 
-	void ModelMatrixUniform::synGL(Scene* scene, RenderInfo& info)
+	void CameraPositionUniform::synGL(Scene* scene)
 	{
-		myUniform->set(Matrix4f::makeTranslate(info.position));
+		if (scene)
+		{
+			if (scene->masterCamera())
+			{
+				myUniform->set(scene->masterCamera()->position());
+			}
+		}
 	}
 
-	ModelMatrixUniformFactory::ModelMatrixUniformFactory()
-		: AutomaticUniformFactory("vrv_model_matrix")
+	CameraPositionUniformFactory::CameraPositionUniformFactory()
+		: AutomaticUniformFactory("vrv_view_pos")
 	{}
 
-	AutomaticUniform* ModelMatrixUniformFactory::create(Uniform* uniform)
+	AutomaticUniform* CameraPositionUniformFactory::create(Uniform* uniform)
 	{
-		return new ModelMatrixUniform(uniform);
+		return new CameraPositionUniform(uniform);
 	}
 
-	UseDiffuseColorUniform::UseDiffuseColorUniform(Uniform* uniform)
-		: AutomaticUniform(uniform)
-	{}
-
-	void UseDiffuseColorUniform::synGL(Scene* scene, RenderInfo& info)
-	{
-		myUniform->set(info.useColor);
-	}
-
-	UseDiffuseColorUniformFactory::UseDiffuseColorUniformFactory()
-		: AutomaticUniformFactory("vrv_use_diffuse")
-	{}
-
-	AutomaticUniform* UseDiffuseColorUniformFactory::create(Uniform* uniform)
-	{
-		return new UseDiffuseColorUniform(uniform);
-	}
-
-	DiffuseColorUniform::DiffuseColorUniform(Uniform* uniform)
-		: AutomaticUniform(uniform)
-	{}
-
-	void DiffuseColorUniform::synGL(Scene* scene, RenderInfo& info)
-	{
-		myUniform->set(info.color);
-	}
-
-	DiffuseColorUniformFactory::DiffuseColorUniformFactory()
-		: AutomaticUniformFactory("vrv_diffuse_color")
-	{}
-
-	AutomaticUniform* DiffuseColorUniformFactory::create(Uniform* uniform)
-	{
-		return new DiffuseColorUniform(uniform);
-	}
-	
 	CameraViewMatrixUniform::CameraViewMatrixUniform(Uniform* uniform)
 		: AutomaticUniform(uniform)
 	{}
 
-	void CameraViewMatrixUniform::synGL(Scene* scene, RenderInfo& info)
+	void CameraViewMatrixUniform::synGL(Scene* scene)
 	{
 		if (scene)
 		{
@@ -398,7 +404,7 @@ namespace vrv
 		: AutomaticUniform(uniform)
 	{}
 
-	void CameraProjMatrixUniform::synGL(Scene* scene, RenderInfo& info)
+	void CameraProjMatrixUniform::synGL(Scene* scene)
 	{
 		if (scene)
 		{

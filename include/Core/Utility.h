@@ -3,6 +3,7 @@
 #include<string>
 #include<algorithm>
 #include<cmath>
+
 namespace vrv
 {
 #define DISALLOW_COPY_AND_ASSIGN(ClassName)\
@@ -42,6 +43,19 @@ namespace vrv
 				std::string ext = fileName.substr(p + 1);
 				std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 				return ext;
+			}
+			else
+			{
+				return "";
+			}
+		}
+
+		static std::string getBaseDirectory(const std::string& fileName)
+		{
+			std::size_t p = fileName.find_last_of('/');
+			if (p != fileName.npos)
+			{
+				return fileName.substr(0, p+1);
 			}
 			else
 			{

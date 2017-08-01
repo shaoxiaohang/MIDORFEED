@@ -10,10 +10,13 @@ namespace vrv
 		void operator =(const Vector3f& right);
 		bool operator ==(const Vector3f& right);
 		bool operator !=(const Vector3f& right);
+		Vector3f operator +=(const Vector3f& right);
+		Vector3f operator -=(const Vector3f& right);
 		Vector3f operator +(const Vector3f& right);
 		Vector3f operator -(const Vector3f& right);
 		Vector3f operator /(float mag);
 		Vector3f operator -();
+		Vector3f operator *(float);
 		Vector3f normalize();
 
 		Vector3f crossProduct(const Vector3f& right);

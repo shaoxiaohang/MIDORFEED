@@ -3,124 +3,45 @@
 namespace vrv
 {
 	Array::Array(DataType type)
-	{
-		initialize(false);
-	}
+		: myPreAllocated(false)
+		, myDataType(type)
+	{}
 
-	Array::Array(DataType type, unsigned int size)
-		: myDataType(type)
-		, mySize(size)
-	{
-		initialize(true);
-	}
-
-	void Array::setSize(int size)
+	Array::Array(DataType type, int size)
+		: myPreAllocated(true)
+		, myDataType(type)
 	{
 		mySize = size;
-		calculateSizeInBytes();
+		initialize();
 	}
 
-	void Array::calculateSizeInBytes()
+	void Array::initialize()
 	{
 		switch (myDataType)
 		{
 		case vrv::Array::INT:
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(int);
+			mySizeInBytes = mySize*sizeof(int);
 			break;
 		case vrv::Array::UNSIGNED_INT:
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(unsigned int);
+			mySizeInBytes = mySize*sizeof(unsigned int);
 			break;
 		case vrv::Array::FLOAT:
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			mySizeInBytes = mySize*sizeof(float);
 			break;
 		case vrv::Array::VEC2F:
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			mySizeInBytes = mySize * 2 * sizeof(float);
 			break;
 		case vrv::Array::VEC3F:
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			mySizeInBytes = mySize * 3 * sizeof(float);
 			break;
 		case vrv::Array::VEC4F:
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			mySizeInBytes = mySize * 4 * sizeof(float);
 			break;
 		case vrv::Array::MAT3F:
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
+			mySizeInBytes = mySize * 9 * sizeof(float);
 			break;
 		case vrv::Array::MAT4F:
-			mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
-			break;
-		default:
-			break;
-		}
-	}
-
-	void Array::initialize(bool knownSize)
-	{
-		GLenum glType;
-		switch (myDataType)
-		{
-		case vrv::Array::INT:
-			glType = GL_INT;
-			myBaseTypeCount = 1;
-			if (knownSize)
-			{
-				mySizeInBytes = mySize*myBaseTypeCount*sizeof(int);
-			}
-			break;
-		case vrv::Array::UNSIGNED_INT:
-			glType = GL_UNSIGNED_INT;
-			myBaseTypeCount = 1;
-			if (knownSize)
-			{
-				mySizeInBytes = mySize*myBaseTypeCount*sizeof(unsigned int);
-			}
-			break;
-		case vrv::Array::FLOAT:
-			glType = GL_FLOAT;
-			myBaseTypeCount = 1;
-			if (knownSize)
-			{
-				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
-			}
-			break;
-		case vrv::Array::VEC2F:
-			glType = GL_FLOAT;
-			myBaseTypeCount = 2;
-			if (knownSize)
-			{
-				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
-			}
-			break;
-		case vrv::Array::VEC3F:
-			glType = GL_FLOAT;
-			myBaseTypeCount = 3;
-			if (knownSize)
-			{
-				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
-			}
-			break;
-		case vrv::Array::VEC4F:
-			glType = GL_FLOAT;
-			myBaseTypeCount = 4;
-			if (knownSize)
-			{
-				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
-			}
-			break;
-		case vrv::Array::MAT3F:
-			glType = GL_FLOAT;
-			myBaseTypeCount = 9;
-			if (knownSize)
-			{
-				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
-			}
-			break;
-		case vrv::Array::MAT4F:
-			glType = GL_FLOAT;
-			myBaseTypeCount = 16;
-			if (knownSize)
-			{
-				mySizeInBytes = mySize*myBaseTypeCount*sizeof(float);
-			}
+			mySizeInBytes = mySize * 16 * sizeof(float);
 			break;
 		default:
 			break;
@@ -131,20 +52,61 @@ namespace vrv
 	{
 		return mySize;
 	}
-	unsigned int Array::sizeInBytes() const
+
+	unsigned int Array::sizeInBytes()
 	{
+		if (!myPreAllocated)
+		{
+			calculateSize();
+			initialize();
+			myPreAllocated = true;
+		}
+	
 		return mySizeInBytes;
 	}
+
+	void Array::add(int&)
+	{}
+	void Array::add(unsigned int&)
+	{}
+	void Array::add(float&)
+	{}
+	void Array::add(Vector2f&)
+	{}
+	void Array::add(Vector3f&)
+	{}
+	void Array::add(Vector4f&)
+	{}
+	void Array::add(Matrix3f&)
+	{}
+	void Array::add(Matrix4f&)
+	{}
 
 	Array::DataType Array::dataType()
 	{
 		return myDataType;
 	}
 
-	ArrayInt::ArrayInt(unsigned int size)
-		: Array(Array::INT, size)
+	ArrayInt::ArrayInt()
+		: Array(Array::INT)
+	{
+	}
+
+	ArrayInt::ArrayInt(int size)
+		: Array(Array::INT,size)
 	{
 		myData.resize(size);
+	}
+
+	void ArrayInt::add(int& value)
+	{
+		myData.push_back(value);
+		mySize = myData.size();
+	}
+
+	void ArrayInt::calculateSize()
+	{
+		mySize = myData.size();
 	}
 
 	const void* ArrayInt::dataPointer() const
@@ -157,10 +119,35 @@ namespace vrv
 		return myData[i];
 	}
 
-	ArrayUnsignedInt::ArrayUnsignedInt(unsigned int size)
+	int ArrayInt::get(unsigned int i)
+	{
+		return myData[i];
+	}
+
+	ArrayUnsignedInt::ArrayUnsignedInt()
+		: Array(Array::UNSIGNED_INT)
+	{
+	}
+
+	ArrayUnsignedInt::ArrayUnsignedInt(int size)
 		: Array(Array::UNSIGNED_INT, size)
 	{
 		myData.resize(size);
+	}
+
+	ArrayUnsignedInt::ArrayUnsignedInt(ArrayUnsignedInt* copy)
+		: Array(Array::UNSIGNED_INT, copy->size())
+	{
+		myData.resize(mySize);
+		for (unsigned int i = 0; i < mySize; ++i)
+		{
+			(*this)[i] = copy->get(i);
+		}
+	}
+
+	void ArrayUnsignedInt::calculateSize()
+	{
+		mySize = myData.size();
 	}
 
 	const void* ArrayUnsignedInt::dataPointer() const
@@ -173,10 +160,31 @@ namespace vrv
 		return myData[i];
 	}
 
-	ArrayFloat::ArrayFloat(unsigned int size)
+	unsigned int ArrayUnsignedInt::get(unsigned int i)
+	{
+		return myData[i];
+	}
+
+	void ArrayUnsignedInt::add(unsigned int& value)
+	{
+		myData.push_back(value);
+		mySize = myData.size();
+	}
+
+	ArrayFloat::ArrayFloat()
+		: Array(Array::FLOAT)
+	{
+	}
+
+	ArrayFloat::ArrayFloat(int size)
 		: Array(Array::FLOAT, size)
 	{
 		myData.resize(size);
+	}
+
+	void ArrayFloat::calculateSize()
+	{
+		mySize = myData.size();
 	}
 
 	const void* ArrayFloat::dataPointer() const
@@ -189,10 +197,41 @@ namespace vrv
 		return myData[i];
 	}
 
-	ArrayVec2::ArrayVec2(unsigned int size)
+	float ArrayFloat::get(unsigned int i)
+	{
+		return myData[i];
+	}
+
+	void ArrayFloat::add(float& value)
+	{
+		myData.push_back(value);
+		mySize = myData.size();
+	}
+
+	ArrayVec2::ArrayVec2()
+		: Array(Array::VEC2F)
+	{
+	}
+
+	ArrayVec2::ArrayVec2(int size)
 		: Array(Array::VEC2F, size)
 	{
 		myData.resize(size);
+	}
+
+	ArrayVec2::ArrayVec2(ArrayVec2* copy)
+		: Array(Array::VEC2F, copy->size())
+	{
+		myData.resize(mySize);
+		for (unsigned int i = 0; i < mySize; ++i)
+		{
+			(*this)[i] = copy->get(i);
+		}
+	}
+
+	void ArrayVec2::calculateSize()
+	{
+		mySize = myData.size();
 	}
 
 	const void* ArrayVec2::dataPointer() const
@@ -205,10 +244,47 @@ namespace vrv
 		return myData[i];
 	}
 
-	ArrayVec3::ArrayVec3(unsigned int size)
+	Vector2f ArrayVec2::get(unsigned int i)
+	{
+		return myData[i];
+	}
+
+	void ArrayVec2::add(Vector2f& value)
+	{
+		myData.push_back(value);
+		mySize = myData.size();
+	}
+
+	ArrayVec3::ArrayVec3()
+		: Array(Array::VEC3F)
+	{
+	}
+
+	ArrayVec3::ArrayVec3(int size)
 		: Array(Array::VEC3F, size)
 	{
 		myData.resize(size);
+	}
+
+	ArrayVec3::ArrayVec3(ArrayVec3* copy)
+		: Array(Array::VEC3F,copy->size())
+	{
+		myData.resize(mySize);
+		for (unsigned int i = 0; i < mySize; ++i)
+		{
+			(*this)[i] = copy->get(i);
+		}
+	}
+
+	void ArrayVec3::add(Vector3f& value)
+	{
+		myData.push_back(value);
+		mySize = myData.size();
+	}
+
+	void ArrayVec3::calculateSize()
+	{
+		mySize = myData.size();
 	}
 
 	const void* ArrayVec3::dataPointer() const
@@ -221,10 +297,31 @@ namespace vrv
 		return myData[i];
 	}
 
-	ArrayVec4::ArrayVec4(unsigned int size)
+	Vector3f ArrayVec3::get(unsigned int i)
+	{
+		return myData[i];
+	}
+
+	ArrayVec4::ArrayVec4()
+		: Array(Array::VEC4F)
+	{
+	}
+
+	ArrayVec4::ArrayVec4(int size)
 		: Array(Array::VEC4F, size)
 	{
 		myData.resize(size);
+	}
+
+	void ArrayVec4::add(Vector4f& value)
+	{
+		myData.push_back(value);
+		mySize = myData.size();
+	}
+
+	void ArrayVec4::calculateSize()
+	{
+		mySize = myData.size();
 	}
 
 	const void* ArrayVec4::dataPointer() const
@@ -237,10 +334,26 @@ namespace vrv
 		return myData[i];
 	}
 
-	ArrayMat3::ArrayMat3(unsigned int size)
+	Vector4f ArrayVec4::get(unsigned int i)
+	{
+		return myData[i];
+	}
+
+	ArrayMat3::ArrayMat3()
+		: Array(Array::MAT3F)
+	{
+	}
+
+	ArrayMat3::ArrayMat3(int size)
 		: Array(Array::MAT3F, size)
 	{
 		myData.resize(size);
+	}
+
+	void ArrayMat3::add(Matrix3f& value)
+	{
+		myData.push_back(value);
+		mySize = myData.size();
 	}
 
 	const void* ArrayMat3::dataPointer() const
@@ -253,10 +366,31 @@ namespace vrv
 		return myData[i];
 	}
 
-	ArrayMat4::ArrayMat4(unsigned int size)
+	Matrix3f ArrayMat3::get(unsigned int i)
+	{
+		return myData[i];
+	}
+
+	void ArrayMat3::calculateSize()
+	{
+		mySize = myData.size();
+	}
+
+	ArrayMat4::ArrayMat4()
+		: Array(Array::MAT4F)
+	{
+	}
+
+	ArrayMat4::ArrayMat4(int size)
 		: Array(Array::MAT4F, size)
 	{
 		myData.resize(size);
+	}
+
+	void ArrayMat4::add(Matrix4f& value)
+	{
+		myData.push_back(value);
+		mySize = myData.size();
 	}
 
 	const void* ArrayMat4::dataPointer() const
@@ -264,7 +398,17 @@ namespace vrv
 		return &myData[0];
 	}
 
+	void ArrayMat4::calculateSize()
+	{
+		mySize = myData.size();
+	}
+
 	Matrix4f& ArrayMat4::operator[](unsigned int i)
+	{
+		return myData[i];
+	}
+
+	Matrix4f ArrayMat4::get(unsigned int i)
 	{
 		return myData[i];
 	}

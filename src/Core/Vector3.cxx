@@ -38,7 +38,7 @@ namespace vrv
 		return !((*this) == right);
 	}
 
-	Vector3f Vector3f::operator +(const Vector3f& right)
+	Vector3f Vector3f::operator +=(const Vector3f& right)
 	{
 		x += right.x;
 		y += right.y;
@@ -46,7 +46,7 @@ namespace vrv
 		return *this;
 	}
 
-	Vector3f Vector3f::operator -(const Vector3f& right)
+	Vector3f Vector3f::operator -=(const Vector3f& right)
 	{
 		x -= right.x;
 		y -= right.y;
@@ -54,12 +54,19 @@ namespace vrv
 		return *this;
 	}
 
+	Vector3f Vector3f::operator +(const Vector3f& right)
+	{
+		return Vector3f(x + right.x, y + right.y, z + right.z);
+	}
+
+	Vector3f Vector3f::operator -(const Vector3f& right)
+	{
+		return Vector3f(x - right.x, y - right.y, z - right.z);
+	}
+
 	Vector3f Vector3f::operator /(float mag)
 	{
-		x /= mag;
-		y /= mag;
-		z /= mag;
-		return *this;
+		return Vector3f(x/mag, y/mag, z/mag);
 	}
 
 	Vector3f Vector3f::operator -()
@@ -68,6 +75,11 @@ namespace vrv
 		y = -y;
 		z = -z;
 		return *this;
+	}
+
+	Vector3f Vector3f::operator *(float mag)
+	{
+		return Vector3f(x * mag, y * mag, z * mag);
 	}
 
 	Vector3f Vector3f::normalize()

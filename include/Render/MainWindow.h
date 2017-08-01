@@ -16,6 +16,7 @@ namespace vrv
 		std::string title;
 
 		int depthBufferSize;
+		int stentilBufferSize;
 		int redBufferSize;
 		int greenBufferSize;
 		int blueBufferSize;
@@ -26,12 +27,11 @@ namespace vrv
 	{
 	protected:
 
-		MainWindow(Viewer* viewer, WindowConfiguration configuration);
+		MainWindow(WindowConfiguration configuration);
 		virtual void initialize() = 0;
 	protected:
 		
 		WindowConfiguration myConfiguration;
-		Viewer* myViewer;
 
 	};
 }

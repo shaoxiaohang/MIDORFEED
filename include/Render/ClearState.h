@@ -10,7 +10,8 @@ namespace vrv
 		{
 			COLOR_BUFFER_BIT,
 			DEPTH_BUFFER_BIT,
-			DEPTH_COLOR_BIT
+			DEPTH_COLOR_BIT,
+			DEPTH_COLOR_STENCIL_BIT
 		};
 	public:
 		ClearState();

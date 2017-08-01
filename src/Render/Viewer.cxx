@@ -1,30 +1,34 @@
 #include <Render/Viewer.h>
-#include <CoreQt/QtMainWindow.h>
+#include <CoreQt/QtApplicationWindow.h>
 #include <Render/Scene.h>
 #include <Render/Camera.h>
 #include <Render/QtContext.h>
+#include <Render/ShaderManager.h>
 #include <QApplication>
 namespace vrv
 {
 	boost::signals2::signal<void()> Viewer::signal_update;
 
 	Viewer::Viewer(int &argc, char **argv)
-		: myMainWindow(0)
+		: myAppWindow(0)
 		, myScene(0)
+		, myShaderManager(0)
 	{
 		myQtApplication = new QApplication(argc,argv);
 	}
 
 	void Viewer::run()
 	{
+		myAppWindow->show();
 		myQtApplication->exec();
 	}
 
 	void Viewer::initialize(int _width, int _height, const std::string& _title)
 	{
 		WindowConfiguration config(_width, _height, _title);
-		myMainWindow = new QtMainWindow(this,config);
-		myScene = new Scene(myMainWindow->context());
+		myAppWindow = new QtApplicationWindow(this, config);
+		myScene = new Scene(myAppWindow->context());
+		myShaderManager = new ShaderManager();
 	}
 
 	void Viewer::onUpdateTick(double dt)

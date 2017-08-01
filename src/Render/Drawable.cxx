@@ -136,11 +136,11 @@ namespace vrv
 		myPrimitiveSets.push_back(PrimitiveSet(pri, cout, type));
 	}
 
-	void Drawable::buildGeometryIfNeeded()
+	void Drawable::buildGeometryIfNeeded(Material* material)
 	{
 		if (!myBuildGeometry)
 		{
-			buildGeometry();
+			buildGeometry(material);
 		}
 	}
 

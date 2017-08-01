@@ -2,25 +2,27 @@
 #include <vector>
 #include <stack>
 #include <Core/Singleton.h>
-#include <Core/Vector3.h>
-#include <Core/Vector4.h>
+#include <Core/Matrix4.h>
+#include <map>
 namespace vrv
 {
 	class Camera;
 	class Node;
 	class Drawable;
-	class Program;
 	class Context;
 	class ClearState;
 	class Light;
+	class Material;
+	class Program;
+	class RenderState;
 
 	struct RenderInfo
 	{
-		RenderInfo(Drawable* drawable, Vector3f pos, Vector4f color, bool useColor);
-		bool useColor;
+		RenderInfo(Drawable* drawable, Matrix4f pos, Material* material);
+		void update(Program* program);
 		Drawable* drawable;
-		Vector3f position;
-		Vector4f color;
+		Matrix4f modelMatrix;
+		Material* material;
 
 		struct SortDrawable
 		{
@@ -39,21 +41,31 @@ namespace vrv
 		Scene(Context* context);
 		void setSceneData(Node* root);
 		virtual void renderScene();
-		Program* defaultProgram();
 		Camera* masterCamera();
 		void addLight(Light* light);
+		Node* root();
+		void setVisualizeDepthBuffer(bool optimize);
+		void setOptimizeVisualizeDepthBuffer(bool);
+		void setOutlineObjects(bool);
+		void setOutlineWidth(double);
 	protected:
 		virtual void cullTraverse();
 		virtual void DFS(std::stack<Node*>& stack, Node* node);	
 		virtual void addDrawableToRender(Node* node);
 		virtual void updateLights();
+		virtual void draw();
 	protected:
 		Camera* myMasterCamera;
 		Node* myRoot;
-		Program* myDefaultProgram;
 		Context* myContext;
+		RenderState* myPhoneLightingRenderState;
+		RenderState* myOutlineRenderState;
 		ClearState* myClearState;
 		RenderList myRenderlist;
 		LightList myLights;
+		bool myVisualizeDepthBuffer;
+		bool myOptimizeVisualizeDepthBuffer;
+		bool myOutlineObjects;
+		double myOutlineWidth;
 	};
 }

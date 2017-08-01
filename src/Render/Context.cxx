@@ -16,7 +16,6 @@ namespace vrv
 
 	void Context::draw(RenderInfo& renderInfo)
 	{
-		renderInfo.drawable->buildGeometryIfNeeded();
 		myCachedRenderState->applyIfChanged(renderInfo.drawable->drawState()->renderState());
 		renderInfo.drawable->drawState()->update(myScene, renderInfo);
 		renderInfo.drawable->drawImplementation();

@@ -1,20 +1,27 @@
 #include <Render/MainWindow.h>
-#include <QOpenGLWindow>
 #include <string>
+#include <QOpenGLWindow>
+#include <QWidget>
 
-class QTime;
 namespace vrv
 {
 	class Viewer;
 	class QtContext;
-	class QtMainWindow : public QOpenGLWindow,public MainWindow
+	class QtApplicationWindow;
+
+	class QtMainWindow : public QOpenGLWindow
 	{
 		Q_OBJECT
 	public:
-		QtMainWindow(Viewer* viewer,WindowConfiguration configuration);
-		virtual void initialize();
+		QtMainWindow(QtApplicationWindow* appWindow, Viewer* viewer, WindowConfiguration configuration);
+		QtApplicationWindow* appWindow();
 		QtContext* context();
+
+	public slots:
+		void tick();
+
 	protected:
+		void initialize(WindowConfiguration configuration);
 		virtual void createContext();
 		virtual void initializeGL();
 		virtual void resizeGL(int w, int h);
@@ -26,11 +33,22 @@ namespace vrv
 	protected:
 		virtual void updateTick(double dt);
 		virtual void renderTick();
-	public slots:
-	void tick();
+
 	protected:
+		Viewer* myViewer;
+		QtApplicationWindow* myAppWindow;
 		QtContext* myContext;
 		QTime* myClock;
 		int myLastFrameTime;
+	};
+
+	class QtAdapter : public QWidget
+	{
+		Q_OBJECT
+	public:
+		QtAdapter(QtApplicationWindow* appWindow, Viewer* viewer, WindowConfiguration configuration);
+		QtMainWindow* mainWindow();
+	protected:
+		QtMainWindow* myMainWindow;
 	};
 }

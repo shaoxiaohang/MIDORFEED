@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 #include <Render/QtContext.h>
-//#define SHADERFROMFILE 
 namespace vrv
 {
 	Shader::ConstantsMap Shader::myConstansMap;
@@ -24,7 +23,6 @@ namespace vrv
 			addUniformConstant("vrv_halfPi", 1.5707963267949f);
 			myConstantsMapInitialized = true;
 		}
-#ifdef SHADERFROMFILE
 		std::ifstream shaderFile;
 		shaderFile.open(fileName.c_str());
 		if (shaderFile.fail())
@@ -35,24 +33,6 @@ namespace vrv
 		shaderStream << shaderFile.rdbuf();
 		shaderFile.close();
 		mySource = shaderStream.str();
-#else
-		if (myType == VertexShader)
-		{
-			mySource = "layout (location = 0) in vec3 pos;\n layout (location = 1) in vec2 st;\n layout(location = 2) in vec3 normal;\n"
-				"uniform mat4 vrv_view_matrix;\n uniform mat4 vrv_model_matrix;\n"
-				"uniform mat4 vrv_proj_matrix;\n out vec2 tex_st;\n out vec3 vrv_normal;\n"
-				"void main()\n{\ngl_Position = vrv_proj_matrix*vrv_view_matrix*vrv_model_matrix*vec4(pos,1);\n"
-				"tex_st = st;\n vrv_normal = normal;\n}\n";
-		}
-		if (myType == FragmentShader)
-		{
-			mySource = "uniform sampler2D texture0;\n  uniform vec4 vrv_diffuse_color;\n  uniform bool vrv_use_diffuse;\n"
-				"uniform vec3 vrv_ambient; uniform vec3 vrv_diffuse; uniform vec3 vrv_specular;in vec2 tex_st;\n in vec3 vrv_normal;\n"
-				"out vec4 color;\n"
-				"void main()\n{\n if(vrv_use_diffuse)\n color = vrv_diffuse_color;"
-				"else\n{color = texture(texture0,tex_st);}\n}\n";
-		}
-#endif
 	}
 
 	void Shader::addVertexAttribute(VertexAttribute* attribute)

@@ -4,13 +4,13 @@ namespace vrv
 {
 	Node::Node()
 		: myParent(0)
-		, myUseColor(false)
+		, myScale(1.0f)
 	{}
 
 	Node::Node(const std::string& name)
 		: myName(name)
 		, myParent(0)
-		, myUseColor(false)
+		, myScale(1.0f)
 	{}
 
 	void Node::addDrawable(Drawable* drawable)
@@ -58,25 +58,9 @@ namespace vrv
 		myPosition = pos;
 	}
 
-	void Node::setColor(Vector4f color)
-	{
-		myUseColor = true;
-		myColor = color;
-	}
-
 	Vector3f Node::position()
 	{
 		return myPosition;
-	}
-
-	Vector4f Node::color()
-	{
-		return myColor;
-	}
-
-	bool Node::useColor()
-	{
-		return myUseColor;
 	}
 
 	Node* Node::parent()
@@ -91,5 +75,20 @@ namespace vrv
 			myParent->removeChild(this);
 		}
 		myParent = parent;
+	}
+
+	void Node::setScale(float scale)
+	{
+		myScale = scale;
+	}
+
+	float Node::scale()
+	{
+		return myScale;
+	}
+
+	Matrix4f Node::getModelMatrix()
+	{
+		return Matrix4f::makeTranslate(myPosition) * Matrix4f::makeScale(myScale,myScale,myScale);
 	}
 }

@@ -4,9 +4,9 @@
 namespace vrv
 {
 	ClearState::ClearState()
-		: myClearColor(1.0f, 1.0f, 1.0f, 1.0f)
+		: myClearColor(0.05f, 0.05f, 0.05f, 1.0f)
 		, myClearDepth(1.0f)
-		, myClearMask(DEPTH_COLOR_BIT)
+		, myClearMask(DEPTH_COLOR_STENCIL_BIT)
 	{
 		switch (myClearMask)
 		{
@@ -18,6 +18,9 @@ namespace vrv
 			break;
 		case vrv::ClearState::DEPTH_COLOR_BIT:
 			myGLClearMask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+			break;
+		case vrv::ClearState::DEPTH_COLOR_STENCIL_BIT:
+			myGLClearMask = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT;
 			break;
 		default:
 			break;

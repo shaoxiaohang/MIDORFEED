@@ -19,9 +19,11 @@ namespace vrv
 		virtual bool handleKeyEvent(QKeyEvent* event);
 		virtual bool handlerMouseEvent(QMouseEvent* event);
 		virtual bool handlerWheelEvent(QWheelEvent* event);
+		virtual Vector3f position();
 	protected:
 		void slot_update();
 		void reset();
+		void updateVectors();
 	protected:
 		float myYaw;
 		float myPitch;
@@ -30,6 +32,7 @@ namespace vrv
 		Matrix4f myProjectionMatrix;
 		Vector3f myUp;
 		Vector3f myFront;
+		Vector3f myRight;
 		float myMoveSpeed; 
 		float myRotateSpeed;
 		float myZoomSpeed;

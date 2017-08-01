@@ -1,50 +1,48 @@
-#include<Render/Geometry.h>
-#include<Render/VertexArrayObject.h>
-#include<Render/VertexAttribute.h>
-#include<Render/VertexBufferObject.h>
-#include<Render/IndexBufferObject.h>
-#include<Render/Scene.h>
-#include<Render/Uniform.h>
-#include<Render/Program.h>
-#include<Render/QtContext.h>
-#include<Render/Texture2D.h>
+#include <Render/Geometry.h>
+#include <Render/VertexArrayObject.h>
+#include <Render/VertexAttribute.h>
+#include <Render/VertexBufferObject.h>
+#include <Render/IndexBufferObject.h>
+#include <Render/Scene.h>
+#include <Render/Uniform.h>
+#include <Render/Program.h>
+#include <Render/QtContext.h>
+#include <Render/Texture.h>
+#include <Render/Material.h>
+#include <Render/ShaderManager.h>
+
 namespace vrv
 {
 	Geometry::Geometry()
 		: Drawable()
 		, myVertexArray(0)
 		, myNormalArray(0)
-		, myNormalBinding(PerVertex)
 		, myIndexArray(0)
+		, myTextureCoordinateArray(0)
 	{}
 
-	void Geometry::setVertex(Array* array)
+	void Geometry::setVertex(ArrayVec3* array)
 	{
-		myVertexArray = array;
+		myVertexArray = new ArrayVec3(array);
 	}
 
-	void Geometry::setNomral(Array* array, VertexBinding binding)
+	void Geometry::setNomral(ArrayVec3* array)
 	{
-		myNormalArray = array;
-		myNormalBinding = binding;
+		myNormalArray = new ArrayVec3(array);
 	}
 
-	void Geometry::setIndex(Array* array)
+	void Geometry::setIndex(ArrayUnsignedInt* array)
 	{
-		myIndexArray = array;
+		myIndexArray = new ArrayUnsignedInt(array);
+		addPrimitiveSet(Drawable::TRIANGLES, array->size(), Array::UNSIGNED_INT);
 	}
 
-	void Geometry::setTextureCoordinate(Array* array)
+	void Geometry::setTextureCoordinate(ArrayVec2* array)
 	{
-		myTextureCoordinateArray = array;
+		myTextureCoordinateArray = new ArrayVec2(array);
 	}
 
-	void Geometry::setTexture2D(Texture2D* texture, unsigned int i)
-	{
-		myTextureMap[i] = texture;
-	}
-
-	void Geometry::buildGeometry()
+	void Geometry::buildGeometry(Material* material)
 	{
 		if (!myBuildGeometry)
 		{
@@ -73,19 +71,8 @@ namespace vrv
 				vbo_normal->copyFromSystemMemory(myNormalArray);
 				vao->bindVertexBufferObject(vbo_normal);
 			}
-			Program* defaultProgram = Scene::instance().defaultProgram();
-			for (int i = 0; i < myTextureMap.size(); i++)
-			{
-				QtContext::instance().glActiveTexture(GL_TEXTURE0 + i);
-				QtContext::instance().glBindTexture(GL_TEXTURE_2D, myTextureMap[i]->id());
-				std::string samplerName = "texture" + std::to_string(i);
-				Uniform* uniform = defaultProgram->getUniform(samplerName);
-				if (uniform)
-				{
-					uniform->set(i);
-				}
-			}
-			createDrawState(vao, defaultProgram);
+			Program* phoneLighting = ShaderManager::instance().getProgram(ShaderManager::PhoneLighting);
+			createDrawState(vao, phoneLighting);
 			myBuildGeometry = true;
 		}
 	}

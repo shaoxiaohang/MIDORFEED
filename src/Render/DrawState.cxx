@@ -2,6 +2,7 @@
 #include <Render/RenderState.h>
 #include <Render/Program.h>
 #include <Render/VertexArrayObject.h>
+#include <Render/Scene.h>
 namespace vrv
 {
 	DrawState::DrawState(RenderState* state, VertexArrayObject* vao, Program* shader)
@@ -60,7 +61,9 @@ namespace vrv
 	{
 		if (myProgram)
 		{
-			myProgram->updateAutomaticUniforms(scene, info);
+			myProgram->use();
+			info.update(myProgram);
+			myProgram->updateAutomaticUniforms(scene);
 			myProgram->updateUniforms();
 		}
 	}

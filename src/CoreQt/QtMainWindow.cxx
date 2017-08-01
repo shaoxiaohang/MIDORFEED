@@ -1,34 +1,37 @@
 #include <CoreQt/QtMainWindow.h>
 #include <Render/QtContext.h>
 #include <Render/Viewer.h>
+#include <CoreQt/QtApplicationWindow.h>
 #include <QTimer>
 #include <QTime>
 #include <QKeyEvent>
+#include <QVBoxLayout>
 namespace vrv
 {
-	QtMainWindow::QtMainWindow(Viewer* viewer, WindowConfiguration configuration)
-		: MainWindow(viewer,configuration)
-		, QOpenGLWindow()
-		, myContext(0)
+	QtMainWindow::QtMainWindow(QtApplicationWindow* appWindow, Viewer* viewer, WindowConfiguration configuration)
+		: QOpenGLWindow()
+		, myViewer(viewer)
+		, myAppWindow(appWindow)
 		, myLastFrameTime(0)
 	{
-		initialize();
+		initialize(configuration);
 	}
 
-	void QtMainWindow::initialize()
+	void QtMainWindow::initialize(WindowConfiguration configuration)
 	{	
-		setWidth(myConfiguration.width);
-		setHeight(myConfiguration.height);
-		setTitle(tr(myConfiguration.title.c_str()));
+		setWidth(configuration.width);
+		setHeight(configuration.height);
+		setTitle(configuration.title.c_str());
 		QSurfaceFormat format;
 		format.setVersion(3, 3);
 		format.setProfile(QSurfaceFormat::CoreProfile);
 		format.setRenderableType(QSurfaceFormat::OpenGL);
-		format.setDepthBufferSize(myConfiguration.depthBufferSize);
-		format.setRedBufferSize(myConfiguration.redBufferSize);
-		format.setGreenBufferSize(myConfiguration.greenBufferSize);
-		format.setBlueBufferSize(myConfiguration.blueBufferSize);
-		format.setAlphaBufferSize(myConfiguration.alphaBufferSize);
+		format.setStencilBufferSize(configuration.stentilBufferSize);
+		format.setDepthBufferSize(configuration.depthBufferSize);
+		format.setRedBufferSize(configuration.redBufferSize);
+		format.setGreenBufferSize(configuration.greenBufferSize);
+		format.setBlueBufferSize(configuration.blueBufferSize);
+		format.setAlphaBufferSize(configuration.alphaBufferSize);
 		format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
 		setFormat(format);
 
@@ -41,6 +44,12 @@ namespace vrv
 		timer->start(0);
 
 		myClock = new QTime();
+	
+	}
+
+	QtApplicationWindow* QtMainWindow::appWindow()
+	{
+		return myAppWindow;
 	}
 
 	void QtMainWindow::tick()
@@ -63,35 +72,6 @@ namespace vrv
 	void QtMainWindow::renderTick()
 	{
 		paintGL();
-	}
-
-	QtContext* QtMainWindow::context()
-	{
-		return myContext;
-	}
-
-	void QtMainWindow::createContext()
-	{
-		QSurfaceFormat format = QOpenGLWindow::requestedFormat();
-
-		std::cout << "Depth Buffer Size : " << format.depthBufferSize() << std::endl;
-		std::cout << "Major OpenGL Version : " << format.majorVersion() << std::endl;
-		std::cout << "Minor OpenGL Version : " << format.minorVersion() << std::endl;
-		myContext = new QtContext(format);
-		//have to make the context current before use it
-		myContext->makeCurrent(this);
-		myContext->initialize();	
-	}
-
-	void QtMainWindow::paintEvent(QPaintEvent *event)
-	{
-		paintGL();
-	}
-
-	void QtMainWindow::resizeEvent(QResizeEvent *event)
-	{
-		resizeGL(this->width(), this->height());
-		this->update();
 	}
 
 	bool QtMainWindow::event(QEvent* event)
@@ -118,6 +98,35 @@ namespace vrv
 		}
 	}
 
+	void QtMainWindow::createContext()
+	{
+		QSurfaceFormat format = QOpenGLWindow::format();
+
+		std::cout << "Depth Buffer Size : " << format.depthBufferSize() << std::endl;
+		std::cout << "Stencil Buffer Size : " << format.stencilBufferSize() << std::endl;
+		std::cout << "Major OpenGL Version : " << format.majorVersion() << std::endl;
+		std::cout << "Minor OpenGL Version : " << format.minorVersion() << std::endl;
+		myContext = new QtContext(format);
+		myContext->makeCurrent(this);
+		myContext->initialize();
+	}
+
+	void QtMainWindow::paintEvent(QPaintEvent *event)
+	{
+		paintGL();
+	}
+
+	void QtMainWindow::resizeEvent(QResizeEvent *event)
+	{
+		resizeGL(this->width(), this->height());
+		this->update();
+	}
+
+	QtContext* QtMainWindow::context()
+	{
+		return myContext;
+	}
+
 	void QtMainWindow::initializeGL()
 	{
 		resizeGL(this->width(), this->height());
@@ -130,14 +139,21 @@ namespace vrv
 
 	void QtMainWindow::paintGL()
 	{
-		if (!isExposed())
-		{
-			return;
-		}
 		myContext->makeCurrent(this);
 		myViewer->onRenderTick();
 
 		myContext->swapBuffer(this);
+	}
+
+	QtAdapter::QtAdapter(QtApplicationWindow* appWindow, Viewer* viewer, WindowConfiguration configuration)
+		: QWidget(appWindow)
+	{
+		myMainWindow = new QtMainWindow(appWindow, viewer, configuration);
+	}
+
+	QtMainWindow* QtAdapter::mainWindow()
+	{
+		return myMainWindow;
 	}
 }
 

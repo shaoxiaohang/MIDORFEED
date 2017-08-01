@@ -18,6 +18,8 @@ namespace vrv
 		static Matrix4f makeTranslate(Vector3f);
 		static Matrix4f makeTranslate(value_type x, value_type y, value_type z);
 		static Matrix4f makeScale(value_type x, value_type y, value_type z);
+		void scale(value_type uniformScale);
+		void scale(value_type x, value_type y, value_type z);
 		Vector4f operator*(const Vector3f& vec);
 		Vector4f operator*(const Vector4f& vec);
 		Matrix4f operator*(const Matrix4f& r);

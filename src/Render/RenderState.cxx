@@ -4,6 +4,7 @@ namespace vrv
 {
 	GLState::GLState(bool enabled)
 		: myEnabled(enabled)
+		, myIsDirty(true)
 	{}
 
 	void GLState::setEnabled(bool enabled)
@@ -25,9 +26,9 @@ namespace vrv
 	//DepthTest
 	DepthTest::DepthTest(bool enabled)
 		: GLState(enabled)
-		, myDepthTestFunction(DepthTest::DEPTH_TEST_LEQUAL)
+		, myDepthTestFunction(DepthTest::DEPTH_FUNC_LEQUAL)
 	{
-
+		//
 	}
 
 	bool DepthTest::operator<(const DepthTest& depth)
@@ -50,34 +51,38 @@ namespace vrv
 	{
 		return !((*this) < (depth));
 	}
-	void DepthTest::apply()
+	void DepthTest::apply(bool forceUpdate)
 	{
-		GLenum depthTest = toGLEnum();
+		if (myIsDirty || forceUpdate)
+		{
+			update();
+		}
 		if (myEnabled)
 		{
 			QtContext::instance().glEnable(GL_DEPTH_TEST);
-			QtContext::instance().glDepthFunc(toGLEnum());
+			QtContext::instance().glDepthFunc(myDepthTestFunction_GL);
 		}
 		else
 		{
 			QtContext::instance().glDisable(GL_DEPTH_TEST);
 		}
-		
 	}
-	unsigned int DepthTest::toGLEnum()
+
+	void DepthTest::update()
 	{
 		switch (myDepthTestFunction)
 		{
-		case vrv::DepthTest::DEPTH_TEST_LEQUAL:
-			return GL_LEQUAL;
+		case vrv::DepthTest::DEPTH_FUNC_LEQUAL:
+			myDepthTestFunction_GL = GL_LEQUAL;
 			break;
-		case vrv::DepthTest::DEPTH_TEST_GEQUAL:
-			return GL_GEQUAL;
+		case vrv::DepthTest::DEPTH_FUNC_GEQUAL:
+			myDepthTestFunction_GL = GL_GEQUAL;
 			break;
 		default:
-			return GL_LEQUAL;
+			myDepthTestFunction_GL = GL_LEQUAL;
 			break;
 		}
+		myIsDirty = false;
 	}
 
 	bool DepthTest::operator==(const GLState& state)
@@ -107,13 +112,204 @@ namespace vrv
 
 	void DepthTest::setDepthTestFunction(DepthTest::DepthTestFunction depthTest)
 	{
-		myDepthTestFunction = depthTest;
+		if (myDepthTestFunction != depthTest)
+		{
+			myDepthTestFunction = depthTest;
+			myIsDirty = true;
+		}
+	
 	}
 	//DepthTest
 	//////////////////////////////////////////////////////////////////////////
 
+	void StencilTest::setStencilMask(unsigned int mask)
+	{
+		if (myStencilMask != mask)
+		{
+			myStencilMask = mask;
+			myIsDirty = true;
+		}
+	}
+
+	void StencilTest::setStencilWriteMask(unsigned int mask)
+	{
+		if (myStencilWriteMask != mask)
+		{
+			myStencilWriteMask = mask;
+			myIsDirty = true;
+		}
+	}
+
+	StencilTest::StencilTest(bool enable)
+		: GLState(enable)
+		, myStencilFunction(STENCIL_FUNC_ALWAYS)
+		, myStencilMask(0xFF)
+		, myStencilWriteMask(0xFF)
+		, myStencilRef(1)
+		, myStencilOperation_sfail(STENCIL_OPER_KEEP)
+		, myStencilOperation_dfail(STENCIL_OPER_KEEP)
+		, myStencilOperation_sdpass(STENCIL_OPER_REPLACE)
+	{}
+
+	void StencilTest::setStencilRef(unsigned int ref)
+	{
+		if (myStencilRef != ref)
+		{
+			myStencilRef = ref;
+			myIsDirty = true;
+		}
+	}
+
+	void StencilTest::setStencilFucntion(StencilFunction function)
+	{
+		if (myStencilFunction != function)
+		{
+			myStencilFunction = function;
+			myIsDirty = true;
+		}
+		
+	}
+
+	void StencilTest::setStencilOperation(StencilOperation sfail, StencilOperation dpfail, StencilOperation dppass)
+	{
+		bool isDirty = false;
+		if (myStencilOperation_sfail != sfail)
+		{
+			myStencilOperation_sfail = sfail;
+			myIsDirty = true;
+		}
+		if (myStencilOperation_dfail != dpfail)
+		{
+			myStencilOperation_dfail = dpfail;
+			myIsDirty = true;
+		}
+		if (myStencilOperation_sdpass != dppass)
+		{
+			myStencilOperation_sdpass = dppass;
+			myIsDirty = true;
+		}
+	}
+
+	void StencilTest::update()
+	{
+		switch (myStencilFunction)
+		{
+		case vrv::StencilTest::STENCIL_FUNC_NEVER:
+			myStencilFunction_GL = GL_NEVER;
+			break;
+		case vrv::StencilTest::STENCIL_FUNC_EQUAL:
+			myStencilFunction_GL = GL_EQUAL;
+			break;
+		case vrv::StencilTest::STENCIL_FUNC_LEQUAL:
+			myStencilFunction_GL = GL_LEQUAL;
+			break;
+		case vrv::StencilTest::STENCIL_FUNC_ALWAYS:
+			myStencilFunction_GL = GL_ALWAYS;
+			break;
+		default:
+			break;
+		}
+
+		switch (myStencilOperation_dfail)
+		{
+		case vrv::StencilTest::STENCIL_OPER_KEEP:
+			myStencilOperation_dfail_GL = GL_KEEP;
+			break;
+		case vrv::StencilTest::STENCIL_OPER_REPLACE:
+			myStencilOperation_dfail_GL = GL_REPLACE;
+			break;
+		default:
+			break;
+		}
+
+		switch (myStencilOperation_sfail)
+		{
+		case vrv::StencilTest::STENCIL_OPER_KEEP:
+			myStencilOperation_sfail_GL = GL_KEEP;
+			break;
+		case vrv::StencilTest::STENCIL_OPER_REPLACE:
+			myStencilOperation_sfail_GL = GL_REPLACE;
+			break;
+		default:
+			break;
+		}
+
+		switch (myStencilOperation_sdpass)
+		{
+		case vrv::StencilTest::STENCIL_OPER_KEEP:
+			myStencilOperation_sdpass_GL = GL_KEEP;
+			break;
+		case vrv::StencilTest::STENCIL_OPER_REPLACE:
+			myStencilOperation_sdpass_GL = GL_REPLACE;
+			break;
+		default:
+			break;
+		}
+
+		myIsDirty = false;
+	}
+
+	void StencilTest::apply(bool forceUpdate)
+	{
+		if (myIsDirty || forceUpdate)
+		{
+			update();
+		}
+
+		if (myEnabled)
+		{
+			QtContext::instance().glEnable(GL_STENCIL_TEST);
+			QtContext::instance().glStencilMask(myStencilWriteMask);
+			QtContext::instance().glStencilFunc(myStencilFunction_GL, myStencilRef, myStencilMask);
+			QtContext::instance().glStencilOp(myStencilOperation_sfail_GL, 
+				myStencilOperation_dfail_GL, myStencilOperation_sdpass_GL);
+		}
+		else
+		{
+			QtContext::instance().glDisable(GL_STENCIL_TEST);
+		}
+	}
+
+	bool StencilTest::operator==(const GLState& state)
+	{
+		const StencilTest& stencil = static_cast<const StencilTest&>(state);
+		if (myStencilMask != stencil.myStencilMask)
+		{
+			return false;
+		}
+		if (myStencilFunction != stencil.myStencilFunction)
+		{
+			return false;
+		}
+		if (myStencilOperation_dfail != stencil.myStencilOperation_dfail)
+		{
+			return false;
+		}
+		if (myStencilOperation_sfail != stencil.myStencilOperation_sfail)
+		{
+			return false;
+		}
+		if (myStencilOperation_sdpass != stencil.myStencilOperation_sdpass)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	void StencilTest::operator=(const StencilTest& stencil)
+	{
+		myStencilMask = stencil.myStencilMask;
+		myStencilWriteMask = stencil.myStencilWriteMask;
+		myStencilFunction = stencil.myStencilFunction;
+		myStencilOperation_dfail = stencil.myStencilOperation_dfail;
+		myStencilOperation_sfail = stencil.myStencilOperation_sfail;
+		myStencilOperation_sdpass = stencil.myStencilOperation_sdpass;
+	}
+
+
 	RenderState::RenderState()
 		: myDepthTest(true)
+		, myStencilTest(true)
 	{}
 
 	void RenderState::setDepthTest(DepthTest depthTest)
@@ -125,9 +321,19 @@ namespace vrv
 		return myDepthTest;
 	}
 
+	void RenderState::setStencilTest(StencilTest stencilTest)
+	{
+		myStencilTest = stencilTest;
+	}
+	StencilTest& RenderState::stencilTest()
+	{
+		return myStencilTest;
+	}
+
 	void RenderState::apply()
 	{
 		myDepthTest.apply();
+		myStencilTest.apply();
 	}
 
 	void RenderState::applyIfChanged(RenderState* state)
@@ -135,7 +341,12 @@ namespace vrv
 		if (myDepthTest != state->myDepthTest)
 		{
 			myDepthTest = state->myDepthTest;
-			myDepthTest.apply();
+			myDepthTest.apply(true);
+		}
+		if (myStencilTest != state->myStencilTest)
+		{
+			myStencilTest = state->myStencilTest;
+			myStencilTest.apply(true);
 		}
 	}
 }

@@ -115,14 +115,14 @@ namespace vrv
 		return 0;
 	}
 
-	void Program::updateAutomaticUniforms(Scene* scene, RenderInfo& info)
+	void Program::updateAutomaticUniforms(Scene* scene)
 	{
 		AutomaticUniformMap::iterator ibegin = myAutomaticUniformsMap.begin();
 		AutomaticUniformMap::iterator iend   = myAutomaticUniformsMap.end();
 		for (; ibegin != iend; ++ibegin)
 		{
 			AutomaticUniform* automaticUniform = ibegin->second;
-			automaticUniform->synGL(scene,info);
+			automaticUniform->synGL(scene);
 		}
 	}
 
@@ -245,9 +245,7 @@ namespace vrv
 
 	void Program::registerAutomaticUniformFactories()
 	{
-		myAutomaticUniformFactories.insert(std::make_pair("vrv_use_diffuse", new UseDiffuseColorUniformFactory()));
-		myAutomaticUniformFactories.insert(std::make_pair("vrv_diffuse_color", new DiffuseColorUniformFactory()));
-		myAutomaticUniformFactories.insert(std::make_pair("vrv_model_matrix", new ModelMatrixUniformFactory()));
+		myAutomaticUniformFactories.insert(std::make_pair("vrv_view_pos", new CameraPositionUniformFactory()));
 		myAutomaticUniformFactories.insert(std::make_pair("vrv_view_matrix", new CameraViewMatrixUniformFactory()));
 		myAutomaticUniformFactories.insert(std::make_pair("vrv_proj_matrix", new CameraProjMatrixUniformFactory()));
 	}

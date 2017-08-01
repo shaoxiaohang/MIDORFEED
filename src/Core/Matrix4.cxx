@@ -61,6 +61,22 @@ namespace vrv
 						0, 0, 0, 1);
 	}
 
+	void Matrix4f::scale(value_type x, value_type y, value_type z)
+	{
+		*this =	*this * Matrix4f(x, 0, 0, 0,
+						0, y, 0, 0,
+						0, 0, z, 0,
+						0, 0, 0, 1);
+	}
+
+	void Matrix4f::scale(value_type uniformScale)
+	{
+		*this = *this * Matrix4f(uniformScale, 0, 0, 0,
+						0, uniformScale, 0, 0,
+						0, 0, uniformScale, 0,
+						0, 0, 0, 1);
+	}
+
 	Vector4f Matrix4f::operator*(const Vector3f& vec)
 	{
 		Vector4f vec4 = (*this)*Vector4f(vec,1);

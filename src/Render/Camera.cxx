@@ -12,6 +12,7 @@ namespace vrv
 		, myRoll(0)
 		, myUp(0, 1, 0)
 		, myFront(0, 0, -1)
+		, myRight(1,0,0)
 		, myPosition(0, 0, 5)
 		, myMoveSpeed(0.1f)
 		, myRotateSpeed(0.04f)
@@ -62,16 +63,27 @@ namespace vrv
 		myPitch = 0;
 		myRoll = 0;
 		myFront = Vector3f(0, 0, -1);
+		myRight = Vector3f(1, 0, 0);
+		myUp = Vector3f(0, 1, 0);
 		myPosition = Vector3f(0, 0, 5);
 		myFOV = 45;
+		myFirstMouse = true;
+		myLastMouseX = 0;
+		myLastMouseY = 0;
+		myIsProjectionDirty = false;
+	}
+
+	void Camera::updateVectors()
+	{
+		Vector3f w = -myFront.normalize();
+		myRight = myUp.crossProduct(w).normalize();
+		myUp = w.crossProduct(myRight);
 	}
 
 	Matrix4f Camera::getViewMatrix()
 	{
 		Vector3f w = -myFront.normalize();
-		Vector3f u = myUp.crossProduct(w).normalize();
-		Vector3f v = w.crossProduct(u);
-		return Matrix4f::makeCanonicalToFrame(myPosition, u, v, w);
+		return Matrix4f::makeCanonicalToFrame(myPosition, myRight, myUp, w);
 	}
 
 	Matrix4f Camera::projectionMatrix()
@@ -89,16 +101,16 @@ namespace vrv
 		switch (event->key())
 		{
 		case Qt::Key_W:
-			myPosition.z -= myMoveSpeed;
+			myPosition += myFront * myMoveSpeed;
 			return true;
 		case Qt::Key_A:
-			myPosition.x -= myMoveSpeed;
+			myPosition -= myRight*myMoveSpeed;
 			return true;
 		case Qt::Key_S:
-			myPosition.z += myMoveSpeed;
+			myPosition -= myFront * myMoveSpeed;
 			return true;
 		case Qt::Key_D:
-			myPosition.x += myMoveSpeed;
+			myPosition += myRight*myMoveSpeed;
 			return true;
 		case Qt::Key_Space:
 			reset();
@@ -123,11 +135,12 @@ namespace vrv
 			myLastMouseX = event->x();
 			myLastMouseY = event->y();
 			myYaw += deltaX*myRotateSpeed;
-			myPitch += deltaY*myRotateSpeed;
+			myPitch -= deltaY*myRotateSpeed;
 
 			myFront.x = Utility::cos(myPitch)*Utility::sin(myYaw);
 			myFront.y = Utility::sin(myPitch);
 			myFront.z = -Utility::cos(myPitch) * Utility::cos(myYaw);
+			updateVectors();
 			return true;
 		}
 		else
@@ -150,5 +163,10 @@ namespace vrv
 			myFOV = 45.0f;
 		myIsProjectionDirty = true;
 		return true;
+	}
+
+	Vector3f Camera::position()
+	{
+		return myPosition;
 	}
 }

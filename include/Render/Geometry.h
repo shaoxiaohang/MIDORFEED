@@ -6,10 +6,11 @@ namespace vrv
 {
 	class Array;
 	class Texture2D;
+	class Material;
+
 	class Geometry : public Drawable
 	{
 	public:
-		typedef std::map<unsigned int, Texture2D*> TextureMap;
 		enum VertexAttLocation
 		{
 			POSITION = 0,
@@ -17,26 +18,19 @@ namespace vrv
 			TEXCOORD = 2,
 			COLOR    = 3
 		};
-		enum VertexBinding
-		{
-			PerVertex,
-			Overall
-		};
 		Geometry();
 
-		virtual void setVertex(Array* array);
-		virtual void setNomral(Array* array, VertexBinding binding = PerVertex);
-		virtual void setIndex(Array* array);
-		virtual void setTextureCoordinate(Array* array);
-		virtual void setTexture2D(Texture2D* texture, unsigned int i);
+		virtual void setVertex(ArrayVec3* array);
+		virtual void setNomral(ArrayVec3* array);
+		virtual void setIndex(ArrayUnsignedInt* array);
+		virtual void setTextureCoordinate(ArrayVec2* array);
+
 	protected:
-		virtual void buildGeometry();
+		virtual void buildGeometry(Material* material);
 	protected:
-		Array* myVertexArray;
-		Array* myNormalArray;
-		VertexBinding myNormalBinding;
-		Array* myIndexArray;
-		Array* myTextureCoordinateArray;
-		TextureMap myTextureMap;
+		ArrayVec3* myVertexArray;
+		ArrayVec3* myNormalArray;
+		ArrayUnsignedInt* myIndexArray;
+		ArrayVec2* myTextureCoordinateArray;
 	};
 }

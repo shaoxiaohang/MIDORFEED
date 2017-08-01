@@ -1,5 +1,5 @@
 #pragma once
-#include<vector>
+#include <vector>
 namespace vrv
 {
 	class Array;
@@ -23,7 +23,7 @@ namespace vrv
 
 		BufferObject(BufferTargetType type,BufferUsage usage = STATIC_DRAW);
 		~BufferObject();
-		virtual void copyFromSystemMemory(const Array* array);
+		virtual void copyFromSystemMemory(Array* array);
 		virtual void bind() ;
 		virtual void unbind() ;
 	protected:

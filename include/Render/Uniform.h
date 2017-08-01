@@ -6,11 +6,11 @@
 #include <Core/Vector4.h>
 #include <Core/Matrix3.h>
 #include <Core/Matrix4.h>
+#include <map>
 namespace vrv
 {
 	class Program;
 	class Scene;
-	class RenderInfo;
 	class Uniform
 	{
 	public:
@@ -20,6 +20,7 @@ namespace vrv
 			FLOAT_VEC2,
 			FLOAT_VEC3,
 			FLOAT_VEC4,
+			UNSIGNED_INT,
 			INT,
 			BOOL,
 			FLOAT_MAT3,
@@ -34,6 +35,7 @@ namespace vrv
 		int location();
 
 		virtual bool set(bool value);
+		virtual bool set(unsigned int value);
 		virtual bool set(int value);
 		virtual bool set(float value);
 		virtual bool set(Vector2f value);
@@ -43,6 +45,7 @@ namespace vrv
 		virtual bool set(Matrix4f value);
 
 		virtual bool get(bool& value);
+		virtual bool get(unsigned int& value);
 		virtual bool get(int& value);
 		virtual bool get(float& value);
 		virtual bool get(Vector2f& value);
@@ -79,6 +82,17 @@ namespace vrv
 		void synGL();
 	protected:
 		int myValue;
+	};
+
+	class UniformUnsignedInt : public Uniform
+	{
+	public:
+		UniformUnsignedInt(const std::string& name, int location);
+		bool set(unsigned int value);
+		bool get(unsigned int& value);
+		void synGL();
+	protected:
+		unsigned int myValue;
 	};
 
 	class UniformFloat : public Uniform
@@ -151,7 +165,7 @@ namespace vrv
 	{
 	public:
 		AutomaticUniform(Uniform* uniform);
-		virtual void synGL(Scene* scene, RenderInfo& info) = 0;
+		virtual void synGL(Scene* scene) = 0;
 	protected:
 		Uniform* myUniform;
 	};
@@ -165,59 +179,11 @@ namespace vrv
 		const std::string& myName;
 	};
 
-	class ModelMatrixUniform : public AutomaticUniform
-	{
-	public:
-		friend class ModelMatrixUniformFactory;
-		virtual void synGL(Scene* scene, RenderInfo& info);
-	protected:
-		ModelMatrixUniform(Uniform* uniform);
-	};
-
-	class ModelMatrixUniformFactory : public AutomaticUniformFactory
-	{
-	public:
-		ModelMatrixUniformFactory();
-		virtual AutomaticUniform* create(Uniform* uniform);
-	};
-
-	class UseDiffuseColorUniform : public AutomaticUniform
-	{
-	public:
-		friend class UseDiffuseColorUniformFactory;
-		virtual void synGL(Scene* scene, RenderInfo& info);
-	protected:
-		UseDiffuseColorUniform(Uniform* uniform);
-	};
-
-	class UseDiffuseColorUniformFactory : public AutomaticUniformFactory
-	{
-	public:
-		UseDiffuseColorUniformFactory();
-		virtual AutomaticUniform* create(Uniform* uniform);
-	};
-
-	class DiffuseColorUniform : public AutomaticUniform
-	{
-	public:
-		friend class DiffuseColorUniformFactory;
-		virtual void synGL(Scene* scene, RenderInfo& info);
-	protected:
-		DiffuseColorUniform(Uniform* uniform);
-	};
-
-	class DiffuseColorUniformFactory : public AutomaticUniformFactory
-	{
-	public:
-		DiffuseColorUniformFactory();
-		virtual AutomaticUniform* create(Uniform* uniform);
-	};
-
 	class CameraViewMatrixUniform : public AutomaticUniform
 	{
 	public:
 		friend class CameraViewMatrixUniformFactory;
-		virtual void synGL(Scene* scene, RenderInfo& info);
+		virtual void synGL(Scene* scene);
 	protected:
 		CameraViewMatrixUniform(Uniform* uniform);
 	};
@@ -229,11 +195,27 @@ namespace vrv
 		virtual AutomaticUniform* create(Uniform* uniform);
 	};
 
+	class CameraPositionUniform : public AutomaticUniform
+	{
+	public:
+		friend class CameraPositionUniformFactory;
+		virtual void synGL(Scene* scene);
+	protected:
+		CameraPositionUniform(Uniform* uniform);
+	};
+
+	class CameraPositionUniformFactory : public AutomaticUniformFactory
+	{
+	public:
+		CameraPositionUniformFactory();
+		virtual AutomaticUniform* create(Uniform* uniform);
+	};
+
 	class CameraProjMatrixUniform : public AutomaticUniform
 	{
 	public:
 		friend class CameraProjMatrixUniformFactory;
-		virtual void synGL(Scene* scene, RenderInfo& info);
+		virtual void synGL(Scene* scene);
 	protected:
 		CameraProjMatrixUniform(Uniform* uniform);
 	};
@@ -245,19 +227,4 @@ namespace vrv
 		virtual AutomaticUniform* create(Uniform* uniform);
 	};
 
-	class AmbientColorUniform : public AutomaticUniform
-	{
-	public:
-		friend class AmbientColorUniformFactory;
-		virtual void synGL(Scene* scene, RenderInfo& info);
-	protected:
-		AmbientColorUniform(Uniform* uniform);
-	};
-
-	class AmbientColorUniformFactory : public AutomaticUniformFactory
-	{
-	public:
-		AmbientColorUniformFactory();
-		virtual AutomaticUniform* create(Uniform* uniform);
-	};
 }

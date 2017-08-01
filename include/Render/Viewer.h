@@ -11,9 +11,10 @@ class QWheelEvent;
 namespace vrv
 {
 	class Node;
-	class QtMainWindow;
+	class QtApplicationWindow;
 	class Scene;
 	class Camera;
+	class ShaderManager;
 	class Viewer
 	{
 	public:
@@ -33,8 +34,9 @@ namespace vrv
 	public:
 	    static boost::signals2::signal<void()> signal_update;
 	protected:
-		QtMainWindow* myMainWindow;
+		QtApplicationWindow* myAppWindow;
 		Scene* myScene;
+		ShaderManager* myShaderManager;
 		QApplication* myQtApplication;
 	};
 }

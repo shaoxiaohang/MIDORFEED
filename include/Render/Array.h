@@ -22,29 +22,55 @@ namespace vrv
 			MAT4F
 		};
 		Array(DataType type);
-		Array(DataType type,unsigned int size);
-		void setSize(int size);
+		Array(DataType type, int size);
+
 		unsigned int size() const;
-		unsigned int sizeInBytes() const;
+
+		unsigned int sizeInBytes();
+
 		virtual const void* dataPointer() const = 0;
+
+		virtual void initialize();
+
 		DataType dataType();
+
+		virtual void add(int&);
+		virtual void add(unsigned int&);
+		virtual void add(float&);
+		virtual void add(Vector2f&);
+		virtual void add(Vector3f&);
+		virtual void add(Vector4f&);
+		virtual void add(Matrix3f&);
+		virtual void add(Matrix4f&);
+
 	protected:
-		void calculateSizeInBytes();
-		void initialize(bool knownSize);
+		virtual void calculateSize() = 0;
+
 	protected:
 		DataType myDataType;
 		unsigned int mySize;
 		unsigned int mySizeInBytes;
-		int myBaseTypeCount;
-		unsigned int myGLBaseType;
+		bool myPreAllocated;
 	};
 
 	class ArrayInt : public Array
 	{
 	public:
-		ArrayInt(unsigned int size);
+		ArrayInt();
+
+		ArrayInt(int size);
+
 		virtual const void* dataPointer() const;
+
 		int& operator[](unsigned int i);
+
+		int get(unsigned int i);
+
+		virtual void add(int&);
+
+	protected:
+		virtual void calculateSize();
+
 	protected:
 		std::vector<int> myData;
 	};
@@ -52,9 +78,23 @@ namespace vrv
 	class ArrayUnsignedInt : public Array
 	{
 	public:
-		ArrayUnsignedInt(unsigned int size);
+		ArrayUnsignedInt();
+
+		ArrayUnsignedInt(int size);
+
+		ArrayUnsignedInt(ArrayUnsignedInt*);
+
 		virtual const void* dataPointer() const;
+
 		unsigned int& operator[](unsigned int i);
+
+		unsigned int get(unsigned int i);
+
+		virtual void add(unsigned int&);
+
+	protected:
+		virtual void calculateSize();
+
 	protected:
 		std::vector<unsigned int> myData;
 	};
@@ -62,9 +102,21 @@ namespace vrv
 	class ArrayFloat : public Array
 	{
 	public:
-		ArrayFloat(unsigned int size);
+		ArrayFloat();
+
+		ArrayFloat(int size);
+
 		virtual const void* dataPointer() const;
+
 		float& operator[](unsigned int i);
+
+		float get(unsigned int i);
+
+		virtual void add(float&);
+
+	protected:
+		virtual void calculateSize();
+
 	protected:
 		std::vector<float> myData;
 	};
@@ -72,9 +124,23 @@ namespace vrv
 	class ArrayVec2 : public Array
 	{
 	public:
-		ArrayVec2(unsigned int size);
+		ArrayVec2();
+
+		ArrayVec2(int size);
+
+		ArrayVec2(ArrayVec2*);
+
 		virtual const void* dataPointer() const;
+
 		Vector2f& operator[](unsigned int i);
+
+		Vector2f get(unsigned int i);
+
+		virtual void add(Vector2f&);
+
+	protected:
+		virtual void calculateSize();
+
 	protected:
 		std::vector<Vector2f> myData;
 	};
@@ -82,9 +148,23 @@ namespace vrv
 	class ArrayVec3 : public Array
 	{
 	public:
-		ArrayVec3(unsigned int size);
+		ArrayVec3();
+
+		ArrayVec3(int size);
+
+		ArrayVec3(ArrayVec3*);
+
 		virtual const void* dataPointer() const;
+
 		Vector3f& operator[](unsigned int i);
+
+		Vector3f get(unsigned int i);
+
+		virtual void add(Vector3f&);
+
+	protected:
+		virtual void calculateSize();
+
 	protected:
 		std::vector<Vector3f> myData;
 	};
@@ -92,9 +172,21 @@ namespace vrv
 	class ArrayVec4 : public Array
 	{
 	public:
-		ArrayVec4(unsigned int size);
+		ArrayVec4();
+
+		ArrayVec4(int size);
+
 		virtual const void* dataPointer() const;
+
 		Vector4f& operator[](unsigned int i);
+
+		Vector4f get(unsigned int i);
+
+		virtual void add(Vector4f&);
+
+	protected:
+		virtual void calculateSize();
+
 	protected:
 		std::vector<Vector4f> myData;
 	};
@@ -102,9 +194,21 @@ namespace vrv
 	class ArrayMat3 : public Array
 	{
 	public:
-		ArrayMat3(unsigned int size);
+
+		ArrayMat3();
+
+		ArrayMat3(int size);
+
 		virtual const void* dataPointer() const;
+
 		Matrix3f& operator[](unsigned int i);
+
+		Matrix3f get(unsigned int i);
+
+		virtual void add(Matrix3f&);
+
+	protected:
+		virtual void calculateSize();
 	protected:
 		std::vector<Matrix3f> myData;
 	};
@@ -112,9 +216,23 @@ namespace vrv
 	class ArrayMat4 : public Array
 	{
 	public:
-		ArrayMat4(unsigned int size);
+
+		ArrayMat4();
+
+		ArrayMat4(int size);
+
 		virtual const void* dataPointer() const;
+
 		Matrix4f& operator[](unsigned int i);
+
+		Matrix4f get(unsigned int i);
+
+		virtual void add(Matrix4f&);
+
+	protected:
+
+		virtual void calculateSize();
+
 	protected:
 		std::vector<Matrix4f> myData;
 	};

@@ -11,17 +11,17 @@ namespace vrv
 	{
 		if (!myGeometryInitialized)
 		{
-			sPosArray[0]  = Vector3f(-0.5f, -0.5f, -0.5f);
-			sPosArray[1]  = Vector3f(0.5f, -0.5f, -0.5f);
-			sPosArray[2]  = Vector3f(0.5f, 0.5f, -0.5f);
-			sPosArray[3]  = Vector3f(0.5f, 0.5f, -0.5f);
-			sPosArray[4]  = Vector3f(-0.5f, 0.5f, -0.5f);
-			sPosArray[5]  = Vector3f(-0.5f, -0.5f, -0.5f);
+			sPosArray[0] = Vector3f(-0.5f, -0.5f, -0.5f);
+			sPosArray[1] = Vector3f(0.5f, -0.5f, -0.5f);
+			sPosArray[2] = Vector3f(0.5f, 0.5f, -0.5f);
+			sPosArray[3] = Vector3f(0.5f, 0.5f, -0.5f);
+			sPosArray[4] = Vector3f(-0.5f, 0.5f, -0.5f);
+			sPosArray[5] = Vector3f(-0.5f, -0.5f, -0.5f);
 
-			sPosArray[6]  = Vector3f(-0.5f, -0.5f, 0.5f);
-			sPosArray[7]  = Vector3f(0.5f, -0.5f, 0.5f);
-			sPosArray[8]  = Vector3f(0.5f, 0.5f, 0.5f);
-			sPosArray[9]  = Vector3f(0.5f, 0.5f, 0.5f);
+			sPosArray[6] = Vector3f(-0.5f, -0.5f, 0.5f);
+			sPosArray[7] = Vector3f(0.5f, -0.5f, 0.5f);
+			sPosArray[8] = Vector3f(0.5f, 0.5f, 0.5f);
+			sPosArray[9] = Vector3f(0.5f, 0.5f, 0.5f);
 			sPosArray[10] = Vector3f(-0.5f, 0.5f, 0.5f);
 			sPosArray[11] = Vector3f(-0.5f, -0.5f, 0.5f);
 	
@@ -143,5 +143,43 @@ namespace vrv
 		setTextureCoordinate(&sTexArray);
 		setNomral(&sNormalArray);
 		addPrimitiveSet(Drawable::TRIANGLES, 0, 36);
+	}
+
+	bool Floor::myGeometryInitialized = false;
+	ArrayVec3 Floor::sPosArray = ArrayVec3(6);
+	ArrayVec2 Floor::sTexArray = ArrayVec2(6);
+	ArrayVec3 Floor::sNormalArray = ArrayVec3(6);
+
+	Floor::Floor()
+	{
+		if (!myGeometryInitialized)
+		{
+			sPosArray[0] = Vector3f(5.0f, -0.5f, 5.0f);
+			sPosArray[1] = Vector3f(-5.0f, -0.5f, 5.0f);
+			sPosArray[2] = Vector3f(-5.0f, -0.5f, -5.0f);
+			sPosArray[3] = Vector3f(5.0f, -0.5f, 5.0f);
+			sPosArray[4] = Vector3f(-5.0f, -0.5f, -5.0f);
+			sPosArray[5] = Vector3f(5.0f, -0.5f, -5.0f);
+
+			sTexArray[0] = Vector2f(2.0f, 0.0f);
+			sTexArray[1] = Vector2f(0.0f, 0.0f);
+			sTexArray[2] = Vector2f(0.0f, 2.0f);
+			sTexArray[3] = Vector2f(2.0f, 0.0f);
+			sTexArray[4] = Vector2f(0.0f, 2.0f);
+			sTexArray[5] = Vector2f(2.0f, 2.0f);
+
+			sNormalArray[0] = Vector3f(0, 1, 0);
+			sNormalArray[1] = Vector3f(0, 1, 0);
+			sNormalArray[2] = Vector3f(0, 1, 0);
+			sNormalArray[3] = Vector3f(0, 1, 0);
+			sNormalArray[4] = Vector3f(0, 1, 0);
+			sNormalArray[5] = Vector3f(0, 1, 0);
+
+			myGeometryInitialized = true;
+		}
+		setVertex(&sPosArray);
+		setTextureCoordinate(&sTexArray);
+		setNomral(&sNormalArray);
+		addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
 	}
 }

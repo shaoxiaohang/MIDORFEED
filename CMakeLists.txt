@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.6)
 set(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "add a postfix for Debug mode, usually d on windows")
-set(CMAKE_PREFIX_PATH "C:\\Qt\\5.8\\msvc2013_64\\")
+set(CMAKE_PREFIX_PATH "D:\\Qt5.6.2\\5.6\\msvc2013_64")
 project (DVA)
 file(GLOB CoreSources "include/Core/*.h" "src/Core/*.cxx")
 file(GLOB RenderSources "include/Render/*.h" "src/Render/*.cxx")
@@ -8,6 +8,30 @@ file(GLOB CoreQtSources "include/CoreQt/*.h" "src/CoreQt/*.cxx" "src/CoreQt/*.cp
 file(GLOB DVASources "src/App/*.cxx")
 file(GLOB CoreQt_moc_src "include/CoreQt/*.h")
 file(GLOB CoreQt_form_src "src/CoreQt/*.ui")
+
+#find include directory by looking for certain header file
+find_path(TINYXMY_INCLUDE_DIR tinyxml2.h
+PATHS
+$ENV{TINYXML_ROOT}/include
+)
+
+#find include directory by looking for certain header file
+find_path(TINYXMY_LIB_DIR tinyxml2d.lib
+PATHS
+$ENV{TINYXML_ROOT}/lib
+)
+
+#find library directory by looking for certain library file
+find_path(ASSIMP_INCLUDE_DIR assimp/ai_assert.h
+PATHS
+$ENV{ASSIMP_ROOT}/include
+)
+
+#find library directory by looking for certain library file
+find_path(ASSIMP_LIB_DIR assimp-vc120-mt.lib
+PATHS
+$ENV{ASSIMP_ROOT}/lib
+)
 
 #find include directory by looking for certain header file
 find_path(FREEIMAGE_INCLUDE_DIR FreeImage.h
@@ -33,6 +57,10 @@ PATHS
 $ENV{BOOST_ROOT}/lib/
 )
 #apply them to following projects
+include_directories(${TINYXMY_INCLUDE_DIR})
+link_directories(${TINYXMY_LIB_DIR})
+include_directories(${ASSIMP_INCLUDE_DIR})
+link_directories(${ASSIMP_LIB_DIR})
 include_directories(${FREEIMAGE_INCLUDE_DIR})
 link_directories(${FREEIMAGE_LIB_DIR})
 include_directories(${BOOST_INCLUDE_DIR})
@@ -65,6 +93,8 @@ opengl32.lib
 Qt5::OpenGL
 FreeImaged.lib
 boost_signals-vc120-mt-1_63.lib
+assimp-vc120-mt.lib
+tinyxml2d.lib
 )
 
 add_custom_command(TARGET DVA

@@ -40,7 +40,7 @@ namespace vrv
 		QtContext::instance().glDeleteBuffers(1, &myID);
 	}
 
-	void BufferObject::copyFromSystemMemory(const Array* array)
+	void BufferObject::copyFromSystemMemory(Array* array)
 	{
 		//TODO cache the current bind target id in context
 		bind();

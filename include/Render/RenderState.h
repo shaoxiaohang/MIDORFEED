@@ -7,8 +7,8 @@ namespace vrv
 	public:
 		GLState(bool enabled);
 
-		virtual void apply() = 0;
-		virtual unsigned int toGLEnum() = 0;
+		virtual void apply(bool forceUpdate = false) = 0;
+		virtual void update() = 0;
 
 		virtual bool operator==(const GLState&) = 0;
 		virtual bool operator!=(const GLState&);
@@ -18,6 +18,7 @@ namespace vrv
 
 	protected:
 		bool myEnabled;
+		bool myIsDirty;
 	};
 
 	class DepthTest : public GLState
@@ -25,8 +26,8 @@ namespace vrv
 	public:
 		enum DepthTestFunction
 		{
-			DEPTH_TEST_LEQUAL,
-			DEPTH_TEST_GEQUAL
+			DEPTH_FUNC_LEQUAL,
+			DEPTH_FUNC_GEQUAL
 		};
 
 		DepthTest(bool enabled);
@@ -34,8 +35,8 @@ namespace vrv
 		bool operator<(const DepthTest& depth);
 		bool operator>(const DepthTest& depth);
 
-		virtual void apply();
-		virtual unsigned int toGLEnum();
+		virtual void apply(bool forceUpdate = false);
+		virtual void update();
 
 		virtual bool operator==(const GLState&);
 		virtual void operator=(const DepthTest& depth);
@@ -45,6 +46,51 @@ namespace vrv
 
 	protected:
 		DepthTestFunction myDepthTestFunction;
+		unsigned int myDepthTestFunction_GL;
+	};
+
+	class StencilTest : public GLState
+	{
+	public:
+		enum StencilFunction
+		{
+			STENCIL_FUNC_NEVER,
+			STENCIL_FUNC_EQUAL,
+			STENCIL_FUNC_LEQUAL,
+			STENCIL_FUNC_ALWAYS
+		};
+		enum StencilOperation
+		{
+			STENCIL_OPER_KEEP,
+			STENCIL_OPER_REPLACE
+		};
+	public:
+		StencilTest(bool enable);
+		void setStencilMask(unsigned int);
+		void setStencilWriteMask(unsigned int);
+		void setStencilRef(unsigned int);
+		void setStencilFucntion(StencilFunction);
+		void setStencilOperation(StencilOperation sfail, StencilOperation dpfail, StencilOperation sdpass);
+
+		virtual void apply(bool forceUpdate = false);
+		virtual bool operator==(const GLState&);
+		virtual void operator=(const StencilTest& depth);
+		virtual void update();
+
+	protected:
+		unsigned int myStencilMask;
+		unsigned int myStencilWriteMask;
+		unsigned int myStencilRef;
+		StencilFunction myStencilFunction;
+		StencilOperation myStencilOperation_sfail;
+		StencilOperation myStencilOperation_dfail;
+		StencilOperation myStencilOperation_sdpass;
+
+		unsigned int myStencilFunction_GL;
+
+		unsigned int myStencilOperation_sfail_GL;
+		unsigned int myStencilOperation_dfail_GL;
+		unsigned int myStencilOperation_sdpass_GL;
 	};
 
 	class RenderState
@@ -58,7 +104,11 @@ namespace vrv
 		void setDepthTest(DepthTest depthTest);
 		DepthTest& depthTest();
 
+		void setStencilTest(StencilTest stencilTest);
+		StencilTest& stencilTest();
+
 	protected:
 		DepthTest myDepthTest;
+		StencilTest myStencilTest;
 	};
 }
