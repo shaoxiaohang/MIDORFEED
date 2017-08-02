@@ -34,6 +34,9 @@ namespace vrv
 			objects->FirstChildElement("position")->QueryFloatAttribute("x", &position.x);
 			objects->FirstChildElement("position")->QueryFloatAttribute("y", &position.y);
 			objects->FirstChildElement("position")->QueryFloatAttribute("z", &position.z);
+
+			parseMaterial(objects);
+
 			std::string texture = objects->FirstChildElement("texture")->GetText();
 			createObject(objectType, name, position, texture);
 		}
@@ -76,6 +79,21 @@ namespace vrv
 			lights->FirstChildElement("specular")->QueryFloatAttribute("b", &specular.z);
 
 			createLight(type, name, position, direction, ambient, diffuse, specular);
+		}
+	}
+
+	Material* Scenario::parseMaterial(XMLElement* object)
+	{
+		XMLElement* material = object->FirstChildElement("material");
+		if (material)
+		{
+			std::string texture;
+			bool discardAlpha = false;
+			XMLElement* textureNode = material->FirstChildElement("texture");
+			if (textureNode)
+			{
+				texture = textureNode->GetText();
+			}
 		}
 	}
 
