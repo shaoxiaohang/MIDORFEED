@@ -4,7 +4,10 @@
 	    <floor>
 			<name>floor</name>
 			<position x="0" y="0" z="0"/>
-			<texture>metal.png</texture>
+			<material>
+				<texture>metal.png</texture>
+				<discardAlpha threshold= "0.1"/>
+			</material>
 		</floor>
 		<cube>
 			<name>cube1</name>
