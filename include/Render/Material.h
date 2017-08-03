@@ -16,10 +16,12 @@ namespace vrv
 	public:
 		Material();
 
-		void setAmbient(Vector3f ambient);
-		void setDiffuse(Vector3f diffuse);
-		void setSpecular(Vector3f specular);
-		void setShininess(float shininess);
+		void setAmbient(Vector3f);
+		void setDiffuse(Vector3f);
+		void setSpecular(Vector3f);
+		void setShininess(float);
+		void setDiscardAlpha(bool);
+		void setDiscardAlphaThreshold(float);
 
 		Vector3f ambient();
 		Vector3f diffuse();
@@ -42,5 +44,7 @@ namespace vrv
 		Vector3f mySpecular;
 		float myShininess;
 		TextureMap myTextureMap;
+		bool myDiscardAlpha;
+		float myDiscardAlphaThreshold;
 	};
 }

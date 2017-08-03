@@ -109,6 +109,7 @@ namespace vrv
 		, myOutlineWidth(1.2)
 		, myOutlineRenderState(0)
 		, myPhoneLightingRenderState(0)
+		, myEnableDepthTest(true)
 	{
 		myContext->setScene(this);
 		myClearState = new ClearState();
@@ -308,5 +309,15 @@ namespace vrv
 	void Scene::setOutlineWidth(double value)
 	{
 		myOutlineWidth = value;
+	}
+
+	void Scene::enableDepthTest(bool value)
+	{
+		if (myEnableDepthTest != value)
+		{
+			myEnableDepthTest = value;
+			myPhoneLightingRenderState->depthTest().setEnabled(myEnableDepthTest);
+		}
+
 	}
 }

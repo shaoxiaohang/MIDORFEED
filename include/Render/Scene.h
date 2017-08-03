@@ -48,6 +48,7 @@ namespace vrv
 		void setOptimizeVisualizeDepthBuffer(bool);
 		void setOutlineObjects(bool);
 		void setOutlineWidth(double);
+		void enableDepthTest(bool);
 	protected:
 		virtual void cullTraverse();
 		virtual void DFS(std::stack<Node*>& stack, Node* node);	
@@ -63,6 +64,7 @@ namespace vrv
 		ClearState* myClearState;
 		RenderList myRenderlist;
 		LightList myLights;
+		bool myEnableDepthTest;
 		bool myVisualizeDepthBuffer;
 		bool myOptimizeVisualizeDepthBuffer;
 		bool myOutlineObjects;

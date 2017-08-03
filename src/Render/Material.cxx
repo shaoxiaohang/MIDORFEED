@@ -8,6 +8,8 @@ namespace vrv
 		, myAmbient(0.2,0.2,0.2)
 		, mySpecular(1,1,1)
 		, myShininess(128)
+		, myDiscardAlpha(false)
+		, myDiscardAlphaThreshold(0)
 	{}
 
 	void Material::setAmbient(Vector3f ambient)
@@ -28,6 +30,16 @@ namespace vrv
 	void Material::setShininess(float shininess)
 	{
 		myShininess = shininess;
+	}
+
+	void Material::setDiscardAlpha(bool value)
+	{
+		myDiscardAlpha = value;
+	}
+
+	void Material::setDiscardAlphaThreshold(float value)
+	{
+		myDiscardAlphaThreshold = value;
 	}
 
 	Vector3f Material::ambient()

@@ -24,7 +24,7 @@ namespace vrv
 			VRV_ERROR("failed to load xml file")
 		}
 		
-		XMLNode* pRoot = doc.FirstChildElement("scene");
+		XMLElement* pRoot = doc.FirstChildElement("scene");
 		XMLElement* objects = pRoot->FirstChildElement("objects")->FirstChildElement();
 		for (; objects; objects = objects->NextSiblingElement())
 		{
@@ -35,10 +35,9 @@ namespace vrv
 			objects->FirstChildElement("position")->QueryFloatAttribute("y", &position.y);
 			objects->FirstChildElement("position")->QueryFloatAttribute("z", &position.z);
 
-			parseMaterial(objects);
+			Material* material = parseMaterial(objects);
 
-			std::string texture = objects->FirstChildElement("texture")->GetText();
-			createObject(objectType, name, position, texture);
+			createObject(objectType, name, position, material);
 		}
 		XMLElement* lights = pRoot->FirstChildElement("lights")->FirstChildElement();
 		for (; lights; lights = lights->NextSiblingElement())
@@ -84,29 +83,45 @@ namespace vrv
 
 	Material* Scenario::parseMaterial(XMLElement* object)
 	{
-		XMLElement* material = object->FirstChildElement("material");
-		if (material)
+		XMLElement* materialNode = object->FirstChildElement("material");
+		if (materialNode)
 		{
-			std::string texture;
+			Texture* texture = 0;
 			bool discardAlpha = false;
-			XMLElement* textureNode = material->FirstChildElement("texture");
+			float discardAlphaThreshold = 0;
+			XMLElement* textureNode = materialNode->FirstChildElement("texture");
 			if (textureNode)
 			{
-				texture = textureNode->GetText();
+				std::string texName = textureNode->GetText();
+				texture = new Texture(texName);
 			}
+			XMLElement* discardAlphaNode = materialNode->FirstChildElement("discardAlpha");
+			if (discardAlphaNode)
+			{
+				discardAlpha = true;
+				discardAlphaNode->QueryFloatAttribute("threshold", &discardAlphaThreshold);
+			}
+
+			Material* material = new Material();
+			if (texture)
+			{
+				material->setTexture(Material::Material_Diffuse, texture);
+			}
+
+			return material;
+
 		}
+		return 0;
 	}
 
-	void Scenario::createObject(const std::string& type, const std::string& name, Vector3f pos, const std::string& texture)
+	void Scenario::createObject(const std::string& type, const std::string& name,
+		Vector3f pos, Material* material)
 	{
 		Node* child = 0;
-		Material* material = 0;
 		if (type == "floor")
 		{
 			child = new Node(name);
 			Floor* floor = new Floor();
-			material = new Material();
-			material->setTexture(Material::Material_Diffuse, new Texture(texture));
 			floor->setMaterial(material);
 			child->addDrawable(floor);
 			child->setPosition(pos);
@@ -116,8 +131,6 @@ namespace vrv
 		{
 			child = new Node(name);
 			Cube* cube = new Cube();
-			material = new Material();
-			material->setTexture(Material::Material_Diffuse, new Texture(texture));
 			cube->setMaterial(material);
 			child->addDrawable(cube);
 			child->setPosition(pos);
