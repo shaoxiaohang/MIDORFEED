@@ -33,6 +33,33 @@ namespace vrv
 		, material(_material)
 	{}
 
+
+	void RenderQueue::sortTransparentList(Camera* camera)
+	{
+		Vector3f cameraPosition = camera->position();
+		struct SortbyCamera
+		{
+			SortbyCamera(Vector3f camera)
+			{
+				myCameraPosition = camera;
+			}
+			bool operator()(RenderInfo const & a, RenderInfo const & b) const 
+			{
+				Vector3f positionA = a.modelMatrix.get
+			}
+
+			Vector3f myCameraPosition;
+		};
+
+		SortbyCamera sort(cameraPosition);
+	}
+
+	void RenderQueue::clear()
+	{
+		myOpaqueList.clear();
+		myTransparentList.clear();
+	}
+
 	void RenderInfo::update(Program* program)
 	{
 		if (program)
@@ -53,6 +80,15 @@ namespace vrv
 					QtContext::instance().glBindTexture(GL_TEXTURE_2D, specular->id());
 				}
 
+				if (program->getUniform("vrv_discardAlpha"))
+				{
+					program->getUniform("vrv_discardAlpha")->set(material->discardAlpha());
+				}
+
+				if (program->getUniform("vrv_discardAlphaThreshold"))
+				{
+					program->getUniform("vrv_discardAlphaThreshold")->set(material->discardAlphaThreshold());
+				}
 
 				if (program->getUniform("vrv_material.hasDiffuse"))
 				{
@@ -154,7 +190,7 @@ namespace vrv
 		{
 			updateLights();
 			cullTraverse();
-			//std::sort(myRenderlist.begin(), myRenderlist.end(), RenderInfo::SortDrawable());
+			std::sort(myRenderlist.begin(), myRenderlist.end(), RenderInfo::SortDrawable());
 			RenderList::iterator itor = myRenderlist.begin();
 			RenderList::iterator end = myRenderlist.end();
 
@@ -208,6 +244,9 @@ namespace vrv
 	{
 		return myMasterCamera;
 	}
+
+
+
 
 	void Scene::addDrawableToRender(Node* node)
 	{

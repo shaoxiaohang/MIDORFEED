@@ -93,6 +93,17 @@ namespace vrv
 		unsigned int myStencilOperation_sdpass_GL;
 	};
 
+	class Blending : public GLState
+	{
+	public:
+		Blending(bool enable);
+
+		virtual void apply(bool forceUpdate = false);
+		virtual void update();
+
+		virtual bool operator==(const GLState&);
+	};
+
 	class RenderState
 	{
 	public:
@@ -110,5 +121,6 @@ namespace vrv
 	protected:
 		DepthTest myDepthTest;
 		StencilTest myStencilTest;
+		Blending myBlending;
 	};
 }

@@ -31,6 +31,8 @@ namespace vrv
 		static Matrix4f makeProjection(value_type verticalFieldOfView, value_type ratioWDivedeH, value_type n, value_type f);
 		static Matrix4f makeFrameToCanonical(Vector3f e, Vector3f u, Vector3f v, Vector3f w);
 		static Matrix4f makeCanonicalToFrame(Vector3f e, Vector3f u, Vector3f v, Vector3f w);
+
+		Vector3f getTranslation();
 	public:
 		std::vector<float> m;
 	};

@@ -27,6 +27,8 @@ namespace vrv
 		Vector4f diffuse();
 		Vector4f specular();
 		float shininess();
+		bool discardAlpha();
+		float discardAlphaThreshold();
 
 		Texture* getTexture(TextureType type);
 

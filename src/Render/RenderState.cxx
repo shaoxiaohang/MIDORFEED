@@ -306,10 +306,45 @@ namespace vrv
 		myStencilOperation_sdpass = stencil.myStencilOperation_sdpass;
 	}
 
+	Blending::Blending(bool enable)
+		: GLState(enable)
+	{
+		//
+	}
+
+	void Blending::apply(bool forceUpdate)
+	{
+		if (myEnabled)
+		{
+			QtContext::instance().glEnable(GL_BLEND);
+			QtContext::instance().glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
+		else
+		{
+			QtContext::instance().glDisable(GL_BLEND);
+		}
+	}
+
+	void Blending::update()
+	{
+
+	}
+
+	bool Blending::operator==(const GLState& blend)
+	{
+		if (myEnabled == blend.enabled())
+		{
+			return true;
+		}
+		return false;
+	}
+
+
 
 	RenderState::RenderState()
 		: myDepthTest(true)
 		, myStencilTest(true)
+		, myBlending(true)
 	{}
 
 	void RenderState::setDepthTest(DepthTest depthTest)
@@ -334,6 +369,7 @@ namespace vrv
 	{
 		myDepthTest.apply();
 		myStencilTest.apply();
+		myBlending.apply();
 	}
 
 	void RenderState::applyIfChanged(RenderState* state)
@@ -347,6 +383,11 @@ namespace vrv
 		{
 			myStencilTest = state->myStencilTest;
 			myStencilTest.apply(true);
+		}
+		if (myBlending != state->myBlending)
+		{
+			myBlending = state->myBlending;
+			myBlending.apply(true);
 		}
 	}
 }

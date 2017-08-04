@@ -24,8 +24,16 @@ namespace vrv
 		void bind();
 		void unbind();
 		unsigned int id();
+		
+		void setTextureWrapMode(TextureWrapMode wrapMode);
+		void setTextureFilterMode(TextureFilterMode filterMode);
+
+		TextureWrapMode textureWrapMode();
+		TextureFilterMode textureFilterMode();
+
 	protected:
 		void initialize();
+		void update();
 	protected:
 		Image* myImage;
 		unsigned int myBindingPoint;

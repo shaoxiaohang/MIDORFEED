@@ -26,4 +26,16 @@ namespace vrv
 		static ArrayVec2 sTexArray;
 		static ArrayVec3 sNormalArray;
 	};
+
+	class Billboard : public Mesh
+	{
+	public:
+		Billboard();
+
+	protected:
+		static bool myGeometryInitialized;
+		static ArrayVec3 sPosArray;
+		static ArrayVec2 sTexArray;
+		static ArrayVec3 sNormalArray;
+	};
 }

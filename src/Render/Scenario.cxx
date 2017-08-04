@@ -92,8 +92,32 @@ namespace vrv
 			XMLElement* textureNode = materialNode->FirstChildElement("texture");
 			if (textureNode)
 			{
-				std::string texName = textureNode->GetText();
+				std::string texName = textureNode->FirstChildElement("filename")->GetText();
 				texture = new Texture(texName);
+				if (textureNode->FirstChildElement("wrapmode"))
+				{
+					std::string wrapModeString = textureNode->FirstChildElement("wrapmode")->GetText();
+					if (wrapModeString == "repeat")
+					{
+						texture->setTextureWrapMode(Texture::REPEAT);
+					}
+					else if (wrapModeString == "clamp_to_edge")
+					{
+						texture->setTextureWrapMode(Texture::CLAMP_TO_EDGE);
+					}
+				}
+				if (textureNode->FirstChildElement("filtermode"))
+				{
+					std::string filterString = textureNode->FirstChildElement("filtermode")->GetText();
+					if (filterString == "linear")
+					{
+						texture->setTextureFilterMode(Texture::LINEAR);
+					}
+					else if (filterString == "nearest")
+					{
+						texture->setTextureFilterMode(Texture::NEAREST);
+					}
+				}
 			}
 			XMLElement* discardAlphaNode = materialNode->FirstChildElement("discardAlpha");
 			if (discardAlphaNode)
@@ -138,6 +162,15 @@ namespace vrv
 			Cube* cube = new Cube();
 			cube->setMaterial(material);
 			child->addDrawable(cube);
+			child->setPosition(pos);
+			addChild(child);
+		}
+		else if (type == "billboard")
+		{
+			child = new Node(name);
+			Billboard* billboard = new Billboard();
+			billboard->setMaterial(material);
+			child->addDrawable(billboard);
 			child->setPosition(pos);
 			addChild(child);
 		}

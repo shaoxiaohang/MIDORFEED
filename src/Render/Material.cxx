@@ -62,6 +62,17 @@ namespace vrv
 		return myShininess;
 	}
 
+	bool Material::discardAlpha()
+	{
+		return myDiscardAlpha;
+	}
+
+	float Material::discardAlphaThreshold()
+	{
+		return myDiscardAlphaThreshold;
+	}
+
+
 	Texture* Material::getTexture(TextureType type)
 	{
 		if (myTextureMap.find(type) != myTextureMap.end())

@@ -31,11 +31,24 @@ namespace vrv
 	};
 
 
+	struct RenderQueue
+	{
+		typedef std::vector<RenderInfo> RenderList;
+
+		void sortTransparentList(Camera* camera);
+
+		RenderList myOpaqueList;
+		RenderList myTransparentList;
+
+		void clear();
+	};
+
+
 
 	class Scene : public Singleton<Scene>
 	{
 	public:
-		typedef std::vector<RenderInfo> RenderList;
+
 		typedef std::vector<Light*> LightList;
 	public:
 		Scene(Context* context);
@@ -62,7 +75,7 @@ namespace vrv
 		RenderState* myPhoneLightingRenderState;
 		RenderState* myOutlineRenderState;
 		ClearState* myClearState;
-		RenderList myRenderlist;
+		RenderQueue myRenderQueue;
 		LightList myLights;
 		bool myEnableDepthTest;
 		bool myVisualizeDepthBuffer;

@@ -53,6 +53,11 @@ void main()
 	if(vrv_material.hasDiffuse)
 	{
 		diffuse = vrv_material.diffuse * texture2D(vrv_material.diffuse_tex,tex_st);
+		if(vrv_discardAlpha)
+		{
+			if(diffuse.a < vrv_discardAlphaThreshold)
+				discard;
+		}
 	}
 	else
 		diffuse = vrv_material.diffuse;
@@ -60,7 +65,7 @@ void main()
 		specular = vrv_material.specular * texture2D(vrv_material.specular_tex,tex_st);
 	else
 		specular = vrv_material.diffuse;
-	color = vec4(calculateLightColor(diffuse,specular,vrv_material.shininess),1);
+	color = vec4(calculateLightColor(diffuse,specular,vrv_material.shininess),diffuse.a);
 }
 
 vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess)

@@ -144,4 +144,9 @@ namespace vrv
 			w.x, w.y, w.z, 0,
 			0, 0, 0, 1) * makeTranslate(-e.x, -e.y, -e.z);
 	}
+
+	Vector3f Matrix4f::getTranslation()
+	{
+
+	}
 }

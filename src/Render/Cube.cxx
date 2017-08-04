@@ -182,4 +182,42 @@ namespace vrv
 		setNomral(&sNormalArray);
 		addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
 	}
+
+	bool Billboard::myGeometryInitialized = false;
+	ArrayVec3 Billboard::sPosArray = ArrayVec3(6);
+	ArrayVec2 Billboard::sTexArray = ArrayVec2(6);
+	ArrayVec3 Billboard::sNormalArray = ArrayVec3(6);
+
+	Billboard::Billboard()
+	{
+		if (!myGeometryInitialized)
+		{
+			sPosArray[0] = Vector3f(0.0f, 0.5f, 0.0f);
+			sPosArray[1] = Vector3f(0.0f, -0.5f, 0.0f);
+			sPosArray[2] = Vector3f(1.0f, -0.5f, 0.0f);
+			sPosArray[3] = Vector3f(0.0f, 0.5f, 0.0f);
+			sPosArray[4] = Vector3f(1.0f, -0.5f, 0.0f);
+			sPosArray[5] = Vector3f(1.0f, 0.5f, 0.0f);
+
+			sTexArray[0] = Vector2f(0.0f, 1.0f);
+			sTexArray[1] = Vector2f(0.0f, 0.0f);
+			sTexArray[2] = Vector2f(1.0f, 0.0f);
+			sTexArray[3] = Vector2f(0.0f, 1.0f);
+			sTexArray[4] = Vector2f(1.0f, 0.0f);
+			sTexArray[5] = Vector2f(1.0f, 1.0f);
+
+			sNormalArray[0] = Vector3f(0, 0, 1);
+			sNormalArray[1] = Vector3f(0, 0, 1);
+			sNormalArray[2] = Vector3f(0, 0, 1);
+			sNormalArray[3] = Vector3f(0, 0, 1);
+			sNormalArray[4] = Vector3f(0, 0, 1);
+			sNormalArray[5] = Vector3f(0, 0, 1);
+
+			myGeometryInitialized = true;
+		}
+		setVertex(&sPosArray);
+		setTextureCoordinate(&sTexArray);
+		setNomral(&sNormalArray);
+		addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
+	}
 }
