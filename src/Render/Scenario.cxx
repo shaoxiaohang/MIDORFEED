@@ -107,6 +107,11 @@ namespace vrv
 			{
 				material->setTexture(Material::Material_Diffuse, texture);
 			}
+			if (discardAlpha)
+			{
+				material->setDiscardAlpha(true);
+				material->setDiscardAlphaThreshold(discardAlphaThreshold);
+			}
 
 			return material;
 

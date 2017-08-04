@@ -4,25 +4,25 @@
 namespace vrv
 {
 	Material::Material()
-		: myDiffuse(1,1,1)
-		, myAmbient(0.2,0.2,0.2)
-		, mySpecular(1,1,1)
+		: myDiffuse(1,1,1,1)
+		, myAmbient(0.2,0.2,0.2,1)
+		, mySpecular(1,1,1,1)
 		, myShininess(128)
 		, myDiscardAlpha(false)
 		, myDiscardAlphaThreshold(0)
 	{}
 
-	void Material::setAmbient(Vector3f ambient)
+	void Material::setAmbient(Vector4f ambient)
 	{
 		myAmbient = ambient;
 	}
 
-	void Material::setDiffuse(Vector3f diffuse)
+	void Material::setDiffuse(Vector4f diffuse)
 	{
 		myDiffuse = diffuse;
 	}
 
-	void Material::setSpecular(Vector3f specular)
+	void Material::setSpecular(Vector4f specular)
 	{
 		mySpecular = specular;
 	}
@@ -42,17 +42,17 @@ namespace vrv
 		myDiscardAlphaThreshold = value;
 	}
 
-	Vector3f Material::ambient()
+	Vector4f Material::ambient()
 	{
 		return myAmbient;
 	}
 
-	Vector3f Material::diffuse()
+	Vector4f Material::diffuse()
 	{
 		return myDiffuse;
 	}
 
-	Vector3f Material::specular()
+	Vector4f Material::specular()
 	{
 		return mySpecular;
 	}

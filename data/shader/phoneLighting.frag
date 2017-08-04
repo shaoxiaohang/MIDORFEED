@@ -4,14 +4,16 @@ struct Material
 	sampler2D specular_tex;
 	bool hasDiffuse;
 	bool hasSpecular;
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
+	vec4 ambient;
+	vec4 diffuse;
+	vec4 specular;
 	float shininess;
 };
 
 uniform Material vrv_material;
 uniform vec3 vrv_view_pos;
+uniform bool vrv_discardAlpha;
+uniform float vrv_discardAlphaThreshold;
 
 in vec2 tex_st;
 in vec3 vrv_normal;
@@ -42,30 +44,32 @@ uniform vrv_light_struct vrv_lights[VRV_MAX_NUM_LIGHTS];
 
 //Lighting functions
 vec3 phoneLighting(vrv_light_struct light,vec3 diffuse,vec3 specular,float shininess);
-vec3 calculateLightColor(vec3 diffuse,vec3 specular,float shininess);
+vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess);
 
 void main()
 {
-	vec3 diffuse;
-	vec3 specular;
+	vec4 diffuse;
+	vec4 specular;
 	if(vrv_material.hasDiffuse)
-		diffuse = vrv_material.diffuse * texture2D(vrv_material.diffuse_tex,tex_st).xyz;
+	{
+		diffuse = vrv_material.diffuse * texture2D(vrv_material.diffuse_tex,tex_st);
+	}
 	else
 		diffuse = vrv_material.diffuse;
 	if(vrv_material.hasSpecular)
-		specular = vrv_material.specular * texture2D(vrv_material.specular_tex,tex_st).xyz;
+		specular = vrv_material.specular * texture2D(vrv_material.specular_tex,tex_st);
 	else
 		specular = vrv_material.diffuse;
 	color = vec4(calculateLightColor(diffuse,specular,vrv_material.shininess),1);
 }
 
-vec3 calculateLightColor(vec3 diffuse,vec3 specular,float shininess)
+vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess)
 {
 	vec3 finalColor = vec3(0);
 	for(int i=0; i<VRV_MAX_NUM_LIGHTS; ++i)
 	{
 		if(vrv_lights[i].used)
-			finalColor += phoneLighting(vrv_lights[i],diffuse,specular,shininess);
+			finalColor += phoneLighting(vrv_lights[i],diffuse.xyz,specular.xyz,shininess);
 	}
 	return finalColor;
 }

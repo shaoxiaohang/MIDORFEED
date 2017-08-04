@@ -1,5 +1,5 @@
 #pragma once
-#include <Core/Vector3.h>
+#include <Core/Vector4.h>
 #include <map>
 namespace vrv
 {
@@ -16,16 +16,16 @@ namespace vrv
 	public:
 		Material();
 
-		void setAmbient(Vector3f);
-		void setDiffuse(Vector3f);
-		void setSpecular(Vector3f);
+		void setAmbient(Vector4f);
+		void setDiffuse(Vector4f);
+		void setSpecular(Vector4f);
 		void setShininess(float);
 		void setDiscardAlpha(bool);
 		void setDiscardAlphaThreshold(float);
 
-		Vector3f ambient();
-		Vector3f diffuse();
-		Vector3f specular();
+		Vector4f ambient();
+		Vector4f diffuse();
+		Vector4f specular();
 		float shininess();
 
 		Texture* getTexture(TextureType type);
@@ -39,9 +39,9 @@ namespace vrv
 		bool hasSpecular();
 
 	protected:
-		Vector3f myAmbient;
-		Vector3f myDiffuse;
-		Vector3f mySpecular;
+		Vector4f myAmbient;
+		Vector4f myDiffuse;
+		Vector4f mySpecular;
 		float myShininess;
 		TextureMap myTextureMap;
 		bool myDiscardAlpha;
