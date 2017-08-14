@@ -32,7 +32,7 @@ namespace vrv
 		static Matrix4f makeFrameToCanonical(Vector3f e, Vector3f u, Vector3f v, Vector3f w);
 		static Matrix4f makeCanonicalToFrame(Vector3f e, Vector3f u, Vector3f v, Vector3f w);
 
-		Vector3f getTranslation();
+		Vector3f getTranslation() const;
 	public:
 		std::vector<float> m;
 	};

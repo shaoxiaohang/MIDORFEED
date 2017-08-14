@@ -18,10 +18,9 @@ namespace vrv
 		Program(const Shader* vert, const Shader* frag);
 		~Program();
 		bool operator< (const Program& pro);
-		bool operator> (const Program& pro);
 
-		Shader* vertexShader();
-		Shader* fragmentShader();
+		Shader* vertexShader() const;
+		Shader* fragmentShader() const;
 		void link();
 		static bool checkProgramLinkStatus(unsigned int id,std::string& error);
 		static Uniform* createUniform(std::string name, Uniform::UniformType type, int location);

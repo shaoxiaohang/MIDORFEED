@@ -89,6 +89,18 @@ namespace vrv
 		return myTextureFilterMode;
 	}
 
+	bool Texture::hasAlphaChannel()
+	{
+		if (myImage->pixelFormat() == Image::PF_RGBA || myImage->pixelFormat() == Image::PF_BGRA)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	void Texture::update()
 	{
 		switch (myTextureWrapMode)

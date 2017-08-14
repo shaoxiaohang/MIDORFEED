@@ -31,6 +31,8 @@ namespace vrv
 		TextureWrapMode textureWrapMode();
 		TextureFilterMode textureFilterMode();
 
+		bool hasAlphaChannel();
+
 	protected:
 		void initialize();
 		void update();

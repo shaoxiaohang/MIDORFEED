@@ -105,4 +105,21 @@ namespace vrv
 	{
 		return myTextureMap.find(Material_Specular) != myTextureMap.end();
 	}
+
+	bool Material::isTransParent()
+	{
+		if (myDiffuse.w != 1)
+		{
+			return true;
+		}
+		else
+		{
+			if (hasDiffuse() && myTextureMap[Material_Diffuse]->hasAlphaChannel())
+			{
+				return true;
+			}
+			return false;
+		}
+	
+	}
 }

@@ -27,37 +27,110 @@ namespace vrv
 {
 	Scene* Scene::myInstance = 0;
 
+	struct SortbyCamera
+	{
+		SortbyCamera(Vector3f camera)
+		{
+			myCameraPosition = camera;
+		}
+		bool operator()(RenderInfo const & a, RenderInfo const & b) const
+		{
+			Vector3f positionA = a.modelMatrix.getTranslation();
+			Vector3f positionB = b.modelMatrix.getTranslation();
+			float distanceA = positionA.distanceSquare(myCameraPosition);
+			float distanceB = positionB.distanceSquare(myCameraPosition);
+			return distanceA > distanceB;
+		}
+
+		Vector3f myCameraPosition;
+	};
+
+
 	RenderInfo::RenderInfo(Drawable* _drawable, Matrix4f _modelMatrix, Material* _material)
 		: drawable(_drawable)
 		, modelMatrix(_modelMatrix)
 		, material(_material)
 	{}
 
+	RenderQueue::RenderQueue()
+		: myModifiedRenderState(0)
+		, myModifiedProgram(0)
+	{}
+
+	void RenderQueue::draw(Context* context, Camera* camera)
+	{
+		//draw opaque list first 
+		//std::sort(myOpaqueList.begin(), myOpaqueList.end(), RenderInfo::SortDrawable());
+		RenderList::iterator itor = myOpaqueList.begin();
+		RenderList::iterator end = myOpaqueList.end();
+		for (; itor != end; ++itor)
+		{
+			RenderInfo& info = *itor;
+			Drawable* drawable = info.drawable;
+			if (myModifiedProgram)
+			{
+				drawable->drawState()->setProgram(myModifiedProgram);
+			}
+			if (myModifiedRenderState)
+			{
+				drawable->drawState()->setRenderState(myModifiedRenderState);
+			}
+			context->draw(*itor);
+		}
+
+		//sort the transparent list from back to front
+		sortTransparentList(camera);
+		//std::sort(myTransparentList.begin(), myTransparentList.end(), RenderInfo::SortDrawable());
+		itor = myTransparentList.begin();
+		end = myTransparentList.end();
+		for (; itor != end; ++itor)
+		{
+			RenderInfo& info = *itor;
+			Drawable* drawable = info.drawable;
+			if (myModifiedProgram)
+			{
+				drawable->drawState()->setProgram(myModifiedProgram);
+			}
+			if (myModifiedRenderState)
+			{
+				drawable->drawState()->setRenderState(myModifiedRenderState);
+			}
+			context->draw(*itor);
+		}
+
+	}
 
 	void RenderQueue::sortTransparentList(Camera* camera)
 	{
 		Vector3f cameraPosition = camera->position();
-		struct SortbyCamera
-		{
-			SortbyCamera(Vector3f camera)
-			{
-				myCameraPosition = camera;
-			}
-			bool operator()(RenderInfo const & a, RenderInfo const & b) const 
-			{
-				Vector3f positionA = a.modelMatrix.get
-			}
-
-			Vector3f myCameraPosition;
-		};
-
 		SortbyCamera sort(cameraPosition);
+		std::sort(myTransparentList.begin(), myTransparentList.end(), sort);
+	}
+
+	void RenderQueue::addToOpaqueList(const RenderInfo& info)
+	{
+		myOpaqueList.push_back(info);
+	}
+
+	void RenderQueue::addToTransparentList(const RenderInfo& info)
+	{
+		myTransparentList.push_back(info);
 	}
 
 	void RenderQueue::clear()
 	{
 		myOpaqueList.clear();
 		myTransparentList.clear();
+	}
+
+	void RenderQueue::modifyProgram(Program* program)
+	{
+		myModifiedProgram = program;
+	}
+
+	void RenderQueue::modifyRenderState(RenderState* renderState)
+	{
+		myModifiedRenderState = renderState;
 	}
 
 	void RenderInfo::update(Program* program)
@@ -165,7 +238,7 @@ namespace vrv
 
 	void Scene::cullTraverse()
 	{
-		myRenderlist.clear();
+		myRenderQueue.clear();
 		std::stack<Node*> DFSStack;
 		DFSStack.push(myRoot);
 		DFS(DFSStack, myRoot);
@@ -190,53 +263,26 @@ namespace vrv
 		{
 			updateLights();
 			cullTraverse();
-			std::sort(myRenderlist.begin(), myRenderlist.end(), RenderInfo::SortDrawable());
-			RenderList::iterator itor = myRenderlist.begin();
-			RenderList::iterator end = myRenderlist.end();
-
-			for (; itor != end; ++itor)
+			if (myVisualizeDepthBuffer)
 			{
-				RenderInfo& info = *itor;
-				Drawable* drawable = info.drawable;
-				if (myVisualizeDepthBuffer)
-				{
-					drawable->drawState()->setProgram(ShaderManager::instance().getProgram(ShaderManager::VisualizeDepthBuffer));
-				}
-				else
-				{
-					drawable->drawState()->setProgram(ShaderManager::instance().getProgram(ShaderManager::PhoneLighting));
-				}
-				
-				drawable->drawState()->setRenderState(myPhoneLightingRenderState);
+				myRenderQueue.modifyProgram(ShaderManager::instance()
+					.getProgram(ShaderManager::VisualizeDepthBuffer));
 			}
+			else
+			{
+				myRenderQueue.modifyProgram(ShaderManager::instance()
+					.getProgram(ShaderManager::PhoneLighting));
+			}
+			myRenderQueue.modifyRenderState(myPhoneLightingRenderState);
+			myRenderQueue.draw(myContext, myMasterCamera);
 
-			draw();
-			
 			if (myOutlineObjects)
 			{
-				RenderList::iterator itor = myRenderlist.begin();
-				RenderList::iterator end = myRenderlist.end();
-
-				for (; itor != end; ++itor)
-				{
-					RenderInfo& info = *itor;
-					Drawable* drawable = info.drawable;
-					drawable->drawState()->setProgram(ShaderManager::instance().getProgram(ShaderManager::NoLighting));
-					drawable->drawState()->setRenderState(myOutlineRenderState);
-					info.modelMatrix.scale(myOutlineWidth);
-				}
-				draw();
+				myRenderQueue.modifyProgram(ShaderManager::instance()
+					.getProgram(ShaderManager::NoLighting));
+				myRenderQueue.modifyRenderState(myOutlineRenderState);
+				myRenderQueue.draw(myContext, myMasterCamera);
 			}
-		}
-	}
-
-	void Scene::draw()
-	{
-		RenderList::iterator itor = myRenderlist.begin();
-		RenderList::iterator end = myRenderlist.end();
-		for (; itor != end; ++itor)
-		{
-			myContext->draw(*itor);
 		}
 	}
 
@@ -244,8 +290,6 @@ namespace vrv
 	{
 		return myMasterCamera;
 	}
-
-
 
 
 	void Scene::addDrawableToRender(Node* node)
@@ -260,7 +304,15 @@ namespace vrv
 				material = mesh->material();
 			}
 			node->getDrawable(i)->buildGeometryIfNeeded(material);
-			myRenderlist.push_back(RenderInfo(node->getDrawable(i), node->getModelMatrix(), material));
+			if (material && material->isTransParent())
+			{
+				myRenderQueue.addToTransparentList(RenderInfo(node->getDrawable(i), node->getModelMatrix(), material));
+			}
+			else
+			{
+				myRenderQueue.addToOpaqueList(RenderInfo(node->getDrawable(i), node->getModelMatrix(), material));
+			}
+
 		}
 	}
 

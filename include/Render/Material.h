@@ -31,22 +31,19 @@ namespace vrv
 		float discardAlphaThreshold();
 
 		Texture* getTexture(TextureType type);
-
 		virtual void setTexture(TextureType textureType, const std::string& texture);
-
 		virtual void setTexture(TextureType textureType, Texture* texture);
-
 		bool hasDiffuse();
-
 		bool hasSpecular();
+		bool isTransParent();
 
 	protected:
-		Vector4f myAmbient;
-		Vector4f myDiffuse;
-		Vector4f mySpecular;
-		float myShininess;
-		TextureMap myTextureMap;
-		bool myDiscardAlpha;
-		float myDiscardAlphaThreshold;
+		Vector4f		myAmbient;
+		Vector4f		myDiffuse;
+		Vector4f		mySpecular;
+		float			myShininess;
+		TextureMap  myTextureMap;
+		bool			myDiscardAlpha;
+		float		   myDiscardAlphaThreshold;
 	};
 }

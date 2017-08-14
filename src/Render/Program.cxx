@@ -33,24 +33,25 @@ namespace vrv
 		QtContext::instance().glDeleteProgram(myID);
 	}
 
-	Shader* Program::vertexShader()
+	Shader* Program::vertexShader() const
 	{
 		return myVertShader;
 	}
-
-	Shader* Program::fragmentShader()
+	 
+	Shader* Program::fragmentShader() const
 	{
 		return myFragShader;
 	}
 
 	bool Program::operator < (const Program& pro)
 	{
-		return true;
+		if (myVertShader != pro.vertexShader() || myFragShader != pro.fragmentShader())
+		{
+			return true;
+		}
+		return false;
 	}
-	bool Program::operator > (const Program& pro)
-	{
-		return true;
-	}
+
 
 	bool Program::checkProgramLinkStatus(unsigned int id, std::string& error)
 	{

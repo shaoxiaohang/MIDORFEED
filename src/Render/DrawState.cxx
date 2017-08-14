@@ -86,10 +86,6 @@ namespace vrv
 		{
 			return true;
 		}
-		if (*(myProgram) > *(state.program()))
-		{
-			return false;
-		}
 
 		RenderState& leftRenderState = *myRenderState;
 		RenderState& rightRenderState = *(state.renderState());

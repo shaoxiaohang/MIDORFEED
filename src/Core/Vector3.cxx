@@ -93,4 +93,8 @@ namespace vrv
 		return Vector3f(y*right.z - z*right.y, z*right.x - x*right.z, x*right.y - y*right.x);
 	}
 
+	float Vector3f::distanceSquare(const Vector3f& right)
+	{
+		return (x - right.x)*(x - right.x) + (y - right.y)*(y - right.y)+(z - right.z)* (z - right.z);
+	}
 }

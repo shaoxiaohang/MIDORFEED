@@ -33,10 +33,11 @@ namespace vrv
 		Image(const std::string& file);
 		unsigned int width();
 		unsigned int height();
-		unsigned int internalFormatGL();
-		unsigned int pixelFormatGL();
+		ImagePixelFormat pixelFormat();
 		unsigned int dataTypeGL();
 		unsigned char* dataPointer();
+		unsigned int internalFormatGL();
+		unsigned int pixelFormatGL();
 	protected:
 		void initialize();
 	protected:

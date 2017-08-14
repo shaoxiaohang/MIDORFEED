@@ -20,6 +20,7 @@ namespace vrv
 		Vector3f normalize();
 
 		Vector3f crossProduct(const Vector3f& right);
+		float distanceSquare(const Vector3f& right);
 
 		float x;
 		float y;

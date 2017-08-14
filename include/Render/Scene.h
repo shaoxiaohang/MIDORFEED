@@ -33,6 +33,7 @@ namespace vrv
 
 	struct RenderQueue
 	{
+		RenderQueue();
 		typedef std::vector<RenderInfo> RenderList;
 
 		void sortTransparentList(Camera* camera);
@@ -40,7 +41,15 @@ namespace vrv
 		RenderList myOpaqueList;
 		RenderList myTransparentList;
 
+		void draw(Context* context, Camera* camera);
+		void addToOpaqueList(const RenderInfo&);
+		void addToTransparentList(const RenderInfo&);
 		void clear();
+		void modifyProgram(Program* program);
+		void modifyRenderState(RenderState* renderState);
+
+		Program* myModifiedProgram;
+		RenderState* myModifiedRenderState;
 	};
 
 
@@ -67,7 +76,6 @@ namespace vrv
 		virtual void DFS(std::stack<Node*>& stack, Node* node);	
 		virtual void addDrawableToRender(Node* node);
 		virtual void updateLights();
-		virtual void draw();
 	protected:
 		Camera* myMasterCamera;
 		Node* myRoot;

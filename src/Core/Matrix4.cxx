@@ -145,8 +145,8 @@ namespace vrv
 			0, 0, 0, 1) * makeTranslate(-e.x, -e.y, -e.z);
 	}
 
-	Vector3f Matrix4f::getTranslation()
+	Vector3f Matrix4f::getTranslation() const
 	{
-
+		return Vector3f(m[12], m[13], m[14]);
 	}
 }

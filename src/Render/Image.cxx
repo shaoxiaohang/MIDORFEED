@@ -44,6 +44,11 @@ namespace vrv
 		return FreeImage_GetBits(myFIImage);
 	}
 
+	Image::ImagePixelFormat Image::pixelFormat()
+	{
+		return myPixelFormat;
+	}
+
 	void Image::initialize()
 	{
 		FREE_IMAGE_FORMAT format;
