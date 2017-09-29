@@ -339,6 +339,49 @@ namespace vrv
 		return false;
 	}
 
+	CullFace::CullFace(bool enable)
+		: GLState(enable)
+	{
+		//
+	}
+
+	void CullFace::apply(bool forceUpdate)
+	{
+		if (myEnabled)
+		{
+			QtContext::instance().glEnable(GL_BLEND);
+			QtContext::instance().glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		}
+		else
+		{
+			QtContext::instance().glDisable(GL_BLEND);
+		}
+	}
+
+	void CullFace::update()
+	{
+
+	}
+
+	bool CullFace::operator==(const GLState& blend)
+	{
+		if (myEnabled == blend.enabled())
+		{
+			return true;
+		}
+		return false;
+	}
+
+	void CullFace::setCullFaceType(CullFaceType type)
+	{
+		myCullFaceType = type;
+	}
+
+	CullFace::CullFaceType CullFace::cullFaceType()
+	{
+		return myCullFaceType;
+	}
+
 
 
 	RenderState::RenderState()

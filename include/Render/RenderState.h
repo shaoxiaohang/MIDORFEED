@@ -104,6 +104,30 @@ namespace vrv
 		virtual bool operator==(const GLState&);
 	};
 
+	class CullFace : public GLState
+	{
+	public:
+		enum CullFaceType
+		{
+			BACK,
+			FRONT,
+			FRONT_BACK
+		};
+
+		CullFace(bool enable);
+
+		virtual void apply(bool forceUpdate = false);
+		virtual void update();
+
+		void setCullFaceType(CullFaceType type);
+		CullFaceType cullFaceType();
+
+		virtual bool operator==(const GLState&);
+
+	protected:
+		CullFaceType myCullFaceType;
+	};
+
 	class RenderState
 	{
 	public:
