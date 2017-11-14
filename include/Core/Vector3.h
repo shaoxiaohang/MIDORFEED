@@ -1,11 +1,12 @@
 #pragma once
-
+#include <Core/Vector2.h>
 namespace vrv
 {
 	class Vector3f
 	{
 	public:
 		Vector3f();
+		Vector3f(Vector2f);
 		Vector3f(float _x, float _y, float _z);
 		void operator =(const Vector3f& right);
 		bool operator ==(const Vector3f& right);

@@ -12,7 +12,6 @@ namespace vrv
 	Viewer::Viewer(int &argc, char **argv)
 		: myAppWindow(0)
 		, myScene(0)
-		, myShaderManager(0)
 	{
 		myQtApplication = new QApplication(argc,argv);
 	}
@@ -27,8 +26,7 @@ namespace vrv
 	{
 		WindowConfiguration config(_width, _height, _title);
 		myAppWindow = new QtApplicationWindow(this, config);
-		myScene = new Scene(myAppWindow->context());
-		myShaderManager = new ShaderManager();
+		myScene = new Scene(myAppWindow,myAppWindow->context());
 	}
 
 	void Viewer::onUpdateTick(double dt)
@@ -38,7 +36,11 @@ namespace vrv
 
 	void Viewer::onRenderTick()
 	{
-		myScene->renderScene();
+		if (myScene)
+		{
+			myScene->renderScene();
+		}
+	
 	}
 
 	void Viewer::setSceneData(Node* root)

@@ -12,9 +12,12 @@
 #include <Render/QtContext.h>
 #include <Render/ShaderManager.h>
 #include <Render/RenderState.h>
+#include <Render/FrameBuffer.h>
+#include <Render/PostProcessorManager.h>
 #include <Core/Node.h>
 #include <Core/Utility.h>
 #include <Core/NodeVisitor.h>
+#include <Render/MainWindow.h>
 #include <algorithm>
 #include <sstream>
 
@@ -209,7 +212,7 @@ namespace vrv
 		return true;
 	}
 
-	Scene::Scene(Context* context)
+	Scene::Scene(MainWindow* window, Context* context)
 		: myContext(context)
 		, myRoot(0)
 		, myVisualizeDepthBuffer(false)
@@ -219,7 +222,9 @@ namespace vrv
 		, myOutlineRenderState(0)
 		, myPhoneLightingRenderState(0)
 		, myEnableDepthTest(true)
+		, myMainWindow(window)
 	{
+		myShaderManager = new ShaderManager();
 		myContext->setScene(this);
 		myClearState = new ClearState();
 		myMasterCamera = new Camera();
@@ -229,6 +234,8 @@ namespace vrv
 		myOutlineRenderState->stencilTest().setStencilWriteMask(0x00);
 		myOutlineRenderState->depthTest().setEnabled(false);
 		myPhoneLightingRenderState = new RenderState();
+		myDefaultFrameBuffer = new FrameBuffer(FrameBuffer::DEPTH_STENCIL, myMainWindow->width(), myMainWindow->height());
+		myPostProcessorManager = new PostProcessorManager();
 	}
 
 	void Scene::setSceneData(Node* root)
@@ -274,15 +281,24 @@ namespace vrv
 					.getProgram(ShaderManager::PhoneLighting));
 			}
 			myRenderQueue.modifyRenderState(myPhoneLightingRenderState);
+
+			myDefaultFrameBuffer->bind();
+
+			QtContext::instance().glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			QtContext::instance().glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 			myRenderQueue.draw(myContext, myMasterCamera);
 
 			if (myOutlineObjects)
 			{
 				myRenderQueue.modifyProgram(ShaderManager::instance()
-					.getProgram(ShaderManager::NoLighting));
+					.getProgram(ShaderManager::OutLineObject));
 				myRenderQueue.modifyRenderState(myOutlineRenderState);
 				myRenderQueue.draw(myContext, myMasterCamera);
 			}
+
+
+			myPostProcessorManager->run(myDefaultFrameBuffer);
 		}
 	}
 
@@ -303,7 +319,7 @@ namespace vrv
 			{
 				material = mesh->material();
 			}
-			node->getDrawable(i)->buildGeometryIfNeeded(material);
+			node->getDrawable(i)->buildGeometryIfNeeded();
 			if (material && material->isTransParent())
 			{
 				myRenderQueue.addToTransparentList(RenderInfo(node->getDrawable(i), node->getModelMatrix(), material));

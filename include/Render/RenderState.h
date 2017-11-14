@@ -126,6 +126,7 @@ namespace vrv
 
 	protected:
 		CullFaceType myCullFaceType;
+		unsigned int myCullFaceType_GL;
 	};
 
 	class RenderState
@@ -142,9 +143,13 @@ namespace vrv
 		void setStencilTest(StencilTest stencilTest);
 		StencilTest& stencilTest();
 
+		void setCullFace(CullFace cull);
+		CullFace& cullFace();
+
 	protected:
 		DepthTest myDepthTest;
 		StencilTest myStencilTest;
 		Blending myBlending;
+		CullFace myCullFace;
 	};
 }

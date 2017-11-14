@@ -44,6 +44,7 @@ namespace vrv
 		if (myEnableDepthTest != value)
 		{
 			myEnableDepthTest = value;
+			Scene::instance().enableDepthTest(myEnableDepthTest);
 		}
 	}
 

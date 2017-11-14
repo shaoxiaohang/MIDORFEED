@@ -17,6 +17,7 @@ namespace vrv
 			NEAREST,
 			LINEAR
 		};
+		Texture2D(int width, int height);
 		Texture2D(const std::string& fileName);
 		Texture2D(Image* image);
 		void bindToPoint(unsigned int bindingPoint);
@@ -29,6 +30,8 @@ namespace vrv
 		Image* myImage;
 		unsigned int myBindingPoint;
 		unsigned int myID;
+		unsigned int myWidth;
+		unsigned int myHeight;
 		TextureWrapMode myTextureWrapMode;
 		TextureFilterMode myTextureFilterMode;
 		unsigned int myTextureWrapModeGL;

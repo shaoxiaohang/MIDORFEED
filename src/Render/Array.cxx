@@ -266,6 +266,16 @@ namespace vrv
 		myData.resize(size);
 	}
 
+	ArrayVec3::ArrayVec3(ArrayVec2* copy)
+		: Array(Array::VEC3F, copy->size())
+	{
+		myData.resize(mySize);
+		for (unsigned int i = 0; i < mySize; ++i)
+		{
+			(*this)[i] = Vector3f(copy->get(i));
+		}
+	}
+
 	ArrayVec3::ArrayVec3(ArrayVec3* copy)
 		: Array(Array::VEC3F,copy->size())
 	{

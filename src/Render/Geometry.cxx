@@ -26,6 +26,11 @@ namespace vrv
 		myVertexArray = new ArrayVec3(array);
 	}
 
+	void Geometry::setVertex(ArrayVec2* array)
+	{
+		myVertexArray = new ArrayVec3(array);
+	}
+
 	void Geometry::setNomral(ArrayVec3* array)
 	{
 		myNormalArray = new ArrayVec3(array);
@@ -42,7 +47,7 @@ namespace vrv
 		myTextureCoordinateArray = new ArrayVec2(array);
 	}
 
-	void Geometry::buildGeometry(Material* material)
+	void Geometry::buildGeometry()
 	{
 		if (!myBuildGeometry)
 		{
@@ -71,8 +76,7 @@ namespace vrv
 				vbo_normal->copyFromSystemMemory(myNormalArray);
 				vao->bindVertexBufferObject(vbo_normal);
 			}
-			Program* phoneLighting = ShaderManager::instance().getProgram(ShaderManager::PhoneLighting);
-			createDrawState(vao, phoneLighting);
+			createDrawState(vao, 0);
 			myBuildGeometry = true;
 		}
 	}

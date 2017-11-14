@@ -7,11 +7,11 @@ namespace vrv
  	class ProgramFactory
 	{
 	public:
-		ProgramFactory(const std::string& name);
-		const std::string name();
+		ProgramFactory(int);
+		int type();
 		virtual Program* createProgram() = 0;
 	protected:
-		const std::string myName;
+		int myType;
 	};
 
 	class PhoneLightingProgramFactory : public ProgramFactory
@@ -32,6 +32,13 @@ namespace vrv
 	{
 	public:
 		OutlineObjectsProgramFactory();
+		Program* createProgram();
+	};
+
+	class DefaultQuadProgramFactory : public ProgramFactory
+	{
+	public:
+		DefaultQuadProgramFactory();
 		Program* createProgram();
 	};
 }

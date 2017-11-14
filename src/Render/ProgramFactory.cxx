@@ -1,20 +1,21 @@
 #include <Render/ProgramFactory.h>
 #include <Render/Program.h>
+#include <Render/ShaderManager.h>
 namespace vrv
 {
-	ProgramFactory::ProgramFactory(const std::string& name)
-		: myName(name)
+	ProgramFactory::ProgramFactory(int type)
+		: myType(type)
 	{
 
 	}
 
-	const std::string ProgramFactory::name()
+	int ProgramFactory::type()
 	{
-		return myName;
+		return myType;
 	}
 
 	PhoneLightingProgramFactory::PhoneLightingProgramFactory()
-		: ProgramFactory("phoneLighting")
+		: ProgramFactory(ShaderManager::PhoneLighting)
 	{}
 
 	Program* PhoneLightingProgramFactory::createProgram()
@@ -26,7 +27,7 @@ namespace vrv
 
 
 	VisualizeDepthBufferProgramFactory::VisualizeDepthBufferProgramFactory()
-		: ProgramFactory("visualize_depth_buffer")
+		: ProgramFactory(ShaderManager::VisualizeDepthBuffer)
 	{}
 
 	Program* VisualizeDepthBufferProgramFactory::createProgram()
@@ -37,12 +38,23 @@ namespace vrv
 	}
 
 	OutlineObjectsProgramFactory::OutlineObjectsProgramFactory()
-		: ProgramFactory("noLighting")
+		: ProgramFactory(ShaderManager::OutLineObject)
 	{}
 
 	Program* OutlineObjectsProgramFactory::createProgram()
 	{
-		Program* program = new Program("../data/shader/noLighting.vert", "../data/shader/noLighting.frag");
+		Program* program = new Program("../data/shader/outlineObject.vert", "../data/shader/outlineObject.frag");
+		program->link();
+		return program;
+	}
+
+	DefaultQuadProgramFactory::DefaultQuadProgramFactory()
+		: ProgramFactory(ShaderManager::DefaultQuadShader)
+	{}
+
+	Program* DefaultQuadProgramFactory::createProgram()
+	{
+		Program* program = new Program("../data/shader/defaultQuad.vert", "../data/shader/defaultQuad.frag");
 		program->link();
 		return program;
 	}

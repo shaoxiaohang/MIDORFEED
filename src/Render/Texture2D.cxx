@@ -3,6 +3,14 @@
 #include <Render/QtContext.h>
 namespace vrv
 {
+	Texture2D::Texture2D(int width, int height)
+		: myWidth(width)
+		, myHeight(height)
+		, myImage(0)
+	{
+		initialize();
+	}
+
 	Texture2D::Texture2D(const std::string& fileName)
 	{
 		myImage = new Image(fileName);
@@ -35,8 +43,17 @@ namespace vrv
 		myTextureFilterModeGL = GL_LINEAR;
 		QtContext::instance().glGenTextures(1, &myID);
 		bind();
-		QtContext::instance().glTexImage2D(GL_TEXTURE_2D, 0, myImage->internalFormatGL(), myImage->width(),
-			myImage->height(), 0, myImage->pixelFormatGL(), myImage->dataTypeGL(), myImage->dataPointer());
+		if (myImage)
+		{
+			QtContext::instance().glTexImage2D(GL_TEXTURE_2D, 0, myImage->internalFormatGL(), myImage->width(),
+				myImage->height(), 0, myImage->pixelFormatGL(), myImage->dataTypeGL(), myImage->dataPointer());
+		}
+		else
+		{
+			QtContext::instance().glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, myWidth,
+				myHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		}
+
 		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, myTextureWrapModeGL);
 		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, myTextureWrapModeGL);
 		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, myTextureFilterModeGL);

@@ -25,6 +25,11 @@ namespace vrv
 
 	class MainWindow
 	{
+	public:
+
+		int width();
+		int height();
+
 	protected:
 
 		MainWindow(WindowConfiguration configuration);

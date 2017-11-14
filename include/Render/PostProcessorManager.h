@@ -4,7 +4,9 @@
 
 namespace vrv
 {
+	class Geometry;
 	class PostProcessor;
+	class FrameBuffer;
 	class PostProcessorManager
 	{
 	public:
@@ -12,8 +14,9 @@ namespace vrv
 	public:
 		PostProcessorManager();
 		void addProcessor(PostProcessor* postProcessor);
-		void run();
+		void run(FrameBuffer* framBuffer);
 	protected:
 		PostProcessorVector myPostProcessors;
+		Geometry* myQuadGeometry;
 	};
 }

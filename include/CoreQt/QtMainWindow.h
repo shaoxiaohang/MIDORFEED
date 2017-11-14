@@ -39,7 +39,9 @@ namespace vrv
 		QtApplicationWindow* myAppWindow;
 		QtContext* myContext;
 		QTime* myClock;
+		QTimer* myTimer;
 		int myLastFrameTime;
+		bool myIsClosing;
 	};
 
 	class QtAdapter : public QWidget

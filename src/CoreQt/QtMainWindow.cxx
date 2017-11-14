@@ -13,6 +13,7 @@ namespace vrv
 		, myViewer(viewer)
 		, myAppWindow(appWindow)
 		, myLastFrameTime(0)
+		, myIsClosing(false)
 	{
 		initialize(configuration);
 	}
@@ -39,9 +40,9 @@ namespace vrv
 
 		createContext();
 
-		QTimer* timer = new QTimer(this);
-		connect(timer, SIGNAL(timeout()), this, SLOT(tick()));
-		timer->start(0);
+		myTimer = new QTimer(this);
+		connect(myTimer, SIGNAL(timeout()), this, SLOT(tick()));
+		myTimer->start(0);
 
 		myClock = new QTime();
 	
@@ -54,14 +55,22 @@ namespace vrv
 
 	void QtMainWindow::tick()
 	{
-		if (myClock->isNull())
+		if (!myIsClosing)
 		{
-			myClock->start();
+			if (myClock->isNull())
+			{
+				myClock->start();
+			}
+			double dt = (myClock->elapsed() - myLastFrameTime) / 1000.0f;
+			myLastFrameTime = myClock->elapsed();
+			updateTick(dt);
+			renderTick();
 		}
-		double dt = (myClock->elapsed() - myLastFrameTime) / 1000.0f;
-		myLastFrameTime = myClock->elapsed();
-		updateTick(dt);
-		renderTick();
+		else
+		{
+			myTimer->stop();
+			delete myTimer;
+		}
 	}
 
 	void QtMainWindow::updateTick(double dt)
@@ -92,6 +101,10 @@ namespace vrv
 		{
 			QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
 			return myViewer->handleWheelEvent(wheelEvent);
+		}
+		case QEvent::Close:
+		{
+			myIsClosing = true;
 		}
 		default:
 			return QOpenGLWindow::event(event);

@@ -9,9 +9,11 @@ namespace vrv
 		PhoneLightingProgramFactory* phoneLighting = new PhoneLightingProgramFactory();
 		VisualizeDepthBufferProgramFactory* visualDepth = new VisualizeDepthBufferProgramFactory();
 		OutlineObjectsProgramFactory* outlineObjects = new OutlineObjectsProgramFactory();
+		DefaultQuadProgramFactory* defaultQuadShader = new DefaultQuadProgramFactory();
 		myProgramFactories.push_back(phoneLighting);
 		myProgramFactories.push_back(visualDepth);
 		myProgramFactories.push_back(outlineObjects);
+		myProgramFactories.push_back(defaultQuadShader);
 		createShaders();
 	}
 
@@ -20,31 +22,15 @@ namespace vrv
 		ProgramFactoryList::iterator itor = myProgramFactories.begin();
 		for (; itor != myProgramFactories.end(); ++itor)
 		{
-			myProgramsMap.insert(std::make_pair((*itor)->name(), (*itor)->createProgram()));
+			myProgramsMap.insert(std::make_pair((*itor)->type(), (*itor)->createProgram()));
 		}
 	}
 
-	Program* ShaderManager::getProgram(ShaderName name)
+	Program* ShaderManager::getProgram(ShaderType type)
 	{
-		std::string shaderName;
-		switch (name)
+		if (myProgramsMap.find(type) != myProgramsMap.end())
 		{
-		case vrv::ShaderManager::NoLighting:
-			shaderName = "noLighting";
-			break;
-		case vrv::ShaderManager::PhoneLighting:
-			shaderName= "phoneLighting";
-			break;
-		case vrv::ShaderManager::VisualizeDepthBuffer:
-			shaderName = "visualize_depth_buffer";
-			break;
-		default:
-			break;
-		}
-
-		if (myProgramsMap.find(shaderName) != myProgramsMap.end())
-		{
-			return myProgramsMap[shaderName];
+			return myProgramsMap[type];
 		}
 
 		return 0;

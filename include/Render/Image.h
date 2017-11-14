@@ -30,16 +30,27 @@ namespace vrv
 			UNSIGNED_BYTE,
 			FLOAT
 		};
+
+		//! Construct a image with the given file name
 		Image(const std::string& file);
+
 		unsigned int width();
+
 		unsigned int height();
+
 		ImagePixelFormat pixelFormat();
+
 		unsigned int dataTypeGL();
+
 		unsigned char* dataPointer();
+
 		unsigned int internalFormatGL();
+
 		unsigned int pixelFormatGL();
+
 	protected:
 		void initialize();
+
 	protected:
 		unsigned int myWidth;
 		unsigned int myHeight;

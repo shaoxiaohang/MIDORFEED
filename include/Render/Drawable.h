@@ -7,7 +7,7 @@ namespace vrv
 	class VertexArrayObject;
 	class Program;
 	class Array;
-	class Material;
+	class RenderState;
 
 	class Drawable
 	{
@@ -48,13 +48,15 @@ namespace vrv
 	public:
 		DrawState* drawState();
 		const DrawState* drawState() const;	
+		void setProgram(Program*);
+		void setRenderState(RenderState*);
 		virtual void drawImplementation();
 		void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
 		void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType = Array::UNSIGNED_INT);
-		virtual void buildGeometryIfNeeded(Material* material);
-	protected:
+		virtual void buildGeometryIfNeeded();
 		void createDrawState(VertexArrayObject* vao, Program* shader);
-		virtual void buildGeometry(Material* material) = 0;
+	protected:
+		virtual void buildGeometry() = 0;
 	protected:
 		bool myBuildGeometry;
 		DrawState* myDrawState;

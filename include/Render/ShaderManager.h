@@ -10,17 +10,18 @@ namespace vrv
 	class ShaderManager : public Singleton<ShaderManager>
 	{
 	public:
-		typedef std::vector<ProgramFactory*> ProgramFactoryList;
-		typedef std::map<std::string, Program*> ProgramMap;
-		enum ShaderName
+		enum ShaderType
 		{
-			NoLighting,
 			PhoneLighting,
-			VisualizeDepthBuffer
+			VisualizeDepthBuffer,
+			OutLineObject,
+			DefaultQuadShader
 		};
+		typedef std::vector<ProgramFactory*> ProgramFactoryList;
+		typedef std::map<int, Program*> ProgramMap;
 	public:
 		ShaderManager();
-		Program* getProgram(ShaderName name);
+		Program* getProgram(ShaderType type);
 	protected:
 		void createShaders();
 	protected:

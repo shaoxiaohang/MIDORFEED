@@ -7,11 +7,34 @@
 #include <Render/Drawable.h>
 #include <Render/Shader.h>
 #include <Render/ShaderManager.h>
+#include <Render/FrameBuffer.h>
 namespace vrv
 {
-	PostProcessor::PostProcessor(std::string name)
-		: myName(name)
+	PostProcessor::PostProcessor()
 	{}
+
+	DefaultPostProcessor::DefaultPostProcessor()
+	{
+		myRenderState = new RenderState;
+		//myRenderState->depthTest().setEnabled(false);
+	}
+
+	void DefaultPostProcessor::run(Drawable* geometry, FrameBuffer* frameBuffer)
+	{
+		geometry->setProgram(ShaderManager::instance().getProgram(ShaderManager::DefaultQuadShader));
+		geometry->setRenderState(myRenderState);
+		myRenderState->apply();
+		Uniform* texture = geometry->drawState()->program()->getUniform("scene");
+		if (texture)
+		{
+			texture->set(0);
+
+			texture->synGL();
+		}
+
+		geometry->drawImplementation();
+	}
+
 
 	class OutlineNodeVisitor : public NodeVisitor
 	{
@@ -28,22 +51,11 @@ namespace vrv
 			for (size_t i = 0; i < node->numberOfDrawable(); ++i)
 			{
 				Drawable* drawable = node->getDrawable(i);
-				drawable->drawState()->setProgram(ShaderManager::instance().getProgram(ShaderManager::NoLighting));
-				drawable->drawState()->setRenderState(myRenderState);
+				drawable->setProgram(ShaderManager::instance().getProgram(ShaderManager::OutLineObject));
+				drawable->setRenderState(myRenderState);
 			}
 		}
 	protected:
 		RenderState* myRenderState;
 	};
-
-	OutlinePostProcessor::OutlinePostProcessor()
-		: PostProcessor("Outline")
-	{
-
-	}
-
-	void OutlinePostProcessor::run(Node* root)
-	{
-
-	}
 }

@@ -1,0 +1,1 @@
+1: can only create vec3 vertex. what if vec2 vertex like full screen quad coordinate.

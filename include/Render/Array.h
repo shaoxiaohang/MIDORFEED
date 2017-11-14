@@ -154,6 +154,8 @@ namespace vrv
 
 		ArrayVec3(ArrayVec3*);
 
+		ArrayVec3(ArrayVec2*);
+
 		virtual const void* dataPointer() const;
 
 		Vector3f& operator[](unsigned int i);

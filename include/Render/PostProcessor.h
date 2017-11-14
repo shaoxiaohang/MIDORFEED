@@ -4,21 +4,26 @@
 
 namespace vrv
 {
-	class Node;
+	class FrameBuffer;
+	class Drawable;
+	class RenderState;
 
 	class PostProcessor
 	{
 	public:
-		PostProcessor(std::string name);
-		virtual void run(Node* root) = 0;
+		PostProcessor();
+		virtual void run(Drawable*, FrameBuffer* frameBuffer) = 0;
 	protected:
-		std::string myName;
 	};
 
-	class OutlinePostProcessor : PostProcessor
+	class DefaultPostProcessor : public PostProcessor
 	{
 	public:
-		OutlinePostProcessor();
-		void run(Node* root);
+		DefaultPostProcessor();
+		void run(Drawable*, FrameBuffer* frameBuffer);
+	protected:
+		RenderState* myRenderState;
 	};
+
+
 }

@@ -15,6 +15,10 @@ namespace vrv
 	class Material;
 	class Program;
 	class RenderState;
+	class FrameBuffer;
+	class MainWindow;
+	class PostProcessorManager;
+	class ShaderManager;
 
 	struct RenderInfo
 	{
@@ -60,7 +64,7 @@ namespace vrv
 
 		typedef std::vector<Light*> LightList;
 	public:
-		Scene(Context* context);
+		Scene(MainWindow* window,Context* context);
 		void setSceneData(Node* root);
 		virtual void renderScene();
 		Camera* masterCamera();
@@ -80,11 +84,15 @@ namespace vrv
 		Camera* myMasterCamera;
 		Node* myRoot;
 		Context* myContext;
+		MainWindow* myMainWindow;
 		RenderState* myPhoneLightingRenderState;
 		RenderState* myOutlineRenderState;
 		ClearState* myClearState;
+		FrameBuffer* myDefaultFrameBuffer;
+		PostProcessorManager* myPostProcessorManager;
 		RenderQueue myRenderQueue;
 		LightList myLights;
+		ShaderManager* myShaderManager;
 		bool myEnableDepthTest;
 		bool myVisualizeDepthBuffer;
 		bool myOptimizeVisualizeDepthBuffer;

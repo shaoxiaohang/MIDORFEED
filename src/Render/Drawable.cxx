@@ -82,6 +82,22 @@ namespace vrv
 		return myDrawState;
 	}
 
+	void Drawable::setProgram(Program* program)
+	{
+		if (myDrawState)
+		{
+			myDrawState->setProgram(program);
+		}
+	}
+	
+	void Drawable::setRenderState(RenderState* renderState)
+	{
+		if (myDrawState)
+		{
+			myDrawState->setRenderState(renderState);
+		}
+	}
+
 	void Drawable::drawImplementation()
 	{
 		myDrawState->bind();
@@ -136,11 +152,11 @@ namespace vrv
 		myPrimitiveSets.push_back(PrimitiveSet(pri, cout, type));
 	}
 
-	void Drawable::buildGeometryIfNeeded(Material* material)
+	void Drawable::buildGeometryIfNeeded()
 	{
 		if (!myBuildGeometry)
 		{
-			buildGeometry(material);
+			buildGeometry();
 		}
 	}
 

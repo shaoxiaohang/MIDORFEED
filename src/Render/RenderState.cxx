@@ -341,31 +341,50 @@ namespace vrv
 
 	CullFace::CullFace(bool enable)
 		: GLState(enable)
+		, myCullFaceType(BACK)
 	{
-		//
+		update();
 	}
 
 	void CullFace::apply(bool forceUpdate)
 	{
+		if (forceUpdate)
+		{
+			update();
+		}
 		if (myEnabled)
 		{
-			QtContext::instance().glEnable(GL_BLEND);
-			QtContext::instance().glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			QtContext::instance().glEnable(GL_CULL_FACE);
+			QtContext::instance().glCullFace(myCullFaceType_GL);
 		}
 		else
 		{
-			QtContext::instance().glDisable(GL_BLEND);
+			QtContext::instance().glDisable(GL_CULL_FACE);
 		}
 	}
 
 	void CullFace::update()
 	{
-
+		switch (myCullFaceType)
+		{
+		case vrv::CullFace::BACK:
+			myCullFaceType_GL = GL_BACK;
+			break;
+		case vrv::CullFace::FRONT:
+			myCullFaceType_GL = GL_FRONT;
+			break;
+		case vrv::CullFace::FRONT_BACK:
+			myCullFaceType_GL = GL_FRONT_AND_BACK;
+			break;
+		default:
+			break;
+		}
 	}
 
-	bool CullFace::operator==(const GLState& blend)
+	bool CullFace::operator==(const GLState& state)
 	{
-		if (myEnabled == blend.enabled())
+		const CullFace& cullFace = static_cast<const CullFace&>(state);
+		if (myEnabled == cullFace.enabled() && myCullFaceType == cullFace.myCullFaceType)
 		{
 			return true;
 		}
@@ -374,7 +393,12 @@ namespace vrv
 
 	void CullFace::setCullFaceType(CullFaceType type)
 	{
-		myCullFaceType = type;
+		if (myCullFaceType != type)
+		{
+			myCullFaceType = type;
+			update();
+		}
+		
 	}
 
 	CullFace::CullFaceType CullFace::cullFaceType()
@@ -386,8 +410,9 @@ namespace vrv
 
 	RenderState::RenderState()
 		: myDepthTest(true)
-		, myStencilTest(true)
+		, myStencilTest(false)
 		, myBlending(true)
+		, myCullFace(false)
 	{}
 
 	void RenderState::setDepthTest(DepthTest depthTest)
@@ -408,11 +433,22 @@ namespace vrv
 		return myStencilTest;
 	}
 
+	void RenderState::setCullFace(CullFace cull)
+	{
+		myCullFace = cull;
+	}
+
+	CullFace& RenderState::cullFace()
+	{
+		return myCullFace;
+	}
+
 	void RenderState::apply()
 	{
 		myDepthTest.apply();
 		myStencilTest.apply();
 		myBlending.apply();
+		myCullFace.apply();
 	}
 
 	void RenderState::applyIfChanged(RenderState* state)
@@ -431,6 +467,11 @@ namespace vrv
 		{
 			myBlending = state->myBlending;
 			myBlending.apply(true);
+		}
+		if (myCullFace != state->myCullFace)
+		{
+			myCullFace = state->myCullFace;
+			myCullFace.apply(true);
 		}
 	}
 }

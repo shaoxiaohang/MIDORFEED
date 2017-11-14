@@ -31,9 +31,13 @@ namespace vrv
 			std::string objectType = objects->Name();
 			std::string name = objects->FirstChildElement("name")->GetText();
 			Vector3f position;
-			objects->FirstChildElement("position")->QueryFloatAttribute("x", &position.x);
-			objects->FirstChildElement("position")->QueryFloatAttribute("y", &position.y);
-			objects->FirstChildElement("position")->QueryFloatAttribute("z", &position.z);
+			if (objects->FirstChildElement("position"))
+			{
+				objects->FirstChildElement("position")->QueryFloatAttribute("x", &position.x);
+				objects->FirstChildElement("position")->QueryFloatAttribute("y", &position.y);
+				objects->FirstChildElement("position")->QueryFloatAttribute("z", &position.z);
+			}
+
 
 			Material* material = parseMaterial(objects);
 

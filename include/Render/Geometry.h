@@ -21,12 +21,11 @@ namespace vrv
 		Geometry();
 
 		virtual void setVertex(ArrayVec3* array);
+		virtual void setVertex(ArrayVec2* array);
 		virtual void setNomral(ArrayVec3* array);
 		virtual void setIndex(ArrayUnsignedInt* array);
 		virtual void setTextureCoordinate(ArrayVec2* array);
-
-	protected:
-		virtual void buildGeometry(Material* material);
+		virtual void buildGeometry();
 	protected:
 		ArrayVec3* myVertexArray;
 		ArrayVec3* myNormalArray;

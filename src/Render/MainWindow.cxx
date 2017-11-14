@@ -18,5 +18,15 @@ namespace vrv
 		: myConfiguration(configuration)
 	{}
 
+	int MainWindow::width()
+	{
+		return myConfiguration.width;
+	}
+
+	int MainWindow::height()
+	{
+		return myConfiguration.height;
+	}
+
 }
 

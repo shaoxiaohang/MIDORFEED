@@ -14,7 +14,6 @@ namespace vrv
 	class QtApplicationWindow;
 	class Scene;
 	class Camera;
-	class ShaderManager;
 	class Viewer
 	{
 	public:
@@ -36,7 +35,6 @@ namespace vrv
 	protected:
 		QtApplicationWindow* myAppWindow;
 		Scene* myScene;
-		ShaderManager* myShaderManager;
 		QApplication* myQtApplication;
 	};
 }
