@@ -58,4 +58,16 @@ namespace vrv
 		program->link();
 		return program;
 	}
+
+	ConfigurablePostEffectProgramFactory::ConfigurablePostEffectProgramFactory()
+		: ProgramFactory(ShaderManager::ConfigurablePostEffectShader)
+	{}
+
+	Program* ConfigurablePostEffectProgramFactory::createProgram()
+	{
+		Program* program = new Program("../data/shader/configurablePostEffect.vert", 
+			"../data/shader/configurablePostEffect.frag");
+		program->link();
+		return program;
+	}
 }

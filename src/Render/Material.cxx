@@ -1,5 +1,5 @@
 #include <Render/Material.h>
-#include <Render/Texture.h>
+#include <Render/Texture2D.h>
 
 namespace vrv
 {
@@ -73,7 +73,7 @@ namespace vrv
 	}
 
 
-	Texture* Material::getTexture(TextureType type)
+	Texture2D* Material::getTexture2D(TextureType type)
 	{
 		if (myTextureMap.find(type) != myTextureMap.end())
 		{
@@ -86,14 +86,14 @@ namespace vrv
 	}
 
 
-	void Material::setTexture(TextureType textureType, Texture* texture)
+	void Material::setTexture2D(TextureType textureType, Texture2D* texture)
 	{
 		myTextureMap[textureType] = texture;
 	}
 
-	void Material::setTexture(TextureType textureType, const std::string& texture)
+	void Material::setTexture2D(TextureType textureType, const std::string& texture)
 	{
-		myTextureMap[textureType] = new Texture(texture);
+		myTextureMap[textureType] = new Texture2D(texture);
 	}
 
 	bool Material::hasDiffuse()

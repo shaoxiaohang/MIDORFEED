@@ -15,7 +15,6 @@ namespace vrv
 	class Material;
 	class Program;
 	class RenderState;
-	class FrameBuffer;
 	class MainWindow;
 	class PostProcessorManager;
 	class ShaderManager;
@@ -62,6 +61,15 @@ namespace vrv
 	{
 	public:
 
+		enum PostEffectType
+		{
+			Inversion,
+			GrayScale,
+			KernelEffect,
+			Blur,
+			EdgeDetection
+		};
+
 		typedef std::vector<Light*> LightList;
 	public:
 		Scene(MainWindow* window,Context* context);
@@ -75,6 +83,8 @@ namespace vrv
 		void setOutlineObjects(bool);
 		void setOutlineWidth(double);
 		void enableDepthTest(bool);
+		void setPostEffectType(int);
+		int postEffectType();
 	protected:
 		virtual void cullTraverse();
 		virtual void DFS(std::stack<Node*>& stack, Node* node);	
@@ -88,7 +98,6 @@ namespace vrv
 		RenderState* myPhoneLightingRenderState;
 		RenderState* myOutlineRenderState;
 		ClearState* myClearState;
-		FrameBuffer* myDefaultFrameBuffer;
 		PostProcessorManager* myPostProcessorManager;
 		RenderQueue myRenderQueue;
 		LightList myLights;
@@ -98,5 +107,6 @@ namespace vrv
 		bool myOptimizeVisualizeDepthBuffer;
 		bool myOutlineObjects;
 		double myOutlineWidth;
+		int myPostEffectType;
 	};
 }

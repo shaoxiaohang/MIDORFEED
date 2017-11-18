@@ -1,44 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene>
+	<skybox>
+	<up></up>
+	<down></down>
+	<left></left>
+	<right></right>
+	<front></front>
+	<back></back>
+	<skybox>				
 	<objects>
 		<floor>
 			<name>floor</name>
 			<position x="0" y="0" z="0"/>
 			<material>
-				<texture>
+				<texture2D>
 					<filename>metal.png</filename>
 					<wrapmode>clamp_to_edge</wrapmode>
 					<filtermode>linear</filtermode>
-				</texture>
+				</texture2D>
 			</material>
 		</floor>
 		<cube>
 			<name>cube1</name>
 			<position x="-1" y="0" z="-1"/>
 			<material>
-				<texture>
+				<texture2D>
 					<filename>marble.jpg</filename>
-				</texture>
+				</texture2D>
 			</material>
 		</cube>
 		<cube>
 			<name>cube2</name>
 			<position x="2" y="0" z="0"/>
 			<material>
-				<texture>
+				<texture2D>
 					<filename>marble.jpg</filename>
-				</texture>
+				</texture2D>
 			</material>
 		</cube>
 		<billboard>
 			<name>grass</name>
 			<position x="3" y="0" z="0"/>
 			<material>
-				<texture>
+				<texture2D>
 					<filename>grass.png</filename>
 					<wrapmode>clamp_to_edge</wrapmode>
 					<filtermode>linear</filtermode>
-				</texture>
+				</texture2D>
 				<discardAlpha threshold = "0.1"/>
 			</material>
 		</billboard>
@@ -46,18 +54,18 @@
 			<name>window1</name>
 			<position x="-0.5" y="0" z="2"/>
 			<material>
-				<texture>
+				<texture2D>
 					<filename>blending_transparent_window.png</filename>
-				</texture>
+				</texture2D>
 			</material>
 		</billboard>
 		<billboard>
 			<name>window2</name>
 			<position x="-1" y="0" z="1"/>
 			<material>
-				<texture>
+				<texture2D>
 					<filename>blending_transparent_window.png</filename>
-				</texture>
+				</texture2D>
 			</material>
 		</billboard>
 	</objects>

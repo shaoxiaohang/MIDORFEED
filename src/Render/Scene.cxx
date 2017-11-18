@@ -7,7 +7,7 @@
 #include <Render/DrawState.h>
 #include <Render/Light.h>
 #include <Render/Material.h>
-#include <Render/Texture.h>
+#include <Render/Texture2D.h>
 #include <Render/Mesh.h>
 #include <Render/QtContext.h>
 #include <Render/ShaderManager.h>
@@ -143,13 +143,13 @@ namespace vrv
 			program->getUniform("vrv_model_matrix")->set(modelMatrix);
 			if (material)
 			{
-				Texture* diffuse = material->getTexture(Material::Material_Diffuse);
+				Texture2D* diffuse = material->getTexture2D(Material::Material_Diffuse);
 				if (diffuse)
 				{
 					QtContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Material_Diffuse);
 					QtContext::instance().glBindTexture(GL_TEXTURE_2D, diffuse->id());
 				}
-				Texture* specular = material->getTexture(Material::Material_Specular);
+				Texture2D* specular = material->getTexture2D(Material::Material_Specular);
 				if (specular)
 				{
 					QtContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Material_Specular);
@@ -223,6 +223,7 @@ namespace vrv
 		, myPhoneLightingRenderState(0)
 		, myEnableDepthTest(true)
 		, myMainWindow(window)
+		, myPostEffectType(0)
 	{
 		myShaderManager = new ShaderManager();
 		myContext->setScene(this);
@@ -234,8 +235,7 @@ namespace vrv
 		myOutlineRenderState->stencilTest().setStencilWriteMask(0x00);
 		myOutlineRenderState->depthTest().setEnabled(false);
 		myPhoneLightingRenderState = new RenderState();
-		myDefaultFrameBuffer = new FrameBuffer(FrameBuffer::DEPTH_STENCIL, myMainWindow->width(), myMainWindow->height());
-		myPostProcessorManager = new PostProcessorManager();
+		myPostProcessorManager = new PostProcessorManager(myMainWindow->width(),myMainWindow->height());
 	}
 
 	void Scene::setSceneData(Node* root)
@@ -282,7 +282,7 @@ namespace vrv
 			}
 			myRenderQueue.modifyRenderState(myPhoneLightingRenderState);
 
-			myDefaultFrameBuffer->bind();
+			myPostProcessorManager->bind();
 
 			QtContext::instance().glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			QtContext::instance().glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -298,7 +298,7 @@ namespace vrv
 			}
 
 
-			myPostProcessorManager->run(myDefaultFrameBuffer);
+			myPostProcessorManager->run();
 		}
 	}
 
@@ -425,6 +425,15 @@ namespace vrv
 			myEnableDepthTest = value;
 			myPhoneLightingRenderState->depthTest().setEnabled(myEnableDepthTest);
 		}
+	}
 
+	void Scene::setPostEffectType(int type)
+	{
+		myPostEffectType = type;
+	}
+
+	int Scene::postEffectType()
+	{
+		return myPostEffectType;
 	}
 }

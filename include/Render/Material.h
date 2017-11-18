@@ -3,7 +3,7 @@
 #include <map>
 namespace vrv
 {
-	class Texture;
+	class Texture2D;
 	class Material
 	{
 	public:
@@ -12,7 +12,7 @@ namespace vrv
 			Material_Diffuse,
 			Material_Specular
 		};
-		typedef std::map<unsigned int, Texture*> TextureMap;
+		typedef std::map<unsigned int, Texture2D*> TextureMap;
 	public:
 		Material();
 
@@ -30,9 +30,9 @@ namespace vrv
 		bool discardAlpha();
 		float discardAlphaThreshold();
 
-		Texture* getTexture(TextureType type);
-		virtual void setTexture(TextureType textureType, const std::string& texture);
-		virtual void setTexture(TextureType textureType, Texture* texture);
+		Texture2D* getTexture2D(TextureType type);
+		virtual void setTexture2D(TextureType textureType, const std::string& texture);
+		virtual void setTexture2D(TextureType textureType, Texture2D* texture);
 		bool hasDiffuse();
 		bool hasSpecular();
 		bool isTransParent();

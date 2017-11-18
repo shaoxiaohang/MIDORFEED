@@ -6,6 +6,7 @@
 class QCheckBox;
 class QDoubleSpinBox;
 class QLabel;
+class QComboBox;
 
 namespace vrv
 {
@@ -32,12 +33,14 @@ namespace vrv
 		void on_optimizeVisualizeDepthBufferCheckBox_valueChanged(int);
 		void on_outlineObjectsCheckBox_valueChanged(int);
 		void on_outlineWidthSpinBox_valueChanged(double);
+		void onPostEffectComboBoxCurrentIndexChanged(int);
 	public:
 		boost::signals2::signal<void(bool)> signal_enableDepthTestCheckBox_valueChanged;
 		boost::signals2::signal<void(bool)> signal_visualizeDepthBufferCheckBox_valueChanged;
 		boost::signals2::signal<void(bool)> signal_optimizeVisualizeDepthBufferCheckBox_valueChanged;
 		boost::signals2::signal<void(bool)> signal_outlineObjectsCheckBox_valueChanged;
 		boost::signals2::signal<void(double)> signal_outlineWidthSpinBox_valueChanged;
+		boost::signals2::signal<void(int)> signal_postEffectComboBoxCurrentIndexChanged;
 	protected:
 		RenderSettingsLogic* myLogic;
 		QCheckBox* myEnableDepthTestCheckBox;
@@ -46,5 +49,6 @@ namespace vrv
 		QCheckBox* myOutlineObjectsCheckBox;
 		QDoubleSpinBox* myOutlineWidthSpinBox;
 		QLabel* myOutlineWidthLabel;
+		QComboBox* myPostEffectComboBox;
 	};
 }

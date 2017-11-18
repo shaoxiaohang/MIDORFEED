@@ -15,7 +15,8 @@ namespace vrv
 			PhoneLighting,
 			VisualizeDepthBuffer,
 			OutLineObject,
-			DefaultQuadShader
+			DefaultQuadShader,
+			ConfigurablePostEffectShader
 		};
 		typedef std::vector<ProgramFactory*> ProgramFactoryList;
 		typedef std::map<int, Program*> ProgramMap;

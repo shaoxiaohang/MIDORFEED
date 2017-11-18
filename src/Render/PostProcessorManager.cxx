@@ -1,12 +1,19 @@
 #include <Render/PostProcessorManager.h>
 #include <Render/FrameBuffer.h>
+#include <Render/DrawState.h>
 #include <Render/Geometry.h>
 #include <Render/PostProcessor.h>
 #include <Render/QtContext.h>
+#include <Render/RenderState.h>
+#include <Render/ShaderManager.h>
+#include <Render/Program.h>
 namespace vrv
 {
-	PostProcessorManager::PostProcessorManager()
+	PostProcessorManager::PostProcessorManager(int width, int height)
 	{
+		myFrameBuffer = new FrameBuffer(width, height);
+
+		myRenderState = new RenderState;
 		myQuadGeometry = new Geometry();
 		ArrayVec3* pos = new ArrayVec3();
 		pos->add(Vector3f(-1, -1,0));
@@ -25,7 +32,9 @@ namespace vrv
 		myQuadGeometry->addPrimitiveSet(Drawable::QUADS, 0,4);
 		myQuadGeometry->buildGeometry();
 
-		addProcessor(new DefaultPostProcessor());
+		myDefaultProcessor = new DefaultPostProcessor();
+
+		addProcessor(new ConfigurableProcessor);
 	}
 
 	void PostProcessorManager::addProcessor(PostProcessor* postProcessor)
@@ -33,21 +42,20 @@ namespace vrv
 		myPostProcessors.push_back(postProcessor);
 	}
 
-	void PostProcessorManager::run(FrameBuffer* frameBuffer)
+
+	void PostProcessorManager::run()
 	{
-		frameBuffer->unbind();
-
-		QtContext::instance().glActiveTexture(GL_TEXTURE0 + 0);
-		QtContext::instance().glBindTexture(GL_TEXTURE_2D, frameBuffer->textureID());
-
-
-
-		QtContext::instance().glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		QtContext::instance().glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		for (int i = 0; i < myPostProcessors.size();++i)
 		{
-			myPostProcessors[i]->run(myQuadGeometry,frameBuffer);
+			 myPostProcessors[i]->run(myQuadGeometry,myFrameBuffer);
 		}
+
+		myFrameBuffer->unbind();
+		myDefaultProcessor->run(myQuadGeometry, myFrameBuffer);
+	}
+
+	void PostProcessorManager::bind()
+	{
+		myFrameBuffer->bind();
 	}
 }

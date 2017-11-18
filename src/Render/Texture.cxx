@@ -3,23 +3,20 @@
 #include <Render/QtContext.h>
 namespace vrv
 {
-	Texture::Texture(const std::string& fileName)
+	Texture::Texture()
+		: myWidth(0)
+		, myHeight(0)
+		, myTextureType(GL_INVALID_ENUM)
+		, myImage()
 	{
-		myImage = new Image(fileName);
-		initialize();
-	}
 
-	Texture::Texture(Image* image)
-	{
-		myImage = image;
-		initialize();
 	}
 
 	void Texture::bindToPoint(unsigned int bindingPoint)
 	{
 		myBindingPoint = bindingPoint;
 		QtContext::instance().glActiveTexture(GL_TEXTURE0 + bindingPoint);
-		QtContext::instance().glBindTexture(GL_TEXTURE_2D, myID);
+		QtContext::instance().glBindTexture(myTextureType, myID);
 	}
 
 	unsigned int Texture::textureUnit()
@@ -29,7 +26,7 @@ namespace vrv
 
 	void Texture::bind()
 	{
-		QtContext::instance().glBindTexture(GL_TEXTURE_2D, myID);
+		QtContext::instance().glBindTexture(myTextureType, myID);
 	}
 
 	void Texture::initialize()
@@ -54,7 +51,7 @@ namespace vrv
 
 	void Texture::unbind()
 	{
-		QtContext::instance().glBindTexture(GL_TEXTURE_2D, 0);
+		QtContext::instance().glBindTexture(myTextureType, 0);
 	}
 
 	unsigned int Texture::id()
@@ -89,52 +86,4 @@ namespace vrv
 		return myTextureFilterMode;
 	}
 
-	bool Texture::hasAlphaChannel()
-	{
-		if (myImage->pixelFormat() == Image::PF_RGBA || myImage->pixelFormat() == Image::PF_BGRA)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	void Texture::update()
-	{
-		switch (myTextureWrapMode)
-		{
-		case vrv::Texture::REPEAT:
-			myTextureWrapModeGL = GL_REPEAT;
-			break;
-		case vrv::Texture::CLAMP_TO_EDGE:
-			myTextureWrapModeGL = GL_CLAMP_TO_EDGE;
-			break;
-		case vrv::Texture::CLAMP_TO_BORDER:
-			myTextureWrapModeGL = GL_CLAMP_TO_BORDER;
-			break;
-		default:
-			break;
-		}
-
-		switch (myTextureFilterMode)
-		{
-		case vrv::Texture::NEAREST:
-			myTextureFilterModeGL = GL_NEAREST;
-			break;
-		case vrv::Texture::LINEAR:
-			myTextureFilterModeGL = GL_LINEAR;
-			break;
-		default:
-			break;
-		}
-
-		bind();
-		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, myTextureWrapModeGL);
-		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, myTextureWrapModeGL);
-		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, myTextureFilterModeGL);
-		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, myTextureFilterModeGL);
-		unbind();
-	}
 }

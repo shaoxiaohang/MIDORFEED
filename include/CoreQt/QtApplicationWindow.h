@@ -36,7 +36,7 @@ namespace vrv
 		Viewer* myViewer;
 		QMenuBar* myMainMenuBar;
 		QMenu* myRenderSettingsMenu;
-		QtAdapter* myQtAdapter;;
+		QtAdapter* myQtAdapter;
 		RenderSettingsWidget* myRenderSettingsWidget;
 	};
 }

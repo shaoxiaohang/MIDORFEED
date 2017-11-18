@@ -85,14 +85,14 @@ namespace vrv
 			for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_DIFFUSE); ++i)
 			{
 				material->GetTexture(aiTextureType_DIFFUSE, i, &str);
-				vrvMaterial->setTexture(Material::Material_Diffuse, myBaseDirectory + str.C_Str());
+				vrvMaterial->setTexture2D(Material::Material_Diffuse, myBaseDirectory + str.C_Str());
 				VRV_INFO(str.C_Str())
 			}
 
 			for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_SPECULAR); ++i)
 			{
 				material->GetTexture(aiTextureType_SPECULAR, i, &str);
-				vrvMaterial->setTexture(Material::Material_Specular, myBaseDirectory + str.C_Str());
+				vrvMaterial->setTexture2D(Material::Material_Specular, myBaseDirectory + str.C_Str());
 				VRV_INFO(str.C_Str())
 			}
 		}

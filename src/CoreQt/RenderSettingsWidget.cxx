@@ -5,6 +5,7 @@
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QLabel>
+#include <QComboBox>
 
 namespace vrv
 {
@@ -60,6 +61,19 @@ namespace vrv
 			connect(myOutlineWidthSpinBox, SIGNAL(valueChanged(double)),
 				SLOT(on_outlineWidthSpinBox_valueChanged(double)));
 		}
+
+		{
+			myPostEffectComboBox = new QComboBox(this);
+			myPostEffectComboBox->insertItem(0, tr("default"));
+			myPostEffectComboBox->insertItem(1, tr("Inversion"));
+			myPostEffectComboBox->insertItem(2, tr("grayscale"));
+			myPostEffectComboBox->insertItem(3, tr("kernel effect"));
+			myPostEffectComboBox->insertItem(4, tr("blur"));
+			myPostEffectComboBox->insertItem(5, tr("edge detection"));
+			mainLayout->addWidget(myPostEffectComboBox,3, 0);
+			connect(myPostEffectComboBox, SIGNAL(currentIndexChanged(int)),
+				SLOT(onPostEffectComboBoxCurrentIndexChanged(int)));
+		}
 	}
 
 	void RenderSettingsWidget::showEvent(QShowEvent* e)
@@ -90,6 +104,11 @@ namespace vrv
 	void RenderSettingsWidget::on_outlineWidthSpinBox_valueChanged(double value)
 	{
 		signal_outlineWidthSpinBox_valueChanged(value);
+	}
+
+	void RenderSettingsWidget::onPostEffectComboBoxCurrentIndexChanged(int index)
+	{
+		signal_postEffectComboBoxCurrentIndexChanged(index);
 	}
 
 	void RenderSettingsWidget::closeEvent(QCloseEvent* e)

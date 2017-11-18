@@ -17,8 +17,8 @@ namespace vrv
 			NEAREST,
 			LINEAR
 		};
-		Texture(const std::string& fileName);
-		Texture(Image* image);
+		Texture();
+
 		void bindToPoint(unsigned int bindingPoint);
 		unsigned int textureUnit();
 		void bind();
@@ -31,19 +31,23 @@ namespace vrv
 		TextureWrapMode textureWrapMode();
 		TextureFilterMode textureFilterMode();
 
-		bool hasAlphaChannel();
+		virtual bool hasAlphaChannel() = 0;
 
 	protected:
-		void initialize();
-		void update();
+		virtual void initialize() = 0;
+		virtual void update() = 0;
+
 	protected:
 		Image* myImage;
 		unsigned int myBindingPoint;
 		unsigned int myID;
+		unsigned int myTextureType;
 		TextureWrapMode myTextureWrapMode;
 		TextureFilterMode myTextureFilterMode;
 		unsigned int myTextureWrapModeGL;
 		unsigned int myTextureFilterModeGL;
 		bool myGenerateMipmap;
+		unsigned int myWidth;
+		unsigned int myHeight;
 	};
 }

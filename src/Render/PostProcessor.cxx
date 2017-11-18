@@ -8,31 +8,68 @@
 #include <Render/Shader.h>
 #include <Render/ShaderManager.h>
 #include <Render/FrameBuffer.h>
+#include <Render/QtContext.h>
+#include <Render/Scene.h>
 namespace vrv
 {
 	PostProcessor::PostProcessor()
-	{}
-
-	DefaultPostProcessor::DefaultPostProcessor()
+		: myProgram(0)
 	{
-		myRenderState = new RenderState;
-		//myRenderState->depthTest().setEnabled(false);
+		myRenderState = new RenderState();
 	}
 
-	void DefaultPostProcessor::run(Drawable* geometry, FrameBuffer* frameBuffer)
+	void PostProcessor::run(Drawable* quad, FrameBuffer* frameBuffer)
 	{
-		geometry->setProgram(ShaderManager::instance().getProgram(ShaderManager::DefaultQuadShader));
-		geometry->setRenderState(myRenderState);
+		drawQuad(quad, frameBuffer);
+	}
+
+	void PostProcessor::drawQuad(Drawable* quad, FrameBuffer* frameBuffer)
+	{
+		QtContext::instance().glActiveTexture(GL_TEXTURE0 + 0);
+		QtContext::instance().glBindTexture(GL_TEXTURE_2D, frameBuffer->textureID());
+
+		quad->setProgram(myProgram);
+		quad->setRenderState(myRenderState);
 		myRenderState->apply();
-		Uniform* texture = geometry->drawState()->program()->getUniform("scene");
+
+		Uniform* texture = myProgram->getUniform("scene");
 		if (texture)
 		{
 			texture->set(0);
-
 			texture->synGL();
 		}
 
-		geometry->drawImplementation();
+		quad->drawImplementation();
+	}
+
+	DefaultPostProcessor::DefaultPostProcessor()
+	{
+		myProgram = ShaderManager::instance().getProgram(ShaderManager::DefaultQuadShader);
+	}
+
+	ConfigurableProcessor::ConfigurableProcessor()
+		: myPostEffectType(0)
+	{
+		myProgram = ShaderManager::instance().getProgram(ShaderManager::ConfigurablePostEffectShader);
+	}
+
+	void ConfigurableProcessor::run(Drawable* quad, FrameBuffer* frameBuffer)
+	{
+		myPostEffectType = Scene::instance().postEffectType();
+		Uniform* type = myProgram->getUniform("effectType");
+		myProgram->use();
+		if (type)
+		{
+			type->set(myPostEffectType);
+			type->synGL();
+		}
+
+		PostProcessor::run(quad, frameBuffer);
+	}
+
+	void ConfigurableProcessor::setPostEffectType(int type)
+	{
+		myPostEffectType = type;
 	}
 
 

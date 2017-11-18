@@ -16,6 +16,7 @@ namespace vrv
 		void slot_optimizeVisualizeDepthBufferCheckBox_valueChanged(bool);
 		void slot_outlineObjectsCheckBox_valueChanged(bool);
 		void slot_outlineWidthSpinBox_valueChanged(double);
+		void slot_postEffectComboBoxCurrentIndexChanged(int);
 	protected:
 		RenderSettingsWidget* myRenderSettingsWidget;
 		bool myEnableDepthTest;
@@ -23,5 +24,6 @@ namespace vrv
 		bool myOptimizeVisualizeDepthBuffer;
 		bool myOutlineObjects;
 		double myOutlineWidth;
+		int myPostEffectType;
 	};
 }

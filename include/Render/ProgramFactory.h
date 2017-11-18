@@ -41,4 +41,11 @@ namespace vrv
 		DefaultQuadProgramFactory();
 		Program* createProgram();
 	};
+
+	class ConfigurablePostEffectProgramFactory : public ProgramFactory
+	{
+	public:
+		ConfigurablePostEffectProgramFactory();
+		Program* createProgram();
+	};
 }

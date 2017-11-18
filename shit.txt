@@ -1,1 +1,6 @@
 1: can only create vec3 vertex. what if vec2 vertex like full screen quad coordinate.
+2: Array should accept a pointer to the data and size of the data, like a float pointer.
+
+Post Effect Notes:
+The last post effect processor should write to the main frame buffer(unbind)
+

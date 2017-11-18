@@ -3,7 +3,7 @@
 #include <Core/Utility.h>
 #include <Render/Cube.h>
 #include <Render/Material.h>
-#include <Render/Texture.h>
+#include <Render/Texture2D.h>
 #include <Render/Scene.h>
 #include <Render/Light.h>
 
@@ -90,14 +90,14 @@ namespace vrv
 		XMLElement* materialNode = object->FirstChildElement("material");
 		if (materialNode)
 		{
-			Texture* texture = 0;
+			Texture2D* texture = 0;
 			bool discardAlpha = false;
 			float discardAlphaThreshold = 0;
 			XMLElement* textureNode = materialNode->FirstChildElement("texture");
 			if (textureNode)
 			{
 				std::string texName = textureNode->FirstChildElement("filename")->GetText();
-				texture = new Texture(texName);
+				texture = new Texture2D(texName);
 				if (textureNode->FirstChildElement("wrapmode"))
 				{
 					std::string wrapModeString = textureNode->FirstChildElement("wrapmode")->GetText();
@@ -133,7 +133,7 @@ namespace vrv
 			Material* material = new Material();
 			if (texture)
 			{
-				material->setTexture(Material::Material_Diffuse, texture);
+				material->setTexture2D(Material::Material_Diffuse, texture);
 			}
 			if (discardAlpha)
 			{

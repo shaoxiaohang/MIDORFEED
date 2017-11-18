@@ -10,10 +10,12 @@ namespace vrv
 		VisualizeDepthBufferProgramFactory* visualDepth = new VisualizeDepthBufferProgramFactory();
 		OutlineObjectsProgramFactory* outlineObjects = new OutlineObjectsProgramFactory();
 		DefaultQuadProgramFactory* defaultQuadShader = new DefaultQuadProgramFactory();
+		ConfigurablePostEffectProgramFactory* configurablePostEffect = new ConfigurablePostEffectProgramFactory();
 		myProgramFactories.push_back(phoneLighting);
 		myProgramFactories.push_back(visualDepth);
 		myProgramFactories.push_back(outlineObjects);
 		myProgramFactories.push_back(defaultQuadShader);
+		myProgramFactories.push_back(configurablePostEffect);
 		createShaders();
 	}
 

@@ -11,6 +11,7 @@ namespace vrv
 		, myOptimizeVisualizeDepthBuffer(true)
 		, myOutlineObjects(false)
 		, myOutlineWidth(1.2f)
+		, myPostEffectType(0)
 	{
 		connectSignals();
 		sendSettingsToGui();
@@ -28,6 +29,8 @@ namespace vrv
 			connect(boost::bind(&RenderSettingsLogic::slot_outlineObjectsCheckBox_valueChanged, this, _1));
 		myRenderSettingsWidget->signal_outlineWidthSpinBox_valueChanged.
 			connect(boost::bind(&RenderSettingsLogic::slot_outlineWidthSpinBox_valueChanged, this, _1));
+		myRenderSettingsWidget->signal_postEffectComboBoxCurrentIndexChanged.
+			connect(boost::bind(&RenderSettingsLogic::slot_postEffectComboBoxCurrentIndexChanged, this, _1));
 	}
 
 	void RenderSettingsLogic::sendSettingsToGui()
@@ -81,6 +84,15 @@ namespace vrv
 		{
 			myOutlineWidth = value;
 			Scene::instance().setOutlineWidth(value);
+		}
+	}
+
+	void RenderSettingsLogic::slot_postEffectComboBoxCurrentIndexChanged(int value)
+	{
+		if (myPostEffectType != value)
+		{
+			myPostEffectType = value;
+			Scene::instance().setPostEffectType(myPostEffectType);
 		}
 	}
 }

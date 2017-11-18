@@ -1,41 +1,18 @@
 #pragma once
 #include <string>
+#include <Render/Texture.h>
 namespace vrv
 {
 	class Image;
-	class Texture2D
+	class Texture2D : public Texture
 	{
 	public:
-		enum TextureWrapMode
-		{
-			REPEAT,
-			CLAMP_TO_EDGE,
-			CLAMP_TO_BORDER
-		};
-		enum TextureFilterMode
-		{
-			NEAREST,
-			LINEAR
-		};
 		Texture2D(int width, int height);
 		Texture2D(const std::string& fileName);
 		Texture2D(Image* image);
-		void bindToPoint(unsigned int bindingPoint);
-		void bind();
-		void unbind();
-		unsigned int id();
+		bool hasAlphaChannel();
 	protected:
 		void initialize();
-	protected:
-		Image* myImage;
-		unsigned int myBindingPoint;
-		unsigned int myID;
-		unsigned int myWidth;
-		unsigned int myHeight;
-		TextureWrapMode myTextureWrapMode;
-		TextureFilterMode myTextureFilterMode;
-		unsigned int myTextureWrapModeGL;
-		unsigned int myTextureFilterModeGL;
-		bool myGenerateMipmap;
+		void update();
 	};
 }
