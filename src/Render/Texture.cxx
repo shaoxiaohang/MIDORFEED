@@ -29,26 +29,6 @@ namespace vrv
 		QtContext::instance().glBindTexture(myTextureType, myID);
 	}
 
-	void Texture::initialize()
-	{
-		myGenerateMipmap = false;
-
-		QtContext::instance().glGenTextures(1, &myID);
-		myTextureWrapMode = REPEAT;
-		myTextureWrapModeGL = GL_REPEAT;
-		myTextureFilterMode = LINEAR;
-		myTextureFilterModeGL = GL_LINEAR;
-		bind();
-		QtContext::instance().glTexImage2D(GL_TEXTURE_2D, 0, myImage->internalFormatGL(), myImage->width(),
-			myImage->height(), 0, myImage->pixelFormatGL(), myImage->dataTypeGL(), myImage->dataPointer());
-		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, myTextureWrapModeGL);
-		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, myTextureWrapModeGL);
-		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, myTextureFilterModeGL);
-		QtContext::instance().glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, myTextureFilterModeGL);
-		QtContext::instance().glGenerateMipmap(GL_TEXTURE_2D);
-		unbind();
-	}
-
 	void Texture::unbind()
 	{
 		QtContext::instance().glBindTexture(myTextureType, 0);

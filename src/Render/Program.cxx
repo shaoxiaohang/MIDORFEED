@@ -1,6 +1,6 @@
 #include <Render/Program.h>
 #include <Render/Shader.h>
-#include <Render/VertexAttribute.h>
+#include <Render/Scene.h>
 #include <Core/Utility.h>
 #include <sstream>
 #include <Render/QtContext.h>
@@ -8,19 +8,33 @@ namespace vrv
 {
 	bool Program::myAutomaticUniformsFactoryInitialized = false;
 	Program::AutomaticUniformFactoryMap Program::myAutomaticUniformFactories;
+	
+	bool Program::myUniformBufferObjectInitialized = false;
+	UniformBufferObject* Program::myUniformBufferObject = 0;
 
-	Program::Program(const std::string& vertFile, const std::string& fragFile)
+	Program::Program(const std::string& vertFile, const std::string& fragFile, std::string geometry)
+		: myGeometryShader(0)
 	{
 		if (myAutomaticUniformsFactoryInitialized == false)
 		{
 			registerAutomaticUniformFactories();
 			myAutomaticUniformsFactoryInitialized = true;
 		}
+		if (myUniformBufferObjectInitialized == false)
+		{
+			setUpUniformBufferObject();
+			myUniformBufferObjectInitialized = true;
+		}
 		myVertShader = new Shader(Shader::VertexShader, vertFile);
 		myFragShader = new Shader(Shader::FragmentShader, fragFile);
+		if (geometry != "")
+		{
+			myGeometryShader = new Shader(Shader::GeometryShader, geometry);
+		}
 	}
 
 	Program::Program(const Shader* vert, const Shader* frag)
+		: myGeometryShader(0)
 	{
 		myVertShader = new Shader(*vert);
 		myFragShader = new Shader(*frag);
@@ -101,8 +115,11 @@ namespace vrv
 		case vrv::Uniform::SAMPLER_2D:
 			return new UniformInt(name, location);
 			break;
+		case vrv::Uniform::SAMPLER_CUBE:
+			return new UniformInt(name, location);
+			break;
 		default:
-			return new UniformFloat(name, location);
+			VRV_ERROR("unsupported uniform" + name)
 			break;
 		}
 	}
@@ -114,17 +131,6 @@ namespace vrv
 			return myUniformsMap[name];
 		}
 		return 0;
-	}
-
-	void Program::updateAutomaticUniforms(Scene* scene)
-	{
-		AutomaticUniformMap::iterator ibegin = myAutomaticUniformsMap.begin();
-		AutomaticUniformMap::iterator iend   = myAutomaticUniformsMap.end();
-		for (; ibegin != iend; ++ibegin)
-		{
-			AutomaticUniform* automaticUniform = ibegin->second;
-			automaticUniform->synGL(scene);
-		}
 	}
 
 	void Program::updateUniforms()
@@ -140,6 +146,9 @@ namespace vrv
 				uniform->synGL();
 			}
 		}
+
+		myUniformBufferObject->update();
+
 	}
 
 	void Program::use()
@@ -152,11 +161,23 @@ namespace vrv
 		QtContext::instance().glUseProgram(0);
 	}
 
+	void Program::bindUniformBufferToPoint(const std::string& uniformBuffer, int point)
+	{
+		unsigned int index = QtContext::instance().glGetUniformBlockIndex(myID, uniformBuffer.c_str());
+		QtContext::instance().glUniformBlockBinding(myID, index, point);
+	}
+
 	void Program::link()
 	{
 		myID = QtContext::instance().glCreateProgram();
 		myVertShader->initialize();
 		myFragShader->initialize();
+
+		if (myGeometryShader)
+		{
+			myGeometryShader->initialize();
+		}
+
 		myVertShader->compile();
 		std::string info;
 		if (!Shader::checkCompileStatus(myVertShader->ID(), info))
@@ -174,8 +195,27 @@ namespace vrv
 			ss << info << std::endl;
 			VRV_ERROR(ss.str());
 		}
+
+		if (myGeometryShader)
+		{
+			myGeometryShader->compile();
+			if (!Shader::checkCompileStatus(myGeometryShader->ID(), info))
+			{
+				std::stringstream ss;
+				ss << myGeometryShader->name() << " compile failed" << std::endl;
+				ss << info << std::endl;
+				VRV_ERROR(ss.str());
+			}
+		}
+
 		QtContext::instance().glAttachShader(myID, myVertShader->ID());
 		QtContext::instance().glAttachShader(myID, myFragShader->ID());
+		if (myGeometryShader)
+		{
+			QtContext::instance().glAttachShader(myID, myGeometryShader->ID());
+		}
+
+
 		QtContext::instance().glLinkProgram(myID);
 		if (!checkProgramLinkStatus(myID,info))
 		{
@@ -185,7 +225,6 @@ namespace vrv
 			VRV_ERROR(ss.str());
 		}
 		populateUniforms();
-		populateAutomaticUniforms();
 	}
 
 	void Program::populateUniforms()
@@ -209,25 +248,17 @@ namespace vrv
 			{
 				QtContext::instance().glGetActiveUniform(myID, i, maxNameLength, NULL, &uniformSize, &uniformType, uniformName);
 				location = QtContext::instance().glGetUniformLocation(myID, uniformName);
-				myUniformsMap.insert(std::make_pair(uniformName, createUniform(uniformName, Uniform::mapGLToUniformType(uniformType), location)));
-			}
-		}
-	}
 
-	void Program::populateAutomaticUniforms()
-	{
-		UniformMap::iterator ibegin = myUniformsMap.begin();
-		UniformMap::iterator iend = myUniformsMap.end();
-		std::vector<std::string>::iterator itor;
-		for (; ibegin != iend; ++ibegin)
-		{
-			std::string name = ibegin->first;
-			AutomaticUniformFactoryMap::iterator factoryItor = myAutomaticUniformFactories.find(name);
-			if (factoryItor != myAutomaticUniformFactories.end())
-			{
-				myAutomaticUniformsMap.insert(std::make_pair(name, factoryItor->second->create(ibegin->second)));
+				AutomaticUniformFactoryMap::iterator factoryItor = myAutomaticUniformFactories.find(uniformName);
+				Uniform* uniform = createUniform(uniformName, Uniform::mapGLToUniformType(uniformType), location);
+				if (factoryItor == myAutomaticUniformFactories.end())
+				{
+					myUniformsMap.insert(std::make_pair(uniformName, uniform));
+				}		
 			}
 		}
+
+		bindUniformBufferToPoint("CameraUBO", 0);
 	}
 
 	void Program::clearUniforms()
@@ -249,5 +280,20 @@ namespace vrv
 		myAutomaticUniformFactories.insert(std::make_pair("vrv_view_pos", new CameraPositionUniformFactory()));
 		myAutomaticUniformFactories.insert(std::make_pair("vrv_view_matrix", new CameraViewMatrixUniformFactory()));
 		myAutomaticUniformFactories.insert(std::make_pair("vrv_proj_matrix", new CameraProjMatrixUniformFactory()));
+	}
+
+	void Program::setUpUniformBufferObject()
+	{
+		myUniformBufferObject = new UniformBufferObject();
+
+		AutomaticUniformFactoryMap::iterator iter = myAutomaticUniformFactories.begin();
+		AutomaticUniformFactoryMap::iterator end = myAutomaticUniformFactories.end();
+		for (; iter != end; ++iter)
+		{
+			myUniformBufferObject->addAutomaticUniform(iter->second->create());
+		}
+		
+		myUniformBufferObject->build();
+		myUniformBufferObject->bindToPoint(0);
 	}
 }

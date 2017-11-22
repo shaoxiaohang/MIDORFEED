@@ -14,7 +14,7 @@ namespace vrv
 	class Model : public Node
 	{
 	public:
-		Model(const std::string& fileName);
+		Model(const std::string& name,const std::string& fileName);
 
 	protected:
 		void initialize();

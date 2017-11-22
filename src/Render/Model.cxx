@@ -7,8 +7,9 @@
 #include <Core/Utility.h>
 namespace vrv
 {
-	Model::Model(const std::string& fileName)
-		: myFileName(fileName)
+	Model::Model(const std::string& name, const std::string& fileName)
+		: Node(name)
+		, myFileName("../data/model/" + fileName)
 	{
 		initialize();
 	}

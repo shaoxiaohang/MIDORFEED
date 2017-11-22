@@ -7,10 +7,14 @@ namespace vrv
 	class Geometry;
 	class RenderState;
 	class Program;
-	class SkyBox
+	class Skybox
 	{
 	public:
-		SkyBox(const std::vector<std::string>& fileName);
+		Skybox(const std::vector<std::string>& fileName);
+
+		void draw();
+
+		Texture3D* cubeMap();
 
 	protected:
 		void initialize();

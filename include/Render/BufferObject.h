@@ -11,7 +11,8 @@ namespace vrv
 		enum BufferTargetType
 		{
 			ARRAY_BUFFER,
-			ELEMENT_ARRAY_BUFFER
+			ELEMENT_ARRAY_BUFFER,
+			UNIFORM_BUFFER
 		};
 
 		enum BufferUsage
@@ -25,7 +26,9 @@ namespace vrv
 		~BufferObject();
 		virtual void copyFromSystemMemory(Array* array);
 		virtual void bind() ;
-		virtual void unbind() ;
+		virtual void unbind();
+		void bufferData(int size, void* data);
+		void bufferSubData(int offset, int size, void* data);
 	protected:
 		BufferTargetType myType;
 		BufferUsage myUsage;

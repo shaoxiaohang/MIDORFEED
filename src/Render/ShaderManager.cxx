@@ -11,11 +11,15 @@ namespace vrv
 		OutlineObjectsProgramFactory* outlineObjects = new OutlineObjectsProgramFactory();
 		DefaultQuadProgramFactory* defaultQuadShader = new DefaultQuadProgramFactory();
 		ConfigurablePostEffectProgramFactory* configurablePostEffect = new ConfigurablePostEffectProgramFactory();
+		SkyBoxProgramFactory* skyBox = new SkyBoxProgramFactory();
+		GeometryTestProgramFactory* geometryShader = new GeometryTestProgramFactory();
 		myProgramFactories.push_back(phoneLighting);
 		myProgramFactories.push_back(visualDepth);
 		myProgramFactories.push_back(outlineObjects);
 		myProgramFactories.push_back(defaultQuadShader);
 		myProgramFactories.push_back(configurablePostEffect);
+		myProgramFactories.push_back(skyBox);
+		myProgramFactories.push_back(geometryShader);
 		createShaders();
 	}
 

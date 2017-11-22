@@ -14,7 +14,8 @@ namespace vrv
 		enum ShaderType
 		{
 			VertexShader,
-			FragmentShader
+			FragmentShader,
+			GeometryShader
 		};
 
 		Shader(ShaderType type,const std::string& fileName);

@@ -159,6 +159,9 @@ namespace vrv
 		case vrv::Shader::FragmentShader:
 			return GL_FRAGMENT_SHADER;
 			break;
+		case vrv::Shader::GeometryShader:
+			return GL_GEOMETRY_SHADER;
+			break;
 		default:
 			break;
 		}

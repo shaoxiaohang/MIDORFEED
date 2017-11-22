@@ -61,9 +61,7 @@ namespace vrv
 	{
 		if (myProgram)
 		{
-			myProgram->use();
 			info.update(myProgram);
-			myProgram->updateAutomaticUniforms(scene);
 			myProgram->updateUniforms();
 		}
 	}

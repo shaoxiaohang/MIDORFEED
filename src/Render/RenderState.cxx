@@ -26,7 +26,7 @@ namespace vrv
 	//DepthTest
 	DepthTest::DepthTest(bool enabled)
 		: GLState(enabled)
-		, myDepthTestFunction(DepthTest::DEPTH_FUNC_LEQUAL)
+		, myDepthTestFunction(DepthTest::DEPTH_FUNC_LESS)
 	{
 		//
 	}
@@ -72,6 +72,9 @@ namespace vrv
 	{
 		switch (myDepthTestFunction)
 		{
+		case vrv::DepthTest::DEPTH_FUNC_LESS:
+			myDepthTestFunction_GL = GL_LESS;
+			break;
 		case vrv::DepthTest::DEPTH_FUNC_LEQUAL:
 			myDepthTestFunction_GL = GL_LEQUAL;
 			break;
@@ -79,7 +82,7 @@ namespace vrv
 			myDepthTestFunction_GL = GL_GEQUAL;
 			break;
 		default:
-			myDepthTestFunction_GL = GL_LEQUAL;
+			myDepthTestFunction_GL = GL_LESS;
 			break;
 		}
 		myIsDirty = false;
@@ -412,7 +415,7 @@ namespace vrv
 		: myDepthTest(true)
 		, myStencilTest(false)
 		, myBlending(true)
-		, myCullFace(false)
+		, myCullFace(true)
 	{}
 
 	void RenderState::setDepthTest(DepthTest depthTest)
@@ -453,22 +456,22 @@ namespace vrv
 
 	void RenderState::applyIfChanged(RenderState* state)
 	{
-		if (myDepthTest != state->myDepthTest)
+		//if (myDepthTest != state->myDepthTest)
 		{
 			myDepthTest = state->myDepthTest;
 			myDepthTest.apply(true);
 		}
-		if (myStencilTest != state->myStencilTest)
+		//if (myStencilTest != state->myStencilTest)
 		{
 			myStencilTest = state->myStencilTest;
 			myStencilTest.apply(true);
 		}
-		if (myBlending != state->myBlending)
+		//if (myBlending != state->myBlending)
 		{
 			myBlending = state->myBlending;
 			myBlending.apply(true);
 		}
-		if (myCullFace != state->myCullFace)
+		//if (myCullFace != state->myCullFace)
 		{
 			myCullFace = state->myCullFace;
 			myCullFace.apply(true);

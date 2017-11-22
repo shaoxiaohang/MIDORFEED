@@ -16,7 +16,9 @@ namespace vrv
 			VisualizeDepthBuffer,
 			OutLineObject,
 			DefaultQuadShader,
-			ConfigurablePostEffectShader
+			ConfigurablePostEffectShader,
+			SkyBoxShader,
+			GeometryTestShader
 		};
 		typedef std::vector<ProgramFactory*> ProgramFactoryList;
 		typedef std::map<int, Program*> ProgramMap;

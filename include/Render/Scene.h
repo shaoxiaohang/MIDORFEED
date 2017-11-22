@@ -18,6 +18,7 @@ namespace vrv
 	class MainWindow;
 	class PostProcessorManager;
 	class ShaderManager;
+	class Skybox;
 
 	struct RenderInfo
 	{
@@ -48,11 +49,7 @@ namespace vrv
 		void addToOpaqueList(const RenderInfo&);
 		void addToTransparentList(const RenderInfo&);
 		void clear();
-		void modifyProgram(Program* program);
-		void modifyRenderState(RenderState* renderState);
 
-		Program* myModifiedProgram;
-		RenderState* myModifiedRenderState;
 	};
 
 
@@ -85,6 +82,8 @@ namespace vrv
 		void enableDepthTest(bool);
 		void setPostEffectType(int);
 		int postEffectType();
+		void setSkybox(Skybox*);
+		Skybox* skybox();
 	protected:
 		virtual void cullTraverse();
 		virtual void DFS(std::stack<Node*>& stack, Node* node);	
@@ -108,5 +107,6 @@ namespace vrv
 		bool myOutlineObjects;
 		double myOutlineWidth;
 		int myPostEffectType;
+		Skybox* mySkybox;
 	};
 }

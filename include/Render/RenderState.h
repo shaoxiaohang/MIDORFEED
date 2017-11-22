@@ -26,6 +26,7 @@ namespace vrv
 	public:
 		enum DepthTestFunction
 		{
+			DEPTH_FUNC_LESS,
 			DEPTH_FUNC_LEQUAL,
 			DEPTH_FUNC_GEQUAL
 		};

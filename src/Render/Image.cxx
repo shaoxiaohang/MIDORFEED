@@ -6,7 +6,7 @@
 namespace vrv
 {
 	Image::Image(const std::string& file)
-		: myFileName("../data/image/" + file)
+		: myFileName(file)
 		, myWidth(0)
 		, myHeight(0)
 		, myFIImage(0)
@@ -64,6 +64,10 @@ namespace vrv
 		else if (ext.compare("png") == 0)
 		{
 			format = FIF_PNG;
+		}
+		else if (ext.compare("tga") == 0)
+		{
+			format = FIF_TARGA;
 		}
 		else
 		{

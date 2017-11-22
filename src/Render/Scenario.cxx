@@ -6,6 +6,10 @@
 #include <Render/Texture2D.h>
 #include <Render/Scene.h>
 #include <Render/Light.h>
+#include <Render/Skybox.h>
+#include <Render/Model.h>
+#include <vector>
+#include <string>
 
 using namespace tinyxml2;
 namespace vrv
@@ -25,6 +29,11 @@ namespace vrv
 		}
 		
 		XMLElement* pRoot = doc.FirstChildElement("scene");
+
+		XMLElement* skybox = pRoot->FirstChildElement("skybox");
+		createSkybox(skybox);
+
+
 		XMLElement* objects = pRoot->FirstChildElement("objects")->FirstChildElement();
 		for (; objects; objects = objects->NextSiblingElement())
 		{
@@ -37,11 +46,22 @@ namespace vrv
 				objects->FirstChildElement("position")->QueryFloatAttribute("y", &position.y);
 				objects->FirstChildElement("position")->QueryFloatAttribute("z", &position.z);
 			}
+			std::string fileName;
+			float scale = 1.0f;
 
+			if (objects->FirstChildElement("filename"))
+			{
+				fileName = objects->FirstChildElement("filename")->GetText();
+			}
+
+			if (objects->FirstChildElement("scale"))
+			{
+				objects->FirstChildElement("scale")->QueryFloatText(&scale);
+			}
 
 			Material* material = parseMaterial(objects);
 
-			createObject(objectType, name, position, material);
+			createObject(objectType, name, fileName, position, scale, material);
 		}
 		XMLElement* lights = pRoot->FirstChildElement("lights")->FirstChildElement();
 		for (; lights; lights = lights->NextSiblingElement())
@@ -93,11 +113,11 @@ namespace vrv
 			Texture2D* texture = 0;
 			bool discardAlpha = false;
 			float discardAlphaThreshold = 0;
-			XMLElement* textureNode = materialNode->FirstChildElement("texture");
+			XMLElement* textureNode = materialNode->FirstChildElement("texture2D");
 			if (textureNode)
 			{
 				std::string texName = textureNode->FirstChildElement("filename")->GetText();
-				texture = new Texture2D(texName);
+				texture = new Texture2D("../data/image/" + texName);
 				if (textureNode->FirstChildElement("wrapmode"))
 				{
 					std::string wrapModeString = textureNode->FirstChildElement("wrapmode")->GetText();
@@ -147,8 +167,8 @@ namespace vrv
 		return 0;
 	}
 
-	void Scenario::createObject(const std::string& type, const std::string& name,
-		Vector3f pos, Material* material)
+	void Scenario::createObject(const std::string& type, const std::string& name, const std::string& fileName,
+		Vector3f pos, float scale, Material* material)
 	{
 		Node* child = 0;
 		if (type == "floor")
@@ -158,6 +178,7 @@ namespace vrv
 			floor->setMaterial(material);
 			child->addDrawable(floor);
 			child->setPosition(pos);
+			child->setScale(scale);
 			addChild(child);
 		}
 		else if (type == "cube")
@@ -167,6 +188,7 @@ namespace vrv
 			cube->setMaterial(material);
 			child->addDrawable(cube);
 			child->setPosition(pos);
+			child->setScale(scale);
 			addChild(child);
 		}
 		else if (type == "billboard")
@@ -176,6 +198,13 @@ namespace vrv
 			billboard->setMaterial(material);
 			child->addDrawable(billboard);
 			child->setPosition(pos);
+			child->setScale(scale);
+			addChild(child);
+		}
+		else if (type == "model")
+		{
+			child = new	Model(name, fileName);
+			child->setScale(scale);
 			addChild(child);
 		}
 	}
@@ -216,6 +245,31 @@ namespace vrv
 		if (light)
 		{
 			scene->addLight(light);
+		}
+	}
+
+	void Scenario::createSkybox(tinyxml2::XMLElement* skybox)
+	{
+		if (skybox)
+		{
+			std::vector<std::string> textures;
+			std::string dataSuffix = "../data/image/";
+			std::string up = skybox->FirstChildElement("up")->GetText();
+			std::string down = skybox->FirstChildElement("down")->GetText();
+			std::string left = skybox->FirstChildElement("left")->GetText();
+			std::string right = skybox->FirstChildElement("right")->GetText();
+			std::string front = skybox->FirstChildElement("front")->GetText();
+			std::string back = skybox->FirstChildElement("back")->GetText();
+			textures.push_back(dataSuffix + right);
+			textures.push_back(dataSuffix + left);
+			textures.push_back(dataSuffix + up);
+			textures.push_back(dataSuffix + down);
+			textures.push_back(dataSuffix + back);
+			textures.push_back(dataSuffix + front);
+
+			Skybox* skybox = new Skybox(textures);
+
+			Scene::instance().setSkybox(skybox);
 		}
 	}
 }

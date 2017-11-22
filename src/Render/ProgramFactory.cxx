@@ -70,4 +70,28 @@ namespace vrv
 		program->link();
 		return program;
 	}
+
+	SkyBoxProgramFactory::SkyBoxProgramFactory()
+		: ProgramFactory(ShaderManager::SkyBoxShader)
+	{}
+
+	Program* SkyBoxProgramFactory::createProgram()
+	{
+		Program* program = new Program("../data/shader/skybox.vert",
+			"../data/shader/skybox.frag");
+		program->link();
+		return program;
+	}
+
+	GeometryTestProgramFactory::GeometryTestProgramFactory()
+		:ProgramFactory(ShaderManager::GeometryTestShader)
+	{}
+
+	Program* GeometryTestProgramFactory::createProgram()
+	{
+		Program* program = new Program("../data/shader/geometryTest.vert",
+			"../data/shader/geometryTest.frag", "../data/shader/geometryTest.geom");
+		program->link();
+		return program;
+	}
 }

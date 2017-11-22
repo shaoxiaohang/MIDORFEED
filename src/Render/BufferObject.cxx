@@ -9,24 +9,27 @@ namespace vrv
 	{
 		switch (myType)
 		{
-		case vrv::BufferObject::ARRAY_BUFFER:
+		case ARRAY_BUFFER:
 			myGLType = GL_ARRAY_BUFFER;
 			break;
-		case vrv::BufferObject::ELEMENT_ARRAY_BUFFER:
+		case ELEMENT_ARRAY_BUFFER:
 			myGLType = GL_ELEMENT_ARRAY_BUFFER;
+			break;
+		case UNIFORM_BUFFER:
+			myGLType = GL_UNIFORM_BUFFER;
 			break;
 		default:
 			break;
 		}
 		switch (myUsage)
 		{
-		case vrv::BufferObject::STATIC_DRAW:
+		case STATIC_DRAW:
 			myGLUsage = GL_STATIC_DRAW;
 			break;
-		case vrv::BufferObject::DYNAMIC_DRAW:
+		case DYNAMIC_DRAW:
 			myGLUsage = GL_DYNAMIC_DRAW;
 			break;
-		case vrv::BufferObject::STREAM_DRAW:
+		case STREAM_DRAW:
 			myGLUsage = GL_STREAM_DRAW;
 			break;
 		default:
@@ -57,5 +60,13 @@ namespace vrv
 		QtContext::instance().glBindBuffer(myGLType, 0);
 	}
 
+	void BufferObject::bufferData(int size, void* data)
+	{
+		QtContext::instance().glBufferData(myGLType, size, data, myGLUsage);
+	}
 
+	void BufferObject::bufferSubData(int offset, int size, void* data)
+	{
+		QtContext::instance().glBufferSubData(myGLType, offset, size, data);
+	}
 }

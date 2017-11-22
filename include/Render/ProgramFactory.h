@@ -48,4 +48,18 @@ namespace vrv
 		ConfigurablePostEffectProgramFactory();
 		Program* createProgram();
 	};
+
+	class SkyBoxProgramFactory : public ProgramFactory
+	{
+	public:
+		SkyBoxProgramFactory();
+		Program* createProgram();
+	};
+
+	class GeometryTestProgramFactory : public ProgramFactory
+	{
+	public:
+		GeometryTestProgramFactory();
+		Program* createProgram();
+	};
 }

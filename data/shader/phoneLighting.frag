@@ -10,8 +10,15 @@ struct Material
 	float shininess;
 };
 
+layout (std140) uniform CameraUBO
+{
+	mat4 vrv_proj_matrix;
+	mat4 vrv_view_matrix;
+	vec3 vrv_view_pos;
+};
+
 uniform Material vrv_material;
-uniform vec3 vrv_view_pos;
+uniform samplerCube skybox;
 uniform bool vrv_discardAlpha;
 uniform float vrv_discardAlphaThreshold;
 
@@ -45,6 +52,8 @@ uniform vrv_light_struct vrv_lights[VRV_MAX_NUM_LIGHTS];
 //Lighting functions
 vec3 phoneLighting(vrv_light_struct light,vec3 diffuse,vec3 specular,float shininess);
 vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess);
+vec3 calculateReflectiveColor();
+vec3 calculateRefractiveColor();
 
 void main()
 {
@@ -76,6 +85,10 @@ vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess)
 		if(vrv_lights[i].used)
 			finalColor += phoneLighting(vrv_lights[i],diffuse.xyz,specular.xyz,shininess);
 	}
+	
+	//finalColor += calculateReflectiveColor();
+	//finalColor += calculateRefractiveColor();
+		
 	return finalColor;
 }
 
@@ -130,8 +143,26 @@ vec3 phoneLighting(vrv_light_struct light,vec3 diffuse,vec3 specular,float shini
 		specular_color = intensity*pow(max(dot(reflect(lightDirection,N),view_direction),0),shininess) * light.specular * specular * strength;	
 	}
 	//return specular_color;
-	return ambient_color+diffuse_color+specular_color;
+	return ambient_color+diffuse_color+specular_color ;
 }
 
+vec3 calculateReflectiveColor()
+{
+	vec3 I = normalize(vrv_view_pos-frag_pos);
+	vec3 N = normalize(vrv_normal);
+	vec3 R = reflect(I,N);
+	vec3 reflective = texture(skybox,R).xyz;
+	return reflective*0.3;
+}
+
+vec3 calculateRefractiveColor()
+{
+	float ratio = 1.0/1.52;
+	vec3 I = normalize(vrv_view_pos-frag_pos);
+	vec3 N = normalize(vrv_normal);
+	vec3 R = refract(I,N,ratio);
+	vec3 refractive = texture(skybox,R).xyz;
+	return refractive*0.3;
+}
 
 

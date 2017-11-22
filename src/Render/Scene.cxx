@@ -8,12 +8,14 @@
 #include <Render/Light.h>
 #include <Render/Material.h>
 #include <Render/Texture2D.h>
+#include <Render/Texture3D.h>
 #include <Render/Mesh.h>
 #include <Render/QtContext.h>
 #include <Render/ShaderManager.h>
 #include <Render/RenderState.h>
 #include <Render/FrameBuffer.h>
 #include <Render/PostProcessorManager.h>
+#include <Render/Skybox.h>
 #include <Core/Node.h>
 #include <Core/Utility.h>
 #include <Core/NodeVisitor.h>
@@ -56,8 +58,6 @@ namespace vrv
 	{}
 
 	RenderQueue::RenderQueue()
-		: myModifiedRenderState(0)
-		, myModifiedProgram(0)
 	{}
 
 	void RenderQueue::draw(Context* context, Camera* camera)
@@ -70,14 +70,6 @@ namespace vrv
 		{
 			RenderInfo& info = *itor;
 			Drawable* drawable = info.drawable;
-			if (myModifiedProgram)
-			{
-				drawable->drawState()->setProgram(myModifiedProgram);
-			}
-			if (myModifiedRenderState)
-			{
-				drawable->drawState()->setRenderState(myModifiedRenderState);
-			}
 			context->draw(*itor);
 		}
 
@@ -90,17 +82,8 @@ namespace vrv
 		{
 			RenderInfo& info = *itor;
 			Drawable* drawable = info.drawable;
-			if (myModifiedProgram)
-			{
-				drawable->drawState()->setProgram(myModifiedProgram);
-			}
-			if (myModifiedRenderState)
-			{
-				drawable->drawState()->setRenderState(myModifiedRenderState);
-			}
 			context->draw(*itor);
 		}
-
 	}
 
 	void RenderQueue::sortTransparentList(Camera* camera)
@@ -126,21 +109,15 @@ namespace vrv
 		myTransparentList.clear();
 	}
 
-	void RenderQueue::modifyProgram(Program* program)
-	{
-		myModifiedProgram = program;
-	}
-
-	void RenderQueue::modifyRenderState(RenderState* renderState)
-	{
-		myModifiedRenderState = renderState;
-	}
-
 	void RenderInfo::update(Program* program)
 	{
 		if (program)
 		{
-			program->getUniform("vrv_model_matrix")->set(modelMatrix);
+			if (program->getUniform("vrv_model_matrix"))
+			{
+				program->getUniform("vrv_model_matrix")->set(modelMatrix);
+			}
+			
 			if (material)
 			{
 				Texture2D* diffuse = material->getTexture2D(Material::Material_Diffuse);
@@ -154,6 +131,15 @@ namespace vrv
 				{
 					QtContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Material_Specular);
 					QtContext::instance().glBindTexture(GL_TEXTURE_2D, specular->id());
+				}
+
+				if (Scene::instance().skybox())
+				{
+					Scene::instance().skybox()->cubeMap()->bindToPoint(2);
+					if (program->getUniform("skybox"))
+					{
+						program->getUniform("skybox")->set(2);
+					}
 				}
 
 				if (program->getUniform("vrv_discardAlpha"))
@@ -224,6 +210,7 @@ namespace vrv
 		, myEnableDepthTest(true)
 		, myMainWindow(window)
 		, myPostEffectType(0)
+		, mySkybox(0)
 	{
 		myShaderManager = new ShaderManager();
 		myContext->setScene(this);
@@ -270,35 +257,23 @@ namespace vrv
 		{
 			updateLights();
 			cullTraverse();
-			if (myVisualizeDepthBuffer)
-			{
-				myRenderQueue.modifyProgram(ShaderManager::instance()
-					.getProgram(ShaderManager::VisualizeDepthBuffer));
-			}
-			else
-			{
-				myRenderQueue.modifyProgram(ShaderManager::instance()
-					.getProgram(ShaderManager::PhoneLighting));
-			}
-			myRenderQueue.modifyRenderState(myPhoneLightingRenderState);
 
-			myPostProcessorManager->bind();
+			//myPostProcessorManager->bind();
 
 			QtContext::instance().glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			QtContext::instance().glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			myRenderQueue.draw(myContext, myMasterCamera);
 
-			if (myOutlineObjects)
+			QtContext::instance().glActiveTexture(GL_TEXTURE2);
+			QtContext::instance().glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+			if (mySkybox)
 			{
-				myRenderQueue.modifyProgram(ShaderManager::instance()
-					.getProgram(ShaderManager::OutLineObject));
-				myRenderQueue.modifyRenderState(myOutlineRenderState);
-				myRenderQueue.draw(myContext, myMasterCamera);
+				mySkybox->draw();
 			}
 
-
-			myPostProcessorManager->run();
+			//myPostProcessorManager->run();
 		}
 	}
 
@@ -435,5 +410,15 @@ namespace vrv
 	int Scene::postEffectType()
 	{
 		return myPostEffectType;
+	}
+
+	void Scene::setSkybox(Skybox* skybox)
+	{
+		mySkybox = skybox;
+	}
+
+	Skybox* Scene::skybox()
+	{
+		return mySkybox;
 	}
 }

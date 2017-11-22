@@ -25,7 +25,8 @@ namespace vrv
 			BOOL,
 			FLOAT_MAT3,
 			FLOAT_MAT4,
-			SAMPLER_2D
+			SAMPLER_2D,
+			SAMPLER_CUBE
 		};
 		static UniformType mapGLToUniformType(unsigned int glenum);
 		Uniform();
@@ -33,6 +34,9 @@ namespace vrv
 		bool isDirty();	
 		virtual void synGL();
 		int location();
+		int size();
+
+		virtual void* dataPointer() = 0;
 
 		virtual bool set(bool value);
 		virtual bool set(unsigned int value);
@@ -69,6 +73,7 @@ namespace vrv
 		bool set(bool value);
 		bool get(bool& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		bool myValue;
 	};
@@ -80,6 +85,7 @@ namespace vrv
 		bool set(int value);
 		bool get(int& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		int myValue;
 	};
@@ -91,6 +97,7 @@ namespace vrv
 		bool set(unsigned int value);
 		bool get(unsigned int& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		unsigned int myValue;
 	};
@@ -102,6 +109,7 @@ namespace vrv
 		bool set(float value);
 		bool get(float& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		float myValue;
 	};
@@ -113,6 +121,7 @@ namespace vrv
 		bool set(Vector2f value);
 		bool get(Vector2f& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		Vector2f myValue;
 	};
@@ -124,6 +133,7 @@ namespace vrv
 		bool set(Vector3f value);
 		bool get(Vector3f& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		Vector3f myValue;
 	};
@@ -135,6 +145,7 @@ namespace vrv
 		bool set(Vector4f value);
 		bool get(Vector4f& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		Vector4f myValue;
 	};
@@ -146,6 +157,7 @@ namespace vrv
 		bool set(Matrix3f value);
 		bool get(Matrix3f& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		Matrix3f myValue;
 	};
@@ -157,6 +169,7 @@ namespace vrv
 		bool set(Matrix4f value);
 		bool get(Matrix4f& value);
 		void synGL();
+		void* dataPointer();
 	protected:
 		Matrix4f myValue;
 	};
@@ -164,8 +177,9 @@ namespace vrv
 	class AutomaticUniform
 	{
 	public:
-		AutomaticUniform(Uniform* uniform);
-		virtual void synGL(Scene* scene) = 0;
+		AutomaticUniform();
+		virtual void update() = 0;
+		Uniform* uniform();
 	protected:
 		Uniform* myUniform;
 	};
@@ -174,57 +188,57 @@ namespace vrv
 	{
 	public:
 		AutomaticUniformFactory(const std::string& name);
-		virtual AutomaticUniform* create(Uniform* uniform) = 0;
+		virtual AutomaticUniform* create() = 0;
 	protected:
-		const std::string& myName;
+		std::string myName;
 	};
 
 	class CameraViewMatrixUniform : public AutomaticUniform
 	{
 	public:
 		friend class CameraViewMatrixUniformFactory;
-		virtual void synGL(Scene* scene);
+		virtual void update();
 	protected:
-		CameraViewMatrixUniform(Uniform* uniform);
+		CameraViewMatrixUniform(const std::string& name);
 	};
 
 	class CameraViewMatrixUniformFactory : public AutomaticUniformFactory
 	{
 	public:
 		CameraViewMatrixUniformFactory();
-		virtual AutomaticUniform* create(Uniform* uniform);
+		virtual AutomaticUniform* create();
 	};
 
 	class CameraPositionUniform : public AutomaticUniform
 	{
 	public:
 		friend class CameraPositionUniformFactory;
-		virtual void synGL(Scene* scene);
+		virtual void update();
 	protected:
-		CameraPositionUniform(Uniform* uniform);
+		CameraPositionUniform(const std::string& name);
 	};
 
 	class CameraPositionUniformFactory : public AutomaticUniformFactory
 	{
 	public:
 		CameraPositionUniformFactory();
-		virtual AutomaticUniform* create(Uniform* uniform);
+		virtual AutomaticUniform* create();
 	};
 
 	class CameraProjMatrixUniform : public AutomaticUniform
 	{
 	public:
 		friend class CameraProjMatrixUniformFactory;
-		virtual void synGL(Scene* scene);
+		virtual void update();
 	protected:
-		CameraProjMatrixUniform(Uniform* uniform);
+		CameraProjMatrixUniform(const std::string& name);
 	};
 
 	class CameraProjMatrixUniformFactory : public AutomaticUniformFactory
 	{
 	public:
 		CameraProjMatrixUniformFactory();
-		virtual AutomaticUniform* create(Uniform* uniform);
+		virtual AutomaticUniform* create();
 	};
 
 }

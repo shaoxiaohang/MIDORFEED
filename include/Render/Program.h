@@ -1,8 +1,9 @@
 #pragma once
-#include<string>
-#include<vector>
-#include<map>
-#include<Render/Uniform.h>
+#include <string>
+#include <vector>
+#include <map>
+#include <Render/Uniform.h>
+#include <Render/UniformBufferObject.h>
 namespace vrv
 {
 	class Shader;
@@ -14,7 +15,7 @@ namespace vrv
 		typedef std::map<std::string, AutomaticUniform*> AutomaticUniformMap;
 		typedef std::map<std::string, AutomaticUniformFactory*> AutomaticUniformFactoryMap;
 	public:
-		Program(const std::string& vertFile, const std::string& fragFile);
+		Program(const std::string& vertFile, const std::string& fragFile, std::string geometry = "");
 		Program(const Shader* vert, const Shader* frag);
 		~Program();
 		bool operator< (const Program& pro);
@@ -26,21 +27,23 @@ namespace vrv
 		static Uniform* createUniform(std::string name, Uniform::UniformType type, int location);
 		Uniform* getUniform(std::string name);
 		void updateUniforms();
-		void updateAutomaticUniforms(Scene* scene);
 		void use();
 		void unuse();
+		void bindUniformBufferToPoint(const std::string& uniformBuffer, int point);
 	protected:
 		void populateUniforms();
-		void populateAutomaticUniforms();
 		void clearUniforms();
 		static void registerAutomaticUniformFactories();
+		static void setUpUniformBufferObject();
 	protected:
 		unsigned int myID;
 		Shader* myVertShader;
 		Shader* myFragShader;
+		Shader* myGeometryShader;
 		UniformMap myUniformsMap;
-		AutomaticUniformMap myAutomaticUniformsMap;
 		static bool myAutomaticUniformsFactoryInitialized;
 		static AutomaticUniformFactoryMap myAutomaticUniformFactories;
+		static bool myUniformBufferObjectInitialized;
+		static UniformBufferObject* myUniformBufferObject;
 	};
 }

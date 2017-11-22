@@ -1,6 +1,11 @@
 1: can only create vec3 vertex. what if vec2 vertex like full screen quad coordinate.
 2: Array should accept a pointer to the data and size of the data, like a float pointer.
+3: Need think a better to handle the cached render state, skybox change the render state.
+4: skybox used in two different draw pass, two shader, binding point has to be the same, need to fix it.
+5: Need a better framework for the program and shader, when you add geometry shader, put too much hack in it.
+6: Need a better way to make the depth visualization and sentencil buffer working. The modified render state and program is bull shit.
 
 Post Effect Notes:
 The last post effect processor should write to the main frame buffer(unbind)
 
+If you want bind the same texture to a different unit, you have to unbind the texture from the old unit first.

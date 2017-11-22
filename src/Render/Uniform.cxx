@@ -2,6 +2,7 @@
 #include <Render/QtContext.h>
 #include <Render/Scene.h>
 #include <Render/Camera.h>
+#include <Core/Utility.h>
 namespace vrv
 {
 	Uniform::UniformType Uniform::mapGLToUniformType(unsigned int glenum)
@@ -26,7 +27,10 @@ namespace vrv
 			return FLOAT_MAT4;
 		case GL_SAMPLER_2D:
 			return SAMPLER_2D;
+		case GL_SAMPLER_CUBE:
+			return SAMPLER_CUBE;
 		default:
+			VRV_ERROR("unsupported uniform type")
 			break;
 		}
 	}
@@ -49,6 +53,48 @@ namespace vrv
 	int Uniform::location()
 	{
 		return myLocation;
+	}
+
+	int Uniform::size()
+	{
+		switch (myType)
+		{
+		case Uniform::FLOAT:
+			return sizeof(float);
+			break;
+		case Uniform::FLOAT_VEC2:
+			return 2*sizeof(float);
+			break;
+		case Uniform::FLOAT_VEC3:
+			return 3*sizeof(float);
+			break;
+		case Uniform::FLOAT_VEC4:
+			return 4*sizeof(float);
+			break;
+		case Uniform::UNSIGNED_INT:
+			return sizeof(unsigned);
+			break;
+		case Uniform::INT:
+			return sizeof(int);
+			break;
+		case Uniform::BOOL:
+			return sizeof(bool);
+			break;
+		case Uniform::FLOAT_MAT3:
+			return 9*sizeof(float);
+			break;
+		case Uniform::FLOAT_MAT4:
+			return 16*sizeof(float);
+			break;
+		case Uniform::SAMPLER_2D:
+			return sizeof(unsigned);
+			break;
+		case Uniform::SAMPLER_CUBE:
+			return sizeof(unsigned);
+			break;
+		default:
+			break;
+		}
 	}
 
 	bool Uniform::isDirty()
@@ -132,7 +178,6 @@ namespace vrv
 		return false;
 	}
 
-
 	UniformBool::UniformBool(const std::string& name,int location)
 		: Uniform(name, Uniform::BOOL, location)
 		, myValue(false)
@@ -155,6 +200,10 @@ namespace vrv
 	{
 		Uniform::synGL();
 		QtContext::instance().glUniform1i(myLocation, myValue);
+	}
+	void* UniformBool::dataPointer()
+	{
+		return  &myValue;
 	}
 
 	UniformInt::UniformInt(const std::string& name, int location)
@@ -180,6 +229,10 @@ namespace vrv
 		Uniform::synGL();
 		QtContext::instance().glUniform1i(myLocation, myValue);
 	}
+	void* UniformInt::dataPointer()
+	{
+		return  &myValue;
+	}
 
 	UniformUnsignedInt::UniformUnsignedInt(const std::string& name, int location)
 		: Uniform(name, Uniform::UNSIGNED_INT, location)
@@ -202,6 +255,10 @@ namespace vrv
 	{
 		Uniform::synGL();
 		QtContext::instance().glUniform1i(myLocation, myValue);
+	}
+	void* UniformUnsignedInt::dataPointer()
+	{
+		return  &myValue;
 	}
 
 	UniformFloat::UniformFloat(const std::string& name, int location)
@@ -227,6 +284,10 @@ namespace vrv
 		Uniform::synGL();
 		QtContext::instance().glUniform1f(myLocation, myValue);
 	}
+	void* UniformFloat::dataPointer()
+	{
+		return  &myValue;
+	}
 
 	UniformVec2f::UniformVec2f(const std::string& name, int location)
 		:Uniform(name, Uniform::FLOAT_VEC2, location)
@@ -249,6 +310,10 @@ namespace vrv
 	{
 		Uniform::synGL();
 		QtContext::instance().glUniform2f(myLocation, myValue.x, myValue.y);
+	}
+	void* UniformVec2f::dataPointer()
+	{
+		return  &myValue;
 	}
 
 	UniformVec3f::UniformVec3f(const std::string& name, int location)
@@ -273,6 +338,10 @@ namespace vrv
 		Uniform::synGL();
 		QtContext::instance().glUniform3f(myLocation, myValue.x, myValue.y, myValue.z);
 	}
+	void* UniformVec3f::dataPointer()
+	{
+		return  &myValue;
+	}
 
 	UniformVec4f::UniformVec4f(const std::string& name, int location)
 		:Uniform(name, Uniform::FLOAT_VEC4, location)
@@ -295,6 +364,10 @@ namespace vrv
 	{
 		Uniform::synGL();
 		QtContext::instance().glUniform4f(myLocation, myValue.x, myValue.y, myValue.z, myValue.w);
+	}
+	void* UniformVec4f::dataPointer()
+	{
+		return  &myValue;
 	}
 
 	UniformMat3f::UniformMat3f(const std::string& name, int location)
@@ -319,6 +392,10 @@ namespace vrv
 		Uniform::synGL();
 		QtContext::instance().glUniformMatrix3fv(myLocation, 1, false, &myValue.m[0]);
 	}
+	void* UniformMat3f::dataPointer()
+	{
+		return  &myValue.m[0];
+	}
 
 	UniformMat4f::UniformMat4f(const std::string& name, int location)
 		:Uniform(name, Uniform::FLOAT_MAT4, location)
@@ -342,28 +419,37 @@ namespace vrv
 		Uniform::synGL();
 		QtContext::instance().glUniformMatrix4fv(myLocation, 1, false, &myValue.m[0]);
 	}
+	void* UniformMat4f::dataPointer()
+	{
+		return  &myValue.m[0];
+	}
 
 
-	AutomaticUniform::AutomaticUniform(Uniform* uniform)
-		: myUniform(uniform)
+	AutomaticUniform::AutomaticUniform()
+		: myUniform(0)
 	{}
+
+	Uniform* AutomaticUniform::uniform()
+	{
+		return myUniform;
+	}
 
 	AutomaticUniformFactory::AutomaticUniformFactory(const std::string& name)
 		: myName(name)
 	{}
 
-	CameraPositionUniform::CameraPositionUniform(Uniform* uniform)
-		: AutomaticUniform(uniform)
-	{}
-
-	void CameraPositionUniform::synGL(Scene* scene)
+	CameraPositionUniform::CameraPositionUniform(const std::string& name)
+		: AutomaticUniform()
 	{
-		if (scene)
+		myUniform = new UniformVec3f(name,-1);
+	}
+
+	void CameraPositionUniform::update()
+	{
+		Scene* scene = Scene::instancePtr();
+		if (scene && scene->masterCamera())
 		{
-			if (scene->masterCamera())
-			{
-				myUniform->set(scene->masterCamera()->position());
-			}
+			myUniform->set(scene->masterCamera()->position());
 		}
 	}
 
@@ -371,23 +457,23 @@ namespace vrv
 		: AutomaticUniformFactory("vrv_view_pos")
 	{}
 
-	AutomaticUniform* CameraPositionUniformFactory::create(Uniform* uniform)
+	AutomaticUniform* CameraPositionUniformFactory::create()
 	{
-		return new CameraPositionUniform(uniform);
+		return new CameraPositionUniform(myName);
 	}
 
-	CameraViewMatrixUniform::CameraViewMatrixUniform(Uniform* uniform)
-		: AutomaticUniform(uniform)
-	{}
-
-	void CameraViewMatrixUniform::synGL(Scene* scene)
+	CameraViewMatrixUniform::CameraViewMatrixUniform(const std::string& name)
+		: AutomaticUniform()
 	{
-		if (scene)
+		myUniform = new UniformMat4f(name, -1);
+	}
+
+	void CameraViewMatrixUniform::update()
+	{
+		Scene* scene = Scene::instancePtr();
+		if (scene && scene->masterCamera())
 		{
-			if (scene->masterCamera())
-			{
-				myUniform->set(scene->masterCamera()->getViewMatrix());
-			}
+			myUniform->set(scene->masterCamera()->getViewMatrix());
 		}
 	}
 
@@ -395,23 +481,23 @@ namespace vrv
 		: AutomaticUniformFactory("vrv_view_matrix")
 	{}
 
-	AutomaticUniform* CameraViewMatrixUniformFactory::create(Uniform* uniform)
+	AutomaticUniform* CameraViewMatrixUniformFactory::create()
 	{
-		return new CameraViewMatrixUniform(uniform);
+		return new CameraViewMatrixUniform(myName);
 	}
 
-	CameraProjMatrixUniform::CameraProjMatrixUniform(Uniform* uniform)
-		: AutomaticUniform(uniform)
-	{}
-
-	void CameraProjMatrixUniform::synGL(Scene* scene)
+	CameraProjMatrixUniform::CameraProjMatrixUniform(const std::string& name)
+		: AutomaticUniform()
 	{
-		if (scene)
+		myUniform = new UniformMat4f(name, -1);
+	}
+
+	void CameraProjMatrixUniform::update()
+	{
+		Scene* scene = Scene::instancePtr();
+		if (scene && scene->masterCamera())
 		{
-			if (scene->masterCamera())
-			{
-				myUniform->set(scene->masterCamera()->projectionMatrix());
-			}
+			myUniform->set(scene->masterCamera()->projectionMatrix());
 		}
 	}
 
@@ -419,9 +505,9 @@ namespace vrv
 		: AutomaticUniformFactory("vrv_proj_matrix")
 	{}
     
-	AutomaticUniform* CameraProjMatrixUniformFactory::create(Uniform* uniform)
+	AutomaticUniform* CameraProjMatrixUniformFactory::create()
 	{
-		return new CameraProjMatrixUniform(uniform);
+		return new CameraProjMatrixUniform(myName);
 	}
 	
 }

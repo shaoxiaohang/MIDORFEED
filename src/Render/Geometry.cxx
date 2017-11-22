@@ -76,7 +76,7 @@ namespace vrv
 				vbo_normal->copyFromSystemMemory(myNormalArray);
 				vao->bindVertexBufferObject(vbo_normal);
 			}
-			createDrawState(vao, 0);
+			createDrawState(vao, ShaderManager::instance().getProgram(ShaderManager::PhoneLighting));
 			myBuildGeometry = true;
 		}
 	}

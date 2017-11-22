@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene>
 	<skybox>
-	<up></up>
-	<down></down>
-	<left></left>
-	<right></right>
-	<front></front>
-	<back></back>
-	<skybox>				
+	<right>skybox/right.jpg</right>
+	<left>skybox/left.jpg</left>
+	<up>skybox/top.jpg</up>
+	<down>skybox/bottom.jpg</down>
+	<back>skybox/back.jpg</back>
+	<front>skybox/front.jpg</front>
+	</skybox>				
 	<objects>
 		<floor>
 			<name>floor</name>
