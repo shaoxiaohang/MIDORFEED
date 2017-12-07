@@ -32,15 +32,15 @@ namespace vrv
 		void unuse();
 		void bindUniformBufferToPoint(const std::string& uniformBuffer, int point);
 
-		virtual bool set(const std::string&, bool value);
-		virtual bool set(const std::string&, unsigned int value);
-		virtual bool set(const std::string&, int value);
-		virtual bool set(const std::string&, float value);
-		virtual bool set(const std::string&, Vector2f value);
-		virtual bool set(const std::string&, Vector3f value);
-		virtual bool set(const std::string&, Vector4f value);
-		virtual bool set(const std::string&, Matrix3f value);
-		virtual bool set(const std::string&, Matrix4f value);
+		virtual void set(const std::string&, bool value);
+		virtual void set(const std::string&, unsigned int value);
+		virtual void set(const std::string&, int value);
+		virtual void set(const std::string&, float value);
+		virtual void set(const std::string&, Vector2f value);
+		virtual void set(const std::string&, Vector3f value);
+		virtual void set(const std::string&, Vector4f value);
+		virtual void set(const std::string&, Matrix3f value);
+		virtual void set(const std::string&, Matrix4f value);
 
 	protected:
 		void populateUniforms();

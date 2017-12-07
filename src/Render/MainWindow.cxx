@@ -1,5 +1,4 @@
 #include<Render/MainWindow.h>
-#include<Render/Context.h>
 namespace vrv
 {
 	WindowConfiguration::WindowConfiguration(int _width, int _height, const std::string& _title)

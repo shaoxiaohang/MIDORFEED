@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Core/Singleton.h>
-#include <Render/Context.h>
 #include <vector>
 #include <map>
 #include <QOpenGLExtraFunctions>
@@ -11,7 +10,7 @@ class QSurfaceFormat;
 namespace vrv
 {
 	class QtMainWindow;
-	class QtContext : public Context, public QOpenGLExtraFunctions, public Singleton<QtContext>
+	class QtContext : public QOpenGLExtraFunctions, public Singleton<QtContext>
 	{
 	public:
 		typedef std::pair<bool, unsigned int> TextureUnit;
@@ -26,7 +25,7 @@ namespace vrv
 		virtual void makeCurrent(QtMainWindow*);
 		virtual void swapBuffer(QtMainWindow*);
 	public:
-		//GL Fucntions
+		//GL Functions
 		//////////////////////////////////////////////////////////////////////////
 		void glBindTexture(GLenum target, GLuint texture);
 		//////////////////////////////////////////////////////////////////////////

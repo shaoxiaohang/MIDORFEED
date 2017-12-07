@@ -6,6 +6,7 @@ namespace vrv
 	class Texture3D;
 	class Geometry;
 	class RenderState;
+	class DrawState;
 	class Program;
 	class Skybox
 	{

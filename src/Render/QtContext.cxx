@@ -46,7 +46,6 @@ namespace vrv
 	void QtContext::initialize()
 	{
 		QOpenGLExtraFunctions::initializeOpenGLFunctions();
-		forceSynGL();
 	}
 
 	void QtContext::makeCurrent(QtMainWindow* window)

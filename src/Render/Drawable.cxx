@@ -4,6 +4,7 @@
 #include <Render/VertexArrayObject.h>
 #include <Render/QtContext.h>
 #include <Render/Material.h>
+#include <Render/RenderState.h>
 #ifdef DrawState
 #undef DrawState
 #endif
@@ -80,6 +81,7 @@ namespace vrv
 	{
 		drawState->bind();
 		drawState->program()->updateUniforms();
+		drawState->renderState()->apply();
 		myVertexArrayObject->bind();
 		for (unsigned int i = 0; i < myPrimitiveSets.size();++i)
 		{

@@ -26,7 +26,7 @@ namespace vrv
 	{
 		WindowConfiguration config(_width, _height, _title);
 		myAppWindow = new QtApplicationWindow(this, config);
-		myScene = new Scene(myAppWindow,myAppWindow->context());
+		myScene = new Scene(myAppWindow);
 	}
 
 	void Viewer::onUpdateTick(double dt)

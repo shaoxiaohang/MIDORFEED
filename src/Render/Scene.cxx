@@ -1,7 +1,6 @@
 #include <Render/Scene.h>
 #include <Render/Drawable.h>
 #include <Render/Program.h>
-#include <Render/Context.h>
 #include <Render/ClearState.h>
 #include <Render/Camera.h>
 #include <Render/DrawState.h>
@@ -64,24 +63,21 @@ namespace vrv
 		Program* program = drawState->program();
 		scene->updateProgram(program);
 
-
 		//draw opaque list first 
-		//std::sort(myOpaqueList.begin(), myOpaqueList.end(), RenderInfo::SortDrawable());
 		RenderList::iterator itor = myOpaqueList.begin();
 		RenderList::iterator end = myOpaqueList.end();
 		for (; itor != end; ++itor)
 		{
-			QtContext::instance().draw(*itor, drawState);
+			draw(*itor, drawState);
 		}
 
 		//sort the transparent list from back to front
 		sortTransparentList(camera);
-		//std::sort(myTransparentList.begin(), myTransparentList.end(), RenderInfo::SortDrawable());
 		itor = myTransparentList.begin();
 		end = myTransparentList.end();
 		for (; itor != end; ++itor)
 		{
-			QtContext::instance().draw(*itor, drawState);
+			draw(*itor, drawState);
 		}
 	}
 
@@ -108,9 +104,16 @@ namespace vrv
 		myTransparentList.clear();
 	}
 
-	Scene::Scene(MainWindow* window, Context* context)
-		: myContext(context)
-		, myRoot(0)
+	void RenderQueue::draw(RenderInfo& renderInfo, DrawState* drawState)
+	{
+		Program* program = drawState->program();
+		program->set("vrv_model_matrix", renderInfo.myModelMatrix);
+		renderInfo.myDrawable->updateProgram(program);
+		renderInfo.myDrawable->drawImplementation(drawState);
+	}
+
+	Scene::Scene(MainWindow* window)
+		: myRoot(0)
 		, myVisualizeDepthBuffer(false)
 		, myOptimizeVisualizeDepthBuffer(true)
 		, myOutlineObjects(false)
@@ -121,8 +124,6 @@ namespace vrv
 		, mySkybox(0)
 	{
 		myShaderManager = new ShaderManager();
-		myContext->setScene(this);
-		myClearState = new ClearState();
 		myMasterCamera = new Camera();
 		initializeDrawState();
 		myPostProcessorManager = new PostProcessorManager(myMainWindow->width(),myMainWindow->height());
@@ -155,7 +156,6 @@ namespace vrv
 
 	void Scene::renderScene()
 	{
-		myContext->clear(myClearState);
 		if (myRoot)
 		{	
 			cullTraverse();

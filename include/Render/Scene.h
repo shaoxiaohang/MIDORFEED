@@ -10,8 +10,6 @@ namespace vrv
 	class Node;
 	class Drawable;
 	class DrawState;
-	class Context;
-	class ClearState;
 	class Light;
 	class Material;
 	class Program;
@@ -44,6 +42,7 @@ namespace vrv
 		void addToOpaqueList(const RenderInfo&);
 		void addToTransparentList(const RenderInfo&);
 		void clear();
+		void draw(RenderInfo& renderInfo, DrawState* drawState);
 	};
 
 
@@ -63,7 +62,7 @@ namespace vrv
 		typedef std::vector<Light*> LightList;
 
 	public:
-		Scene(MainWindow* window,Context* context);
+		Scene(MainWindow* window);
 		void setSceneData(Node* root);
 		virtual void renderScene();
 		Camera* masterCamera();
@@ -89,9 +88,7 @@ namespace vrv
 	protected:
 		Camera* myMasterCamera;
 		Node* myRoot;
-		Context* myContext;
 		MainWindow* myMainWindow;
-		ClearState* myClearState;
 		PostProcessorManager* myPostProcessorManager;
 		RenderQueue myRenderQueue;
 		LightList myLights;

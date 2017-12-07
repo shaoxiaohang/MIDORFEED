@@ -175,7 +175,7 @@ namespace vrv
 		QtContext::instance().glUniformBlockBinding(myID, index, point);
 	}
 
-	bool Program::set(const std::string& uniform, bool value)
+	void Program::set(const std::string& uniform, bool value)
 	{
 		if (getUniform(uniform))
 		{
@@ -183,7 +183,7 @@ namespace vrv
 		}
 	}
 
-	bool Program::set(const std::string& uniform, unsigned int value)
+	void Program::set(const std::string& uniform, unsigned int value)
 	{
 		if (getUniform(uniform))
 		{
@@ -191,7 +191,7 @@ namespace vrv
 		}
 	}
 
-	bool Program::set(const std::string& uniform, int value)
+	void Program::set(const std::string& uniform, int value)
 	{
 		if (getUniform(uniform))
 		{
@@ -199,7 +199,7 @@ namespace vrv
 		}
 	}
 
-	bool Program::set(const std::string& uniform, float value)
+	void Program::set(const std::string& uniform, float value)
 	{
 		if (getUniform(uniform))
 		{
@@ -207,7 +207,7 @@ namespace vrv
 		}
 	}
 
-	bool Program::set(const std::string& uniform, Vector2f value)
+	void Program::set(const std::string& uniform, Vector2f value)
 	{
 		if (getUniform(uniform))
 		{
@@ -215,7 +215,7 @@ namespace vrv
 		}
 	}
 
-	bool Program::set(const std::string& uniform, Vector3f value)
+	void Program::set(const std::string& uniform, Vector3f value)
 	{
 		if (getUniform(uniform))
 		{
@@ -223,7 +223,7 @@ namespace vrv
 		}
 	}
 
-	bool Program::set(const std::string& uniform, Vector4f value)
+	void Program::set(const std::string& uniform, Vector4f value)
 	{
 		if (getUniform(uniform))
 		{
@@ -231,7 +231,7 @@ namespace vrv
 		}
 	}
 
-	bool Program::set(const std::string& uniform, Matrix3f value)
+	void Program::set(const std::string& uniform, Matrix3f value)
 	{
 		if (getUniform(uniform))
 		{
@@ -239,7 +239,7 @@ namespace vrv
 		}
 	}
 
-	bool Program::set(const std::string& uniform, Matrix4f value)
+	void Program::set(const std::string& uniform, Matrix4f value)
 	{
 		if (getUniform(uniform))
 		{
