@@ -10,12 +10,14 @@
 #include <Render/FrameBuffer.h>
 #include <Render/QtContext.h>
 #include <Render/Scene.h>
+#ifdef DrawState
+#undef DrawState
+#endif
 namespace vrv
 {
 	PostProcessor::PostProcessor()
-		: myProgram(0)
+		: myDrawState(0)
 	{
-		myRenderState = new RenderState();
 	}
 
 	void PostProcessor::run(Drawable* quad, FrameBuffer* frameBuffer)
@@ -27,43 +29,25 @@ namespace vrv
 	{
 		QtContext::instance().glActiveTexture(GL_TEXTURE0 + 0);
 		QtContext::instance().glBindTexture(GL_TEXTURE_2D, frameBuffer->textureID());
-
-		quad->setProgram(myProgram);
-		quad->setRenderState(myRenderState);
-		myRenderState->apply();
-
-		Uniform* texture = myProgram->getUniform("scene");
-		if (texture)
-		{
-			texture->set(0);
-			texture->synGL();
-		}
-
-		quad->drawImplementation();
+		myDrawState->program()->set("scene",0);
+		quad->drawImplementation(myDrawState);
 	}
 
 	DefaultPostProcessor::DefaultPostProcessor()
 	{
-		myProgram = ShaderManager::instance().getProgram(ShaderManager::DefaultQuadShader);
+		myDrawState = new DrawState(ShaderManager::instance().getProgram(ShaderManager::DefaultQuadShader));
 	}
 
 	ConfigurableProcessor::ConfigurableProcessor()
 		: myPostEffectType(0)
 	{
-		myProgram = ShaderManager::instance().getProgram(ShaderManager::ConfigurablePostEffectShader);
+		myDrawState = new DrawState(ShaderManager::instance().getProgram(ShaderManager::ConfigurablePostEffectShader));
 	}
 
 	void ConfigurableProcessor::run(Drawable* quad, FrameBuffer* frameBuffer)
 	{
 		myPostEffectType = Scene::instance().postEffectType();
-		Uniform* type = myProgram->getUniform("effectType");
-		myProgram->use();
-		if (type)
-		{
-			type->set(myPostEffectType);
-			type->synGL();
-		}
-
+		myDrawState->program()->set("effectType", myPostEffectType);
 		PostProcessor::run(quad, frameBuffer);
 	}
 
@@ -88,8 +72,6 @@ namespace vrv
 			for (size_t i = 0; i < node->numberOfDrawable(); ++i)
 			{
 				Drawable* drawable = node->getDrawable(i);
-				drawable->setProgram(ShaderManager::instance().getProgram(ShaderManager::OutLineObject));
-				drawable->setRenderState(myRenderState);
 			}
 		}
 	protected:

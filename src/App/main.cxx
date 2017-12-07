@@ -1,7 +1,7 @@
 #include <Render/Viewer.h>
 #include <Core/Node.h>
 #include <Render/Array.h>
-#include <Render/Cube.h>
+#include <Render/Primitives.h>
 #include <Render/Texture.h>
 #include <Core/Matrix4.h>
 #include <Core/Matrix3.h>
@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	Viewer* viewer = new Viewer(argc,argv);
 	viewer->initialize(800, 600, "main window");
 
-	Scenario* test = new Scenario("simple.scene");
+	Scenario* test = new Scenario("DepthTest.scene");
 	viewer->setSceneData(test);
 
 	//Geometry* points = new Geometry();

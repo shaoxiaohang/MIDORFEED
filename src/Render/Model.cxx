@@ -1,6 +1,8 @@
 #include <Render/Model.h>
-#include <Render/Mesh.h>
+#include <Render/Geometry.h>
 #include <Render/Material.h>
+#include <Render/Program.h>
+#include <Render/DrawState.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -8,10 +10,21 @@
 namespace vrv
 {
 	Model::Model(const std::string& name, const std::string& fileName)
-		: Node(name)
-		, myFileName("../data/model/" + fileName)
+		: myFileName("../data/model/" + fileName)
 	{
 		initialize();
+	}
+
+	void Model::setPostProcessorShader(Shader* shader)
+	{
+		for (int i = 0; i < numberOfMeshes(); ++i)
+		{
+			Drawable* d = getMesh(i);
+			if (d)
+			{
+				
+			}
+		}
 	}
 
 	void Model::initialize()
@@ -68,7 +81,7 @@ namespace vrv
 			}
 		}
 
-		Mesh* vrvmesh = new Mesh();
+		Geometry* vrvmesh = new Geometry();
 		vrvmesh->setVertex(&vertices);
 		vrvmesh->setIndex(&indices);
 		vrvmesh->setNomral(&normals);
@@ -100,8 +113,18 @@ namespace vrv
 
 		vrvmesh->setMaterial(vrvMaterial);
 
-		addDrawable(vrvmesh);
+		myMeshes.push_back(vrvmesh);
 
 		VRV_INFO(mesh->mName.C_Str())
+	}
+
+	int Model::numberOfMeshes()
+	{
+		return myMeshes.size();
+	}
+
+	Geometry* Model::getMesh(int i)
+	{
+		return myMeshes[i];
 	}
 }

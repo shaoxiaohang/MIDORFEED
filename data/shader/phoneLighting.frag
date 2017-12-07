@@ -1,3 +1,5 @@
+#version 330
+
 struct Material
 {
 	sampler2D diffuse_tex;
@@ -21,6 +23,7 @@ uniform Material vrv_material;
 uniform samplerCube skybox;
 uniform bool vrv_discardAlpha;
 uniform float vrv_discardAlphaThreshold;
+uniform bool vrv_isTransparent;
 
 in vec2 tex_st;
 in vec3 vrv_normal;
@@ -56,7 +59,7 @@ vec3 calculateReflectiveColor();
 vec3 calculateRefractiveColor();
 
 void main()
-{
+{	
 	vec4 diffuse;
 	vec4 specular;
 	if(vrv_material.hasDiffuse)
@@ -73,8 +76,13 @@ void main()
 	if(vrv_material.hasSpecular)
 		specular = vrv_material.specular * texture2D(vrv_material.specular_tex,tex_st);
 	else
-		specular = vrv_material.diffuse;
-	color = vec4(calculateLightColor(diffuse,specular,vrv_material.shininess),diffuse.a);
+		specular = vrv_material.specular;
+		
+	float alpha = vrv_isTransparent ? diffuse.a : 1;
+	color = vec4(calculateLightColor(diffuse,specular,vrv_material.shininess),alpha);
+
+	float gamma = 2.2;
+	color.rgb = pow(color.rgb, vec3(1.0/gamma));
 }
 
 vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess)
@@ -84,6 +92,7 @@ vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess)
 	{
 		if(vrv_lights[i].used)
 			finalColor += phoneLighting(vrv_lights[i],diffuse.xyz,specular.xyz,shininess);
+			
 	}
 	
 	//finalColor += calculateReflectiveColor();
@@ -101,11 +110,13 @@ vec3 phoneLighting(vrv_light_struct light,vec3 diffuse,vec3 specular,float shini
 
 	if(light.type == 0)
 	{
-		float theta = max(dot(N,-light.direction),0);
+		vec3 L = normalize(-light.direction);
+		float theta = max(dot(N,L),0);
 		vec3 view_direction = normalize(vrv_view_pos-frag_pos);
+		vec3 H = normalize(L + view_direction);
 		ambient_color = light.ambient * diffuse;
 		diffuse_color = diffuse*theta*light.diffuse;	
-		specular_color = pow(max(dot(reflect(light.direction,N),view_direction),0),shininess)* light.specular * specular;
+		specular_color = pow(max(dot(H,N),0),shininess)* light.specular * specular;
 	}
 	else if(light.type == 1)
 	{
@@ -113,11 +124,12 @@ vec3 phoneLighting(vrv_light_struct light,vec3 diffuse,vec3 specular,float shini
 		float distance = length(lightDirection);
 		lightDirection = normalize(lightDirection);
 		vec3 view_direction = normalize(vrv_view_pos-frag_pos);
+		vec3 H = normalize(lightDirection + view_direction);
 		float theta = max(dot(N,lightDirection),0);
 		float strength = 1.0/(light.constant + light.linear*distance + light.quadratic*distance*distance);
 		ambient_color = light.ambient * diffuse*strength;
 		diffuse_color = theta*light.diffuse*diffuse*strength;
-		specular_color = pow(max(dot(reflect(lightDirection,N),view_direction),0),shininess) * light.specular * specular * strength;
+		specular_color = pow(max(dot(H,N),0),shininess) * light.specular * specular * strength;
 	}
 	else
 	{
@@ -126,6 +138,7 @@ vec3 phoneLighting(vrv_light_struct light,vec3 diffuse,vec3 specular,float shini
 		float strength = 1.0/(light.constant + light.linear*distance + light.quadratic*distance*distance);
 		lightDirection = normalize(lightDirection);
 		vec3 view_direction = normalize(vrv_view_pos-frag_pos);
+		vec3 H = normalize(lightDirection + view_direction);
 		float theta = max(dot(N,lightDirection),0);
 		float intensity;
 		if(theta <= light.cutoff)
@@ -140,7 +153,7 @@ vec3 phoneLighting(vrv_light_struct light,vec3 diffuse,vec3 specular,float shini
 		}
 		ambient_color = intensity*light.ambient*diffuse*strength;
 		diffuse_color = intensity*max(dot(N,lightDirection),0)*light.diffuse*diffuse*strength;
-		specular_color = intensity*pow(max(dot(reflect(lightDirection,N),view_direction),0),shininess) * light.specular * specular * strength;	
+		specular_color = intensity*pow(max(dot(H,N),0),shininess) * light.specular * specular * strength;	
 	}
 	//return specular_color;
 	return ambient_color+diffuse_color+specular_color ;
@@ -152,7 +165,7 @@ vec3 calculateReflectiveColor()
 	vec3 N = normalize(vrv_normal);
 	vec3 R = reflect(I,N);
 	vec3 reflective = texture(skybox,R).xyz;
-	return reflective*0.3;
+	return reflective*0.1;
 }
 
 vec3 calculateRefractiveColor()
@@ -162,7 +175,7 @@ vec3 calculateRefractiveColor()
 	vec3 N = normalize(vrv_normal);
 	vec3 R = refract(I,N,ratio);
 	vec3 refractive = texture(skybox,R).xyz;
-	return refractive*0.3;
+	return refractive*0.1;
 }
 
 

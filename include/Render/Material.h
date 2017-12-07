@@ -4,6 +4,8 @@
 namespace vrv
 {
 	class Texture2D;
+	class Shader;
+	class Program;
 	class Material
 	{
 	public:
@@ -22,6 +24,7 @@ namespace vrv
 		void setShininess(float);
 		void setDiscardAlpha(bool);
 		void setDiscardAlphaThreshold(float);
+		void setTransparent(bool);
 
 		Vector4f ambient();
 		Vector4f diffuse();
@@ -37,6 +40,11 @@ namespace vrv
 		bool hasSpecular();
 		bool isTransParent();
 
+		void setPostProcessShader(Shader*);
+		Shader* postProcessShader();
+
+		void updateProgram(Program* program);
+
 	protected:
 		Vector4f		myAmbient;
 		Vector4f		myDiffuse;
@@ -45,5 +53,7 @@ namespace vrv
 		TextureMap  myTextureMap;
 		bool			myDiscardAlpha;
 		float		   myDiscardAlphaThreshold;
+		bool myIsTransparent;
+		Shader* myShader;
 	};
 }

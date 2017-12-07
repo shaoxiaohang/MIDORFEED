@@ -51,6 +51,6 @@ namespace vrv
 		std::string myName;
 		Vector3f myPosition;
 		float myScale;
-
+		bool myIsInstanced;
 	};
 }

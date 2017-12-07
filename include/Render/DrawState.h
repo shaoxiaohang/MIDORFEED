@@ -7,19 +7,17 @@ namespace vrv
 	class Program;
 	class Scene;
 	class RenderInfo;
+	class Shader;
 	class DrawState
 	{
 	public:
-		DrawState(RenderState* state, VertexArrayObject* vao, Program* shader);
-		DrawState(VertexArrayObject* vao, Program* shader);
+		DrawState();
+		DrawState(Program* shader);
+		DrawState(RenderState* state, Program* shader);
 
 		void setRenderState(RenderState*);
 		RenderState* renderState();
 		RenderState* renderState() const;
-
-		void setVertexArrayObject(VertexArrayObject*);
-		VertexArrayObject* vertexArrayObject();
-		VertexArrayObject* vertexArrayObject() const;
 
 		void setProgram(Program*);
 		Program* program();
@@ -30,16 +28,11 @@ namespace vrv
 		void bind();
 		void unbind();
 
-		virtual void update(Scene* scene, RenderInfo& info);
+		void insertShader(Shader* shader);
 
 	protected:
 		RenderState* myRenderState;
-		VertexArrayObject* myVertexArrayObject;
 		Program* myProgram;
 	};
 
-	struct SortDrawState
-	{
-		bool operator()(const DrawState& left, const DrawState& right);
-	};
 }

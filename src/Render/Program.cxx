@@ -40,6 +40,14 @@ namespace vrv
 		myFragShader = new Shader(*frag);
 	}
 
+	Program::Program(Shader* vert, Shader* frag, Shader* geom)
+		: myVertShader(vert)
+		, myFragShader(frag)
+		, myGeometryShader(geom)
+	{
+
+	}
+
 	Program::~Program()
 	{
 		delete myVertShader;
@@ -167,6 +175,78 @@ namespace vrv
 		QtContext::instance().glUniformBlockBinding(myID, index, point);
 	}
 
+	bool Program::set(const std::string& uniform, bool value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
+	bool Program::set(const std::string& uniform, unsigned int value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
+	bool Program::set(const std::string& uniform, int value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
+	bool Program::set(const std::string& uniform, float value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
+	bool Program::set(const std::string& uniform, Vector2f value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
+	bool Program::set(const std::string& uniform, Vector3f value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
+	bool Program::set(const std::string& uniform, Vector4f value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
+	bool Program::set(const std::string& uniform, Matrix3f value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
+	bool Program::set(const std::string& uniform, Matrix4f value)
+	{
+		if (getUniform(uniform))
+		{
+			getUniform(uniform)->set(value);
+		}
+	}
+
 	void Program::link()
 	{
 		myID = QtContext::instance().glCreateProgram();
@@ -214,7 +294,6 @@ namespace vrv
 		{
 			QtContext::instance().glAttachShader(myID, myGeometryShader->ID());
 		}
-
 
 		QtContext::instance().glLinkProgram(myID);
 		if (!checkProgramLinkStatus(myID,info))

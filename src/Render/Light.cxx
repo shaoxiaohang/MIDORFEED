@@ -4,8 +4,8 @@ namespace vrv
 {
 	Light::Light(const std::string& name)
 		: myConstantTerm(1.0)
-		, myLinearTerm(0.22)
-		, myQuadraticTerm(0.2)
+		, myLinearTerm(0.045)
+		, myQuadraticTerm(0.0075)
 		, myName(name)
 	{
 

@@ -6,7 +6,8 @@ namespace vrv
 	class VertexAttribute
 	{
 	public:
-		VertexAttribute(const std::string& name,Array::DataType type,unsigned int location);
+		VertexAttribute(const std::string& name,Array::DataType type,unsigned int location,
+			unsigned int stride = 0, unsigned int offset = 0);
 		unsigned int location();
 		const std::string& name();
 		unsigned int baseType();
@@ -29,35 +30,35 @@ namespace vrv
 	class VertexAttributeInt : public VertexAttribute
 	{
 	public:
-		VertexAttributeInt(std::string name, unsigned int location);
+		VertexAttributeInt(std::string name, unsigned int location, unsigned int stride = 0, unsigned int offset = 0);
 		std::string typeToGLSL();
 	};
 
 	class VertexAttributefloat : public VertexAttribute
 	{
 	public:
-		VertexAttributefloat(std::string name, unsigned int location);
+		VertexAttributefloat(std::string name, unsigned int location, unsigned int stride = 0, unsigned int offset = 0);
 		std::string typeToGLSL();
 	};
 
 	class VertexAttributeVector2f : public VertexAttribute
 	{
 	public:
-		VertexAttributeVector2f(std::string name, unsigned int location);
+		VertexAttributeVector2f(std::string name, unsigned int location, unsigned int stride = 0, unsigned int offset = 0);
 		std::string typeToGLSL();
 	};
 
 	class VertexAttributeVector3f : public VertexAttribute
 	{
 	public:
-		VertexAttributeVector3f(std::string name, unsigned int location);
+		VertexAttributeVector3f(std::string name, unsigned int location, unsigned int stride = 0, unsigned int offset = 0);
 		std::string typeToGLSL();
 	};
 
 	class VertexAttributeVector4f : public VertexAttribute
 	{
 	public:
-		VertexAttributeVector4f(std::string name, unsigned int location);
+		VertexAttributeVector4f(std::string name, unsigned int location, unsigned int stride = 0, unsigned int offset = 0);
 		std::string typeToGLSL();
 	};
 

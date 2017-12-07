@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scene>
+<scene>		
 	<skybox>
 	<right>skybox/right.jpg</right>
 	<left>skybox/left.jpg</left>
@@ -7,8 +7,14 @@
 	<down>skybox/bottom.jpg</down>
 	<back>skybox/back.jpg</back>
 	<front>skybox/front.jpg</front>
-	</skybox>				
+	</skybox>	
 	<objects>
+		<model>
+			<name>nanosuit</name>
+			<position x="-2" y="0" z="-1"/>
+			<scale>0.1</scale>
+			<filename>nanosuit/nanosuit.obj</filename>
+		</model>
 		<floor>
 			<name>floor</name>
 			<position x="0" y="0" z="0"/>
@@ -22,7 +28,6 @@
 		</floor>
 		<cube>
 			<name>cube1</name>
-			<position x="-1" y="0" z="-1"/>
 			<material>
 				<texture2D>
 					<filename>marble.jpg</filename>
@@ -57,6 +62,7 @@
 				<texture2D>
 					<filename>blending_transparent_window.png</filename>
 				</texture2D>
+				<transparent>true</transparent>
 			</material>
 		</billboard>
 		<billboard>
@@ -66,14 +72,14 @@
 				<texture2D>
 					<filename>blending_transparent_window.png</filename>
 				</texture2D>
+				<transparent>true</transparent>
 			</material>
 		</billboard>
 	</objects>
 	<lights>
 		<light1>
 			<type>direction</type>
-			<position x="0" y="0" z="0"/>
-			<direction x="0" y="0" z= "-1"/>
+			<direction x="0" y="-1" z= "-1"/>
 			<ambient r="0.2" g="0.2" b="0.2"/>
 			<diffuse r="0.8" g="0.8" b="0.8"/>
 			<specular r="0.3" g="0.3" b="0.3"/>

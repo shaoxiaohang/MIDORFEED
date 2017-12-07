@@ -1,13 +1,15 @@
 #include <Render/Scenario.h>
 #include <tinyxml2.h>
 #include <Core/Utility.h>
-#include <Render/Cube.h>
+#include <Render/Primitives.h>
 #include <Render/Material.h>
 #include <Render/Texture2D.h>
 #include <Render/Scene.h>
 #include <Render/Light.h>
 #include <Render/Skybox.h>
 #include <Render/Model.h>
+#include <Render/Shader.h>
+#include <Render/InstancedNode.h>
 #include <vector>
 #include <string>
 
@@ -39,29 +41,63 @@ namespace vrv
 		{
 			std::string objectType = objects->Name();
 			std::string name = objects->FirstChildElement("name")->GetText();
-			Vector3f position;
-			if (objects->FirstChildElement("position"))
-			{
-				objects->FirstChildElement("position")->QueryFloatAttribute("x", &position.x);
-				objects->FirstChildElement("position")->QueryFloatAttribute("y", &position.y);
-				objects->FirstChildElement("position")->QueryFloatAttribute("z", &position.z);
-			}
 			std::string fileName;
-			float scale = 1.0f;
-
 			if (objects->FirstChildElement("filename"))
 			{
 				fileName = objects->FirstChildElement("filename")->GetText();
 			}
-
-			if (objects->FirstChildElement("scale"))
-			{
-				objects->FirstChildElement("scale")->QueryFloatText(&scale);
-			}
-
 			Material* material = parseMaterial(objects);
 
-			createObject(objectType, name, fileName, position, scale, material);
+			if (objects->FirstChildElement("instanced"))
+			{
+				XMLElement* instanced = objects->FirstChildElement("instanced");
+				int count;
+				XMLElement* countElement = instanced->FirstChildElement("count");
+				countElement->QueryIntText(&count);
+				std::vector<Vector3f> offsets;
+				std::vector<float> scales;
+				XMLElement* offsetxml = countElement->NextSiblingElement("offset");
+				XMLElement* scalexml = countElement->NextSiblingElement("scale");
+				for (int i = 0; i < count; ++i)
+				{
+					Vector3f offset;
+					float scale;
+					offsetxml->QueryFloatAttribute("x", &offset.x);
+					offsetxml->QueryFloatAttribute("y", &offset.y);
+					offsetxml->QueryFloatAttribute("z", &offset.z);
+					scalexml->QueryFloatText(&scale);
+					offsets.push_back(offset);
+					scales.push_back(scale);
+					offsetxml = offsetxml->NextSiblingElement("offset");
+					scalexml = scalexml->NextSiblingElement("scale");
+				}
+
+				createInstancedObjects(objectType, name, fileName, material,count,offsets, scales);
+
+			}
+			else
+			{
+				Vector3f position;
+				if (objects->FirstChildElement("position"))
+				{
+					objects->FirstChildElement("position")->QueryFloatAttribute("x", &position.x);
+					objects->FirstChildElement("position")->QueryFloatAttribute("y", &position.y);
+					objects->FirstChildElement("position")->QueryFloatAttribute("z", &position.z);
+				}
+		
+				float scale = 1.0f;
+
+
+
+				if (objects->FirstChildElement("scale"))
+				{
+					objects->FirstChildElement("scale")->QueryFloatText(&scale);
+				}
+
+				
+
+				createObject(objectType, name, fileName, position, scale, material);
+			}
 		}
 		XMLElement* lights = pRoot->FirstChildElement("lights")->FirstChildElement();
 		for (; lights; lights = lights->NextSiblingElement())
@@ -103,6 +139,31 @@ namespace vrv
 
 			createLight(type, name, position, direction, ambient, diffuse, specular);
 		}
+	}
+
+	void Scenario::parsePostProcess(Material* material, tinyxml2::XMLElement* node)
+	{
+		if (node)
+		{
+			XMLElement* postprocess = node->FirstChildElement("postprocess");
+			if (postprocess)
+			{
+				XMLElement* shader = postprocess->FirstChildElement("shader");
+				if (shader)
+				{
+					std::string type = shader->FirstChildElement("type")->GetText();
+					std::string filename = shader->FirstChildElement("filename")->GetText();
+
+					if (type == "geometry")
+					{
+						Shader::ShaderType shaderType = Shader::GeometryShader;
+						Shader* shader = new Shader(shaderType, "../data/shader/" + filename);
+						material->setPostProcessShader(shader);
+					}					
+				}
+			}
+		}
+		
 	}
 
 	Material* Scenario::parseMaterial(XMLElement* object)
@@ -150,7 +211,18 @@ namespace vrv
 				discardAlphaNode->QueryFloatAttribute("threshold", &discardAlphaThreshold);
 			}
 
+			bool transParent = false;
+			XMLElement* transparentNode = materialNode->FirstChildElement("transparent");
+			if (transparentNode)
+			{
+				transparentNode->QueryBoolText(&transParent);
+			}
+
 			Material* material = new Material();
+
+
+			parsePostProcess(material, materialNode);
+
 			if (texture)
 			{
 				material->setTexture2D(Material::Material_Diffuse, texture);
@@ -160,11 +232,58 @@ namespace vrv
 				material->setDiscardAlpha(true);
 				material->setDiscardAlphaThreshold(discardAlphaThreshold);
 			}
+			material->setTransparent(transParent);
 
 			return material;
 
 		}
 		return 0;
+	}
+
+	void Scenario::createInstancedObjects(const std::string& type, const std::string& name, const std::string& fileName,
+		Material* material,	int count, std::vector<Vector3f>& offsets, std::vector<float>& scales)
+	{
+		InstancedNode* child = 0;
+		if (type == "floor")
+		{
+			child = new InstancedNode(name,count,offsets,scales);
+			Floor* floor = new Floor();
+			floor->setMaterial(material);
+			child->addDrawable(floor);
+			addChild(child);
+		}
+		else if (type == "cube")
+		{
+			child = new InstancedNode(name, count, offsets, scales);
+			Cube* cube = new Cube();
+			cube->setMaterial(material);
+			child->addDrawable(cube);
+			addChild(child);
+		}
+		else if (type == "billboard")
+		{
+			child = new InstancedNode(name, count, offsets, scales);
+			Billboard* billboard = new Billboard();
+			billboard->setMaterial(material);
+			child->addDrawable(billboard);
+			addChild(child);
+		}
+		else if (type == "model")
+		{
+			Model* model = new Model(name, fileName);
+			if (material && material->postProcessShader())
+			{
+				model->setPostProcessorShader(material->postProcessShader());
+			}
+			child->addDrawable(model);
+			addChild(child);
+		}
+
+		if (child)
+		{
+			child->setUpInstanced();
+		}
+
 	}
 
 	void Scenario::createObject(const std::string& type, const std::string& name, const std::string& fileName,
@@ -203,8 +322,16 @@ namespace vrv
 		}
 		else if (type == "model")
 		{
-			child = new	Model(name, fileName);
+			child = new Node(name);
+			Model* model = new	Model(name, fileName);
+			if (material && material->postProcessShader())
+			{
+				model->setPostProcessorShader(material->postProcessShader());
+			}
+			model->setMaterial(material);
 			child->setScale(scale);
+			child->setPosition(pos);
+			child->addDrawable(model);
 			addChild(child);
 		}
 	}

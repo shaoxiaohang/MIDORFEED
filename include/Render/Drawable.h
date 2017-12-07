@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <Render/Array.h>
+#include <Core/Node.h>
 namespace vrv
 {
 	class DrawState;
@@ -8,6 +9,7 @@ namespace vrv
 	class Program;
 	class Array;
 	class RenderState;
+	class Material;
 
 	class Drawable
 	{
@@ -46,20 +48,24 @@ namespace vrv
 			void mapToGLIndexType();
 		};
 	public:
-		DrawState* drawState();
-		const DrawState* drawState() const;	
-		void setProgram(Program*);
-		void setRenderState(RenderState*);
-		virtual void drawImplementation();
+		virtual void drawImplementation(DrawState*);
 		void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
 		void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType = Array::UNSIGNED_INT);
 		virtual void buildGeometryIfNeeded();
-		void createDrawState(VertexArrayObject* vao, Program* shader);
+		void setVertexArrayObject(VertexArrayObject* vao);
+		void setMaterial(Material*);
+		Material* material();
+		void setInstancedCount(int);
+		bool instanced();
+		void updateProgram(Program* program);
 	protected:
 		virtual void buildGeometry() = 0;
 	protected:
 		bool myBuildGeometry;
-		DrawState* myDrawState;
+		VertexArrayObject* myVertexArrayObject;
 		std::vector<PrimitiveSet> myPrimitiveSets;
+		Material* myMaterial;
+		bool myIsInstanced;
+		int myInstancedCount;
 	};
 }

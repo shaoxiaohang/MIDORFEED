@@ -19,6 +19,7 @@ namespace vrv
 		, myNormalArray(0)
 		, myIndexArray(0)
 		, myTextureCoordinateArray(0)
+		, myInstancedArray(0)
 	{}
 
 	void Geometry::setVertex(ArrayVec3* array)
@@ -45,6 +46,12 @@ namespace vrv
 	void Geometry::setTextureCoordinate(ArrayVec2* array)
 	{
 		myTextureCoordinateArray = new ArrayVec2(array);
+	}
+
+	void Geometry::setInstancedMatrices(ArrayVec3* array)
+	{
+		myIsInstanced = true;
+		myInstancedArray = array;
 	}
 
 	void Geometry::buildGeometry()
@@ -76,7 +83,17 @@ namespace vrv
 				vbo_normal->copyFromSystemMemory(myNormalArray);
 				vao->bindVertexBufferObject(vbo_normal);
 			}
-			createDrawState(vao, ShaderManager::instance().getProgram(ShaderManager::PhoneLighting));
+			if (myInstancedArray)
+			{
+				VertexBufferObject* vbo_instanced = new VertexBufferObject();
+				vbo_instanced->addVertexAttribute(new VertexAttributeVector3f("instancedMatrix", 3));
+				vbo_instanced->copyFromSystemMemory(myInstancedArray);
+				vao->bindVertexBufferObject(vbo_instanced);
+				QtContext::instance().glVertexAttribDivisor(3, 1);
+			}
+
+
+			setVertexArrayObject(vao);
 			myBuildGeometry = true;
 		}
 	}

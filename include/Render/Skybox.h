@@ -21,8 +21,7 @@ namespace vrv
 
 	protected:
 		Geometry* myCube;
-		RenderState* myRenderState;
-		Program* myProgram;
+		DrawState* myDrawState;
 		std::vector<std::string> myFileNames;
 		Texture3D* myCubeMap;
 	};

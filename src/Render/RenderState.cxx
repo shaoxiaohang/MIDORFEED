@@ -415,7 +415,7 @@ namespace vrv
 		: myDepthTest(true)
 		, myStencilTest(false)
 		, myBlending(true)
-		, myCullFace(true)
+		, myCullFace(false)
 	{}
 
 	void RenderState::setDepthTest(DepthTest depthTest)
@@ -456,12 +456,14 @@ namespace vrv
 
 	void RenderState::applyIfChanged(RenderState* state)
 	{
-		//if (myDepthTest != state->myDepthTest)
+		if (state)
 		{
-			myDepthTest = state->myDepthTest;
-			myDepthTest.apply(true);
-		}
-		//if (myStencilTest != state->myStencilTest)
+			//if (myDepthTest != state->myDepthTest)
+			{
+				myDepthTest = state->myDepthTest;
+				myDepthTest.apply(true);
+			}
+			//if (myStencilTest != state->myStencilTest)
 		{
 			myStencilTest = state->myStencilTest;
 			myStencilTest.apply(true);
@@ -475,6 +477,7 @@ namespace vrv
 		{
 			myCullFace = state->myCullFace;
 			myCullFace.apply(true);
+		}
 		}
 	}
 }

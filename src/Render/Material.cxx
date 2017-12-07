@@ -1,6 +1,7 @@
 #include <Render/Material.h>
 #include <Render/Texture2D.h>
-
+#include <Render/Program.h>
+#include <Render/QtContext.h>
 namespace vrv
 {
 	Material::Material()
@@ -10,6 +11,8 @@ namespace vrv
 		, myShininess(128)
 		, myDiscardAlpha(false)
 		, myDiscardAlphaThreshold(0)
+		, myIsTransparent(false)
+		, myShader(0)
 	{}
 
 	void Material::setAmbient(Vector4f ambient)
@@ -40,6 +43,11 @@ namespace vrv
 	void Material::setDiscardAlphaThreshold(float value)
 	{
 		myDiscardAlphaThreshold = value;
+	}
+
+	void Material::setTransparent(bool value)
+	{
+		myIsTransparent = value;
 	}
 
 	Vector4f Material::ambient()
@@ -108,18 +116,57 @@ namespace vrv
 
 	bool Material::isTransParent()
 	{
+		bool possibleTrans = false;
+
 		if (myDiffuse.w != 1)
 		{
-			return true;
+			possibleTrans = true;
 		}
 		else
 		{
 			if (hasDiffuse() && myTextureMap[Material_Diffuse]->hasAlphaChannel())
 			{
-				return true;
+				possibleTrans = true;
 			}
-			return false;
 		}
 	
+		return myIsTransparent && possibleTrans;
+	}
+
+	void Material::setPostProcessShader(Shader* shader)
+	{
+		myShader = shader;
+	}
+
+	Shader* Material::postProcessShader()
+	{
+		return myShader;
+	}
+
+	void Material::updateProgram(Program* program)
+	{
+		program->set("vrv_isTransparent", myIsTransparent);
+		Texture2D* diffuse = getTexture2D(Material_Diffuse);
+		if (diffuse)
+		{
+			QtContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Material_Diffuse);
+			QtContext::instance().glBindTexture(GL_TEXTURE_2D, diffuse->id());
+		}
+		Texture2D* specular = getTexture2D(Material_Specular);
+		if (specular)
+		{
+			QtContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Material_Specular);
+			QtContext::instance().glBindTexture(GL_TEXTURE_2D, specular->id());
+		}
+		program->set("vrv_discardAlpha", myDiscardAlpha);
+		program->set("vrv_discardAlphaThreshold", myDiscardAlphaThreshold);
+		program->set("vrv_material.hasDiffuse", hasDiffuse());
+		program->set("vrv_material.hasSpecular", hasSpecular());
+		program->set("vrv_material.diffuse_tex", Material_Diffuse);
+		program->set("vrv_material.specular_tex", Material_Specular);
+		program->set("vrv_material.ambient", myAmbient);
+		program->set("vrv_material.diffuse", myDiffuse);
+		program->set("vrv_material.specular", mySpecular);
+		program->set("vrv_material.shininess", myShininess);
 	}
 }

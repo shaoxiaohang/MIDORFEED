@@ -62,4 +62,11 @@ namespace vrv
 		GeometryTestProgramFactory();
 		Program* createProgram();
 	};
+
+	class VisualizeNormalProgramFactory : public ProgramFactory
+	{
+	public:
+		VisualizeNormalProgramFactory();
+		Program* createProgram();
+	};
 }

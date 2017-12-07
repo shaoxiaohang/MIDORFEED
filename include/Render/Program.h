@@ -17,6 +17,7 @@ namespace vrv
 	public:
 		Program(const std::string& vertFile, const std::string& fragFile, std::string geometry = "");
 		Program(const Shader* vert, const Shader* frag);
+		Program( Shader* vert,  Shader* frag,  Shader* geom);
 		~Program();
 		bool operator< (const Program& pro);
 
@@ -30,6 +31,17 @@ namespace vrv
 		void use();
 		void unuse();
 		void bindUniformBufferToPoint(const std::string& uniformBuffer, int point);
+
+		virtual bool set(const std::string&, bool value);
+		virtual bool set(const std::string&, unsigned int value);
+		virtual bool set(const std::string&, int value);
+		virtual bool set(const std::string&, float value);
+		virtual bool set(const std::string&, Vector2f value);
+		virtual bool set(const std::string&, Vector3f value);
+		virtual bool set(const std::string&, Vector4f value);
+		virtual bool set(const std::string&, Matrix3f value);
+		virtual bool set(const std::string&, Matrix4f value);
+
 	protected:
 		void populateUniforms();
 		void clearUniforms();

@@ -1,3 +1,5 @@
+#version 330
+
 uniform bool optimizeVisualizeDepth;
 out vec4 color;
 

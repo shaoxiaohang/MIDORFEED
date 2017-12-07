@@ -25,11 +25,14 @@ namespace vrv
 		virtual void setNomral(ArrayVec3* array);
 		virtual void setIndex(ArrayUnsignedInt* array);
 		virtual void setTextureCoordinate(ArrayVec2* array);
+		virtual void setInstancedMatrices(ArrayVec3* array);
+
 		virtual void buildGeometry();
 	protected:
 		ArrayVec3* myVertexArray;
 		ArrayVec3* myNormalArray;
 		ArrayUnsignedInt* myIndexArray;
 		ArrayVec2* myTextureCoordinateArray;
+		ArrayVec3* myInstancedArray;
 	};
 }

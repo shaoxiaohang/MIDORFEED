@@ -9,13 +9,13 @@
 #include <Render/Material.h>
 #include <Render/Texture2D.h>
 #include <Render/Texture3D.h>
-#include <Render/Mesh.h>
 #include <Render/QtContext.h>
 #include <Render/ShaderManager.h>
 #include <Render/RenderState.h>
 #include <Render/FrameBuffer.h>
 #include <Render/PostProcessorManager.h>
 #include <Render/Skybox.h>
+#include <Render/Model.h>
 #include <Core/Node.h>
 #include <Core/Utility.h>
 #include <Core/NodeVisitor.h>
@@ -40,8 +40,8 @@ namespace vrv
 		}
 		bool operator()(RenderInfo const & a, RenderInfo const & b) const
 		{
-			Vector3f positionA = a.modelMatrix.getTranslation();
-			Vector3f positionB = b.modelMatrix.getTranslation();
+			Vector3f positionA = a.myModelMatrix.getTranslation();
+			Vector3f positionB = b.myModelMatrix.getTranslation();
 			float distanceA = positionA.distanceSquare(myCameraPosition);
 			float distanceB = positionB.distanceSquare(myCameraPosition);
 			return distanceA > distanceB;
@@ -51,26 +51,27 @@ namespace vrv
 	};
 
 
-	RenderInfo::RenderInfo(Drawable* _drawable, Matrix4f _modelMatrix, Material* _material)
-		: drawable(_drawable)
-		, modelMatrix(_modelMatrix)
-		, material(_material)
+	RenderInfo::RenderInfo(Drawable* _drawable, Matrix4f _modelMatrix)
+		: myDrawable(_drawable)
+		, myModelMatrix(_modelMatrix)
 	{}
 
 	RenderQueue::RenderQueue()
 	{}
 
-	void RenderQueue::draw(Context* context, Camera* camera)
+	void RenderQueue::draw(Scene* scene, DrawState* drawState, Camera* camera)
 	{
+		Program* program = drawState->program();
+		scene->updateProgram(program);
+
+
 		//draw opaque list first 
 		//std::sort(myOpaqueList.begin(), myOpaqueList.end(), RenderInfo::SortDrawable());
 		RenderList::iterator itor = myOpaqueList.begin();
 		RenderList::iterator end = myOpaqueList.end();
 		for (; itor != end; ++itor)
 		{
-			RenderInfo& info = *itor;
-			Drawable* drawable = info.drawable;
-			context->draw(*itor);
+			QtContext::instance().draw(*itor, drawState);
 		}
 
 		//sort the transparent list from back to front
@@ -80,9 +81,7 @@ namespace vrv
 		end = myTransparentList.end();
 		for (; itor != end; ++itor)
 		{
-			RenderInfo& info = *itor;
-			Drawable* drawable = info.drawable;
-			context->draw(*itor);
+			QtContext::instance().draw(*itor, drawState);
 		}
 	}
 
@@ -109,95 +108,6 @@ namespace vrv
 		myTransparentList.clear();
 	}
 
-	void RenderInfo::update(Program* program)
-	{
-		if (program)
-		{
-			if (program->getUniform("vrv_model_matrix"))
-			{
-				program->getUniform("vrv_model_matrix")->set(modelMatrix);
-			}
-			
-			if (material)
-			{
-				Texture2D* diffuse = material->getTexture2D(Material::Material_Diffuse);
-				if (diffuse)
-				{
-					QtContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Material_Diffuse);
-					QtContext::instance().glBindTexture(GL_TEXTURE_2D, diffuse->id());
-				}
-				Texture2D* specular = material->getTexture2D(Material::Material_Specular);
-				if (specular)
-				{
-					QtContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Material_Specular);
-					QtContext::instance().glBindTexture(GL_TEXTURE_2D, specular->id());
-				}
-
-				if (Scene::instance().skybox())
-				{
-					Scene::instance().skybox()->cubeMap()->bindToPoint(2);
-					if (program->getUniform("skybox"))
-					{
-						program->getUniform("skybox")->set(2);
-					}
-				}
-
-				if (program->getUniform("vrv_discardAlpha"))
-				{
-					program->getUniform("vrv_discardAlpha")->set(material->discardAlpha());
-				}
-
-				if (program->getUniform("vrv_discardAlphaThreshold"))
-				{
-					program->getUniform("vrv_discardAlphaThreshold")->set(material->discardAlphaThreshold());
-				}
-
-				if (program->getUniform("vrv_material.hasDiffuse"))
-				{
-					program->getUniform("vrv_material.hasDiffuse")->set(material->hasDiffuse());
-				}
-				if (program->getUniform("vrv_material.hasSpecular"))
-				{
-					program->getUniform("vrv_material.hasSpecular")->set(material->hasSpecular());
-				}
-				if (program->getUniform("vrv_material.diffuse_tex"))
-				{
-					program->getUniform("vrv_material.diffuse_tex")->set(Material::Material_Diffuse);
-				}
-				if (program->getUniform("vrv_material.specular_tex"))
-				{
-					program->getUniform("vrv_material.specular_tex")->set(Material::Material_Specular);
-				}
-				if (program->getUniform("vrv_material.ambient"))
-				{
-					program->getUniform("vrv_material.ambient")->set(material->ambient());
-				}
-				if (program->getUniform("vrv_material.diffuse"))
-				{
-					program->getUniform("vrv_material.diffuse")->set(material->diffuse());
-				}
-
-				if (program->getUniform("vrv_material.specular"))
-				{
-					program->getUniform("vrv_material.specular")->set(material->specular());
-				}
-				if (program->getUniform("vrv_material.shininess"))
-				{
-					program->getUniform("vrv_material.shininess")->set(material->shininess());
-				}
-			}
-		}
-	}
-
-	bool RenderInfo::SortDrawable::operator()(const RenderInfo& left, const RenderInfo& right)
-	{
-		if (left.drawable->drawState() && right.drawable->drawState())
-		{
-			return *(left.drawable->drawState()) < *(right.drawable->drawState());
-		}
-		return true;
-	}
-
 	Scene::Scene(MainWindow* window, Context* context)
 		: myContext(context)
 		, myRoot(0)
@@ -205,8 +115,6 @@ namespace vrv
 		, myOptimizeVisualizeDepthBuffer(true)
 		, myOutlineObjects(false)
 		, myOutlineWidth(1.2)
-		, myOutlineRenderState(0)
-		, myPhoneLightingRenderState(0)
 		, myEnableDepthTest(true)
 		, myMainWindow(window)
 		, myPostEffectType(0)
@@ -216,12 +124,7 @@ namespace vrv
 		myContext->setScene(this);
 		myClearState = new ClearState();
 		myMasterCamera = new Camera();
-		myOutlineRenderState = new RenderState();
-		myOutlineRenderState->stencilTest().setStencilRef(1);
-		myOutlineRenderState->stencilTest().setStencilFucntion(StencilTest::STENCIL_FUNC_LEQUAL);
-		myOutlineRenderState->stencilTest().setStencilWriteMask(0x00);
-		myOutlineRenderState->depthTest().setEnabled(false);
-		myPhoneLightingRenderState = new RenderState();
+		initializeDrawState();
 		myPostProcessorManager = new PostProcessorManager(myMainWindow->width(),myMainWindow->height());
 	}
 
@@ -254,8 +157,7 @@ namespace vrv
 	{
 		myContext->clear(myClearState);
 		if (myRoot)
-		{
-			updateLights();
+		{	
 			cullTraverse();
 
 			//myPostProcessorManager->bind();
@@ -263,8 +165,9 @@ namespace vrv
 			QtContext::instance().glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			QtContext::instance().glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			myRenderQueue.draw(myContext, myMasterCamera);
+			myRenderQueue.draw(this, myPhoneLightingDrawState, myMasterCamera);
 
+			//unbind the sky box cube map
 			QtContext::instance().glActiveTexture(GL_TEXTURE2);
 			QtContext::instance().glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
@@ -288,26 +191,44 @@ namespace vrv
 		unsigned int numOfDrawables = node->numberOfDrawable();
 		for (unsigned int i = 0; i < numOfDrawables; ++i)
 		{
-			Mesh* mesh = dynamic_cast<Mesh*>(node->getDrawable(i));
-			Material* material = 0;
-			if (mesh)
+			Drawable* drawable = node->getDrawable(i);
+			Material* material = drawable->material();
+			Model* model = dynamic_cast<Model*>(drawable);
+			bool isTransParent = material && material->isTransParent();
+
+			if (model)
 			{
-				material = mesh->material();
-			}
-			node->getDrawable(i)->buildGeometryIfNeeded();
-			if (material && material->isTransParent())
-			{
-				myRenderQueue.addToTransparentList(RenderInfo(node->getDrawable(i), node->getModelMatrix(), material));
+				for (int i = 0; i < model->numberOfMeshes(); ++ i)
+				{
+					Geometry* mesh = model->getMesh(i);
+					mesh->buildGeometryIfNeeded();
+					if (isTransParent)
+					{
+						myRenderQueue.addToTransparentList(RenderInfo(mesh, node->getModelMatrix()));
+					}
+					else
+					{
+						myRenderQueue.addToOpaqueList(RenderInfo(mesh, node->getModelMatrix()));
+					}
+				}
 			}
 			else
 			{
-				myRenderQueue.addToOpaqueList(RenderInfo(node->getDrawable(i), node->getModelMatrix(), material));
+				drawable->buildGeometryIfNeeded();
+				if (isTransParent)
+				{
+					myRenderQueue.addToTransparentList(RenderInfo(drawable, node->getModelMatrix()));
+				}
+				else
+				{
+					myRenderQueue.addToOpaqueList(RenderInfo(node->getDrawable(i), node->getModelMatrix()));
+				}
 			}
-
+		
 		}
 	}
 
-	void Scene::updateLights()
+	void Scene::updateLights(Program* program)
 	{
 		if (myLights.size() > 0)
 		{
@@ -318,29 +239,77 @@ namespace vrv
 				ss << "vrv_lights[" << i << "].";
 				std::string lightName = ss.str();
 				Light* light = myLights[i];
-				Program* phoneLighting = ShaderManager::instance().getProgram(ShaderManager::PhoneLighting);
-				phoneLighting->getUniform(lightName + "used")->set(true);
-				phoneLighting->getUniform(lightName + "type")->set(light->type());
-				phoneLighting->getUniform(lightName + "ambient")->set(light->ambient());
-				phoneLighting->getUniform(lightName + "diffuse")->set(light->diffuse());
-				phoneLighting->getUniform(lightName + "specular")->set(light->specular());
+				if (program->getUniform(lightName + "used"))
+				{
+					program->getUniform(lightName + "used")->set(true);
+				}
+				if (program->getUniform(lightName + "type"))
+				{
+					program->getUniform(lightName + "type")->set(light->type());
+				}
+				if (program->getUniform(lightName + "ambient"))
+				{
+					program->getUniform(lightName + "ambient")->set(light->ambient());
+				}
+				if (program->getUniform(lightName + "diffuse"))
+				{
+					program->getUniform(lightName + "diffuse")->set(light->diffuse());
+				}
+				if (program->getUniform(lightName + "specular"))
+				{
+					program->getUniform(lightName + "specular")->set(light->specular());
+				}
+				
 				switch (light->type())
 				{
 				case Light::DirectionalLight:
-					phoneLighting->getUniform(lightName + "direction")->set(light->direction());
+					if (program->getUniform(lightName + "direction"))
+					{
+						program->getUniform(lightName + "direction")->set(light->direction());
+					}				
 					break;
 				case Light::PointLight:
-					phoneLighting->getUniform(lightName + "position")->set(light->position());
-					phoneLighting->getUniform(lightName + "constant")->set(light->constantTerm());
-					phoneLighting->getUniform(lightName + "linear")->set(light->linearTerm());
-					phoneLighting->getUniform(lightName + "quadratic")->set(light->quadraticTerm());
+					if (program->getUniform(lightName + "position"))
+					{
+						program->getUniform(lightName + "position")->set(light->position());
+					}
+					if (program->getUniform(lightName + "constant"))
+					{
+						program->getUniform(lightName + "constant")->set(light->constantTerm());
+					}
+					if (program->getUniform(lightName + "linear"))
+					{
+						program->getUniform(lightName + "linear")->set(light->linearTerm());
+					}
+					
+					if (program->getUniform(lightName + "quadratic"))
+					{
+						program->getUniform(lightName + "quadratic")->set(light->quadraticTerm());
+					}
+				
 					break;
 				case Light::SpotLight:
-					phoneLighting->getUniform(lightName + "position")->set(light->position());
-					phoneLighting->getUniform(lightName + "constant")->set(light->constantTerm());
-					phoneLighting->getUniform(lightName + "linear")->set(light->linearTerm());
-					phoneLighting->getUniform(lightName + "fade")->set(Utility::cos(light->fadeAngle()));
-					phoneLighting->getUniform(lightName + "cutoff")->set(Utility::cos(light->cutoffAngle()));
+					if (program->getUniform(lightName + "position"))
+					{
+						program->getUniform(lightName + "position")->set(light->position());
+					}
+					if (program->getUniform(lightName + "constant"))
+					{
+						program->getUniform(lightName + "constant")->set(light->constantTerm());
+					}
+					if (program->getUniform(lightName + "linear"))
+					{
+						program->getUniform(lightName + "linear")->set(light->linearTerm());
+					}
+					if (program->getUniform(lightName + "fade"))
+					{
+						program->getUniform(lightName + "fade")->set(Utility::cos(light->fadeAngle()));
+					}
+					if (program->getUniform(lightName + "cutoff"))
+					{
+						program->getUniform(lightName + "cutoff")->set(Utility::cos(light->cutoffAngle()));
+					}
+					
 					break;
 				default:
 					break;
@@ -349,6 +318,12 @@ namespace vrv
 			}
 		}
 
+	}
+
+	void Scene::initializeDrawState()
+	{
+		myPhoneLightingDrawState = new DrawState(new RenderState(), ShaderManager::instance().
+			getProgram(ShaderManager::PhoneLighting));
 	}
 
 	void Scene::addLight(Light* light)
@@ -398,7 +373,6 @@ namespace vrv
 		if (myEnableDepthTest != value)
 		{
 			myEnableDepthTest = value;
-			myPhoneLightingRenderState->depthTest().setEnabled(myEnableDepthTest);
 		}
 	}
 
@@ -420,5 +394,23 @@ namespace vrv
 	Skybox* Scene::skybox()
 	{
 		return mySkybox;
+	}
+
+	void Scene::visualizeNormal(bool b)
+	{
+		myVisualizeNormal = b;
+	}
+
+	void Scene::updateProgram(Program* program)
+	{
+		if (mySkybox)
+		{
+			mySkybox->cubeMap()->bindToPoint(2);
+			if (program->getUniform("skybox"))
+			{
+				program->getUniform("skybox")->set(2);
+			}
+		}
+		updateLights(program);
 	}
 }

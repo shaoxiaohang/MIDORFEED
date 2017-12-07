@@ -87,13 +87,13 @@ namespace vrv
 		{
 		case FIC_RGB:
 			myInternalFormat = IF_RGB;
-			myInternalFormatGL = GL_RGB;
+			myInternalFormatGL = GL_SRGB;
 			myPixelFormat = PF_RGB;
 			myPixelFormatGL = GL_BGR;
 			break;
 		case FIC_RGBALPHA:
 			myInternalFormat = IF_RGBA;
-			myInternalFormatGL = GL_RGBA;
+			myInternalFormatGL = GL_SRGB_ALPHA;
 			myPixelFormat = PF_RGBA;
 			myPixelFormatGL = GL_BGRA;
 		default:

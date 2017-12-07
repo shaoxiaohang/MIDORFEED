@@ -4,7 +4,8 @@
 4: skybox used in two different draw pass, two shader, binding point has to be the same, need to fix it.
 5: Need a better framework for the program and shader, when you add geometry shader, put too much hack in it.
 6: Need a better way to make the depth visualization and sentencil buffer working. The modified render state and program is bull shit.
-
+7:Cull face is not working correctly , need figure out why.
+8: MSAA need get it working for offline rendering.
 Post Effect Notes:
 The last post effect processor should write to the main frame buffer(unbind)
 

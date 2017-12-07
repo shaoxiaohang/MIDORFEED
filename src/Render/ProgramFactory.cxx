@@ -94,4 +94,18 @@ namespace vrv
 		program->link();
 		return program;
 	}
+
+	VisualizeNormalProgramFactory::VisualizeNormalProgramFactory()
+		:ProgramFactory(ShaderManager::VisualizeNormal)
+	{
+
+	}
+
+	Program* VisualizeNormalProgramFactory::createProgram()
+	{
+		Program* program = new Program("../data/shader/pos.vert",
+			"../data/shader/visualizeNormal.frag", "../data/shader/visualizeNormal.geom");
+		program->link();
+		return program;
+	}
 }

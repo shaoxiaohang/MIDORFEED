@@ -9,6 +9,7 @@ namespace vrv
 	class Camera;
 	class Node;
 	class Drawable;
+	class DrawState;
 	class Context;
 	class ClearState;
 	class Light;
@@ -19,19 +20,13 @@ namespace vrv
 	class PostProcessorManager;
 	class ShaderManager;
 	class Skybox;
+	class Scene;
 
 	struct RenderInfo
 	{
-		RenderInfo(Drawable* drawable, Matrix4f pos, Material* material);
-		void update(Program* program);
-		Drawable* drawable;
-		Matrix4f modelMatrix;
-		Material* material;
-
-		struct SortDrawable
-		{
-			bool operator()(const RenderInfo& left, const RenderInfo& right);
-		};
+		RenderInfo(Drawable* drawable, Matrix4f modelMatrix);
+		Drawable* myDrawable;
+		Matrix4f myModelMatrix;
 	};
 
 
@@ -45,13 +40,11 @@ namespace vrv
 		RenderList myOpaqueList;
 		RenderList myTransparentList;
 
-		void draw(Context* context, Camera* camera);
+		void draw(Scene* scene,DrawState* drawState, Camera* camera);
 		void addToOpaqueList(const RenderInfo&);
 		void addToTransparentList(const RenderInfo&);
 		void clear();
-
 	};
-
 
 
 	class Scene : public Singleton<Scene>
@@ -68,6 +61,7 @@ namespace vrv
 		};
 
 		typedef std::vector<Light*> LightList;
+
 	public:
 		Scene(MainWindow* window,Context* context);
 		void setSceneData(Node* root);
@@ -84,18 +78,19 @@ namespace vrv
 		int postEffectType();
 		void setSkybox(Skybox*);
 		Skybox* skybox();
+		void visualizeNormal(bool);
+		void updateProgram(Program* program);
 	protected:
-		virtual void cullTraverse();
-		virtual void DFS(std::stack<Node*>& stack, Node* node);	
-		virtual void addDrawableToRender(Node* node);
-		virtual void updateLights();
+		void cullTraverse();
+		void DFS(std::stack<Node*>& stack, Node* node);	
+		void addDrawableToRender(Node* node);
+		void updateLights(Program* program);
+		void initializeDrawState();
 	protected:
 		Camera* myMasterCamera;
 		Node* myRoot;
 		Context* myContext;
 		MainWindow* myMainWindow;
-		RenderState* myPhoneLightingRenderState;
-		RenderState* myOutlineRenderState;
 		ClearState* myClearState;
 		PostProcessorManager* myPostProcessorManager;
 		RenderQueue myRenderQueue;
@@ -108,5 +103,7 @@ namespace vrv
 		double myOutlineWidth;
 		int myPostEffectType;
 		Skybox* mySkybox;
+		bool myVisualizeNormal;
+		DrawState* myPhoneLightingDrawState;
 	};
 }

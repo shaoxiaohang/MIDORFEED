@@ -34,6 +34,7 @@ namespace vrv
 		format.setBlueBufferSize(configuration.blueBufferSize);
 		format.setAlphaBufferSize(configuration.alphaBufferSize);
 		format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+		format.setSamples(1);
 		setFormat(format);
 
 		QOpenGLWindow::show();

@@ -23,7 +23,6 @@ namespace vrv
 		void compile();
 		virtual void addVertexAttribute(VertexAttribute* attribute);
 		static bool checkCompileStatus(unsigned int id,std::string& error);
-		static void addUniformConstant(const std::string& name, float value);
 		const std::string name();
 		unsigned int ID();
 
@@ -34,13 +33,10 @@ namespace vrv
 		ShaderType myType;
 		unsigned int myID;
 		std::string mySource;
-		const std::string& myFileName;
+		std::string myFileName;
 		bool myIsCompiled;
 		bool myInitialized;
 
 		VertexAttributesMap myVertexAttributesMap;
-
-		static bool myConstantsMapInitialized;
-		static ConstantsMap myConstansMap;
 	};
 }

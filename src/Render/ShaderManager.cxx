@@ -13,6 +13,7 @@ namespace vrv
 		ConfigurablePostEffectProgramFactory* configurablePostEffect = new ConfigurablePostEffectProgramFactory();
 		SkyBoxProgramFactory* skyBox = new SkyBoxProgramFactory();
 		GeometryTestProgramFactory* geometryShader = new GeometryTestProgramFactory();
+		VisualizeNormalProgramFactory* visualizeNormal = new VisualizeNormalProgramFactory();
 		myProgramFactories.push_back(phoneLighting);
 		myProgramFactories.push_back(visualDepth);
 		myProgramFactories.push_back(outlineObjects);
@@ -20,6 +21,7 @@ namespace vrv
 		myProgramFactories.push_back(configurablePostEffect);
 		myProgramFactories.push_back(skyBox);
 		myProgramFactories.push_back(geometryShader);
+		myProgramFactories.push_back(visualizeNormal);
 		createShaders();
 	}
 

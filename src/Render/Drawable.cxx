@@ -3,6 +3,7 @@
 #include <Render/Program.h>
 #include <Render/VertexArrayObject.h>
 #include <Render/QtContext.h>
+#include <Render/Material.h>
 #ifdef DrawState
 #undef DrawState
 #endif
@@ -69,55 +70,54 @@ namespace vrv
 
 	Drawable::Drawable()
 		: myBuildGeometry(false)
-		, myDrawState(0)
+		, myMaterial(0)
+		, myIsInstanced(false)
+		, myInstancedCount(0)
+		, myVertexArrayObject(0)
 	{}
 
-	DrawState* Drawable::drawState()
+	void Drawable::drawImplementation(DrawState* drawState)
 	{
-		return myDrawState;
-	}
-
-	const DrawState* Drawable::drawState() const
-	{
-		return myDrawState;
-	}
-
-	void Drawable::setProgram(Program* program)
-	{
-		if (myDrawState)
-		{
-			myDrawState->setProgram(program);
-		}
-	}
-	
-	void Drawable::setRenderState(RenderState* renderState)
-	{
-		if (myDrawState)
-		{
-			myDrawState->setRenderState(renderState);
-		}
-	}
-
-	void Drawable::drawImplementation()
-	{
-		myDrawState->bind();
+		drawState->bind();
+		drawState->program()->updateUniforms();
+		myVertexArrayObject->bind();
 		for (unsigned int i = 0; i < myPrimitiveSets.size();++i)
 		{
 			const PrimitiveSet& set = myPrimitiveSets[i];
 			switch (set.myRenderApproach)
 			{
 			case PrimitiveSet::DRAW_ARRAYS:
-				QtContext::instance().glDrawArrays(myPrimitiveSets[i].myGLPrimitiveType, myPrimitiveSets[i].myStart, myPrimitiveSets[i].myCount);
+				if (myIsInstanced)
+				{
+					QtContext::instance().glDrawArraysInstanced(myPrimitiveSets[i].myGLPrimitiveType,
+						myPrimitiveSets[i].myStart, myPrimitiveSets[i].myCount,myInstancedCount);
+				}
+				else
+				{
+					QtContext::instance().glDrawArrays(myPrimitiveSets[i].myGLPrimitiveType, 
+						myPrimitiveSets[i].myStart, myPrimitiveSets[i].myCount);
+				}		
 				break;
 			case PrimitiveSet::DRAW_ELEMENTS:
-				QtContext::instance().glDrawElements(myPrimitiveSets[i].myGLPrimitiveType, myPrimitiveSets[i].myCount, myPrimitiveSets[i].myGLIndexType, 0);
+				if (myIsInstanced)
+				{
+					QtContext::instance().glDrawElementsInstanced(myPrimitiveSets[i].myGLPrimitiveType,
+						myPrimitiveSets[i].myCount, myPrimitiveSets[i].myGLIndexType, 0,myInstancedCount);
+				}
+				else
+				{
+					QtContext::instance().glDrawElements(myPrimitiveSets[i].myGLPrimitiveType,
+						myPrimitiveSets[i].myCount, myPrimitiveSets[i].myGLIndexType, 0);
+				}
 				break;
 			default:
 				break;
 			}
 		
 		}
-		myDrawState->unbind();
+
+		drawState->unbind();
+		myVertexArrayObject->unbind();
 	}
 	
 	void Drawable::addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout)
@@ -160,9 +160,38 @@ namespace vrv
 		}
 	}
 
-	void Drawable::createDrawState(VertexArrayObject* vao, Program* shader)
+	void Drawable::setVertexArrayObject(VertexArrayObject* vao)
 	{
-		myDrawState = new DrawState(vao, shader);
+		myVertexArrayObject = vao;
+	}
+
+	void Drawable::setMaterial(Material* material)
+	{
+		myMaterial = material;
+	}
+
+	Material* Drawable::material()
+	{
+		return myMaterial;
 	}
 	
+	void Drawable::setInstancedCount(int count)
+	{
+		myInstancedCount = count;
+		myIsInstanced = true;
+	}
+
+	bool Drawable::instanced()
+	{
+		return myIsInstanced;
+	}
+
+	void Drawable::updateProgram(Program* program)
+	{
+		program->set("vrv_instanced", myIsInstanced);
+		if (myMaterial)
+		{
+			myMaterial->updateProgram(program);
+		}
+	}
 }

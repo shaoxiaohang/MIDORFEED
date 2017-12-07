@@ -45,7 +45,6 @@ namespace vrv
 
 	void BufferObject::copyFromSystemMemory(Array* array)
 	{
-		//TODO cache the current bind target id in context
 		bind();
 		QtContext::instance().glBufferData(myGLType, array->sizeInBytes(), array->dataPointer(), myGLUsage);
 	}

@@ -1,47 +1,43 @@
 #include <Render/DrawState.h>
 #include <Render/RenderState.h>
+#include <Render/ShaderManager.h>
 #include <Render/Program.h>
 #include <Render/VertexArrayObject.h>
 #include <Render/Scene.h>
 namespace vrv
 {
-	DrawState::DrawState(RenderState* state, VertexArrayObject* vao, Program* shader)
+	DrawState::DrawState()
+		: myRenderState(0)
+		, myProgram(0)
+	{
+	}
+
+	DrawState::DrawState(Program* shader)
+	{
+		myRenderState = new RenderState();
+		myProgram = shader;
+	}
+
+
+	DrawState::DrawState(RenderState* state, Program* shader)
 		: myRenderState(state)
-		, myVertexArrayObject(vao)
 		, myProgram(shader)
 	{}
 
-	DrawState::DrawState(VertexArrayObject* vao, Program* shader)
-		: myVertexArrayObject(vao)
-		, myProgram(shader)
-	{
-		myRenderState = new RenderState();
-	}
 
 	void DrawState::setRenderState(RenderState* state)
 	{
 		myRenderState = state;
 	}
+
 	RenderState* DrawState::renderState()
 	{
 		return myRenderState;
 	}
+
 	RenderState* DrawState::renderState() const
 	{
 		return myRenderState;
-	}
-
-	void DrawState::setVertexArrayObject(VertexArrayObject* vao)
-	{
-		myVertexArrayObject = vao;
-	}
-	VertexArrayObject* DrawState::vertexArrayObject()
-	{
-		return myVertexArrayObject;
-	}
-	VertexArrayObject* DrawState::vertexArrayObject() const
-	{
-		return myVertexArrayObject;
 	}
 
 	void DrawState::setProgram(Program* shader)
@@ -57,24 +53,21 @@ namespace vrv
 		return myProgram;
 	}
 
-	void DrawState::update(Scene* scene, RenderInfo& info)
+	void DrawState::insertShader(Shader* shader)
 	{
-		if (myProgram)
-		{
-			info.update(myProgram);
-			myProgram->updateUniforms();
-		}
+		Shader* vert = program()->vertexShader();
+		Shader* frag = program()->fragmentShader();
+		myProgram = new Program(vert, frag, shader);
+		myProgram->link();
 	}
 
 	void DrawState::bind()
 	{
-		myVertexArrayObject->bind();
 		myProgram->use();
 	}
 
 	void DrawState::unbind()
 	{
-		myVertexArrayObject->unbind();
 		myProgram->unuse();
 	}
 

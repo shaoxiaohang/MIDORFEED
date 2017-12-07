@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Node.h>
+#include <Render/Geometry.h>
 #include <string>
 #include <vector>
 
@@ -11,10 +11,17 @@ class aiMesh;
 namespace vrv
 {
 	class Mesh;
-	class Model : public Node
+	class Shader;
+	class Model : public Geometry
 	{
 	public:
 		Model(const std::string& name,const std::string& fileName);
+
+		void setPostProcessorShader(Shader*);
+
+		int numberOfMeshes();
+
+		Geometry* getMesh(int i);
 
 	protected:
 		void initialize();
@@ -23,8 +30,11 @@ namespace vrv
 		
 		void processMesh(aiMesh* mesh, const aiScene* scene);
 
+
+
 	protected:
 		std::string myFileName;
 		std::string myBaseDirectory;
+		std::vector<Geometry*> myMeshes;
 	};
 }

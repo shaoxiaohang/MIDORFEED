@@ -18,7 +18,8 @@ namespace vrv
 			DefaultQuadShader,
 			ConfigurablePostEffectShader,
 			SkyBoxShader,
-			GeometryTestShader
+			GeometryTestShader,
+			VisualizeNormal
 		};
 		typedef std::vector<ProgramFactory*> ProgramFactoryList;
 		typedef std::map<int, Program*> ProgramMap;

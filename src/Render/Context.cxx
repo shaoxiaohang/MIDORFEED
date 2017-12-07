@@ -4,6 +4,7 @@
 #include <Render/DrawState.h>
 #include <Render/ClearState.h>
 #include <Render/Scene.h>
+#include <Render/Program.h>
 namespace vrv
 {
 	Context::Context()
@@ -14,11 +15,13 @@ namespace vrv
 		//nop
 	}
 
-	void Context::draw(RenderInfo& renderInfo)
+	void Context::draw(RenderInfo& renderInfo, DrawState* drawState)
 	{
-		myCachedRenderState->applyIfChanged(renderInfo.drawable->drawState()->renderState());
-		renderInfo.drawable->drawState()->update(myScene, renderInfo);
-		renderInfo.drawable->drawImplementation();
+		Program* program = drawState->program();
+		myCachedRenderState->applyIfChanged(drawState->renderState());
+		program->set("vrv_model_matrix", renderInfo.myModelMatrix);
+		renderInfo.myDrawable->updateProgram(program);
+		renderInfo.myDrawable->drawImplementation(drawState);
 	}
 
 	void Context::forceSynGL()
