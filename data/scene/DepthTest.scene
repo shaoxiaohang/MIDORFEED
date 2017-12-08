@@ -20,7 +20,7 @@
 			<position x="0" y="0" z="0"/>
 			<material>
 				<texture2D>
-					<filename>metal.png</filename>
+					<filename>wood.png</filename>
 					<wrapmode>clamp_to_edge</wrapmode>
 					<filtermode>linear</filtermode>
 				</texture2D>
@@ -78,11 +78,12 @@
 	</objects>
 	<lights>
 		<light1>
-			<type>direction</type>
-			<direction x="0" y="-1" z= "-1"/>
+			<type>point</type>
+			<position x="0" y="5" z= "0"/>
 			<ambient r="0.2" g="0.2" b="0.2"/>
-			<diffuse r="0.8" g="0.8" b="0.8"/>
+			<diffuse r="0.8" g="0.8" b="0.8"/>s
 			<specular r="0.3" g="0.3" b="0.3"/>
+			<cast_shadow>true</cast_shadow>
 		</light1>
 	</lights>
 </scene>

@@ -19,6 +19,7 @@ namespace vrv
 	class ShaderManager;
 	class Skybox;
 	class Scene;
+	class ShadowSystem;
 
 	struct RenderInfo
 	{
@@ -39,10 +40,13 @@ namespace vrv
 		RenderList myTransparentList;
 
 		void draw(Scene* scene,DrawState* drawState, Camera* camera);
+		void shadowPass(DrawState* drawState, Matrix4f view, Matrix4f proj);
+
 		void addToOpaqueList(const RenderInfo&);
 		void addToTransparentList(const RenderInfo&);
 		void clear();
 		void draw(RenderInfo& renderInfo, DrawState* drawState);
+		void updateProgram(RenderInfo& renderInfo, Program*);
 	};
 
 
@@ -102,5 +106,6 @@ namespace vrv
 		Skybox* mySkybox;
 		bool myVisualizeNormal;
 		DrawState* myPhoneLightingDrawState;
+		ShadowSystem* myShadowSystem;
 	};
 }

@@ -19,6 +19,7 @@
 #include <Core/Utility.h>
 #include <Core/NodeVisitor.h>
 #include <Render/MainWindow.h>
+#include <Render/ShadowSystem.h>
 #include <algorithm>
 #include <sstream>
 
@@ -68,6 +69,7 @@ namespace vrv
 		RenderList::iterator end = myOpaqueList.end();
 		for (; itor != end; ++itor)
 		{
+			updateProgram(*itor, program);
 			draw(*itor, drawState);
 		}
 
@@ -77,8 +79,14 @@ namespace vrv
 		end = myTransparentList.end();
 		for (; itor != end; ++itor)
 		{
+			updateProgram(*itor, program);
 			draw(*itor, drawState);
 		}
+	}
+
+	void RenderQueue::shadowPass(DrawState* drawState, Matrix4f view, Matrix4f proj)
+	{
+
 	}
 
 	void RenderQueue::sortTransparentList(Camera* camera)
@@ -106,10 +114,13 @@ namespace vrv
 
 	void RenderQueue::draw(RenderInfo& renderInfo, DrawState* drawState)
 	{
-		Program* program = drawState->program();
+		renderInfo.myDrawable->drawImplementation(drawState);
+	}
+
+	void RenderQueue::updateProgram(RenderInfo& renderInfo, Program* program)
+	{
 		program->set("vrv_model_matrix", renderInfo.myModelMatrix);
 		renderInfo.myDrawable->updateProgram(program);
-		renderInfo.myDrawable->drawImplementation(drawState);
 	}
 
 	Scene::Scene(MainWindow* window)
@@ -127,6 +138,7 @@ namespace vrv
 		myMasterCamera = new Camera();
 		initializeDrawState();
 		myPostProcessorManager = new PostProcessorManager(myMainWindow->width(),myMainWindow->height());
+		myShadowSystem = new ShadowSystem();
 	}
 
 	void Scene::setSceneData(Node* root)
@@ -161,6 +173,9 @@ namespace vrv
 			cullTraverse();
 
 			//myPostProcessorManager->bind();
+
+
+			myShadowSystem->run(&myRenderQueue);
 
 			QtContext::instance().glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			QtContext::instance().glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -331,6 +346,10 @@ namespace vrv
 		if (light != NULL)
 		{
 			myLights.push_back(light);
+			if (light->castShadow())
+			{
+				myShadowSystem->setShadowCaster(light);
+			}
 		}
 	}
 
@@ -413,4 +432,5 @@ namespace vrv
 		}
 		updateLights(program);
 	}
+
 }

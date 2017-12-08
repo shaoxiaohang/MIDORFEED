@@ -4,9 +4,10 @@ namespace vrv
 {
 	Light::Light(const std::string& name)
 		: myConstantTerm(1.0)
-		, myLinearTerm(0.045)
-		, myQuadraticTerm(0.0075)
+		, myLinearTerm(0.09)
+		, myQuadraticTerm(0.032)
 		, myName(name)
+		, myCastShadow(false)
 	{
 
 	}
@@ -33,6 +34,7 @@ namespace vrv
 	{
 		myDirection = direction;
 	}
+
 	Vector3f Light::direction()
 	{
 		return myDirection;
@@ -42,6 +44,7 @@ namespace vrv
 	{
 		myAmbient = ambient;
 	}
+
 	Vector3f Light::ambient()
 	{
 		return myAmbient;
@@ -51,6 +54,7 @@ namespace vrv
 	{
 		myDiffuse = diffuse;
 	}
+
 	Vector3f Light::diffuse()
 	{
 		return myDiffuse;
@@ -60,6 +64,7 @@ namespace vrv
 	{
 		mySpecular = specular;
 	}
+
 	Vector3f Light::specular()
 	{
 		return mySpecular;
@@ -69,6 +74,7 @@ namespace vrv
 	{
 		myConstantTerm = constant;
 	}
+
 	float Light::constantTerm()
 	{
 		return myConstantTerm;
@@ -78,6 +84,7 @@ namespace vrv
 	{
 		myLinearTerm = linear;
 	}
+
 	float Light::linearTerm()
 	{
 		return myLinearTerm;
@@ -87,6 +94,7 @@ namespace vrv
 	{
 		myQuadraticTerm = quadratic;
 	}
+
 	float Light::quadraticTerm()
 	{
 		return myQuadraticTerm;
@@ -96,6 +104,7 @@ namespace vrv
 	{
 		myCutoffAngle = cutoff;
 	}
+
 	float Light::cutoffAngle()
 	{
 		return myCutoffAngle;
@@ -105,8 +114,19 @@ namespace vrv
 	{
 		myFadeAngle = fade;
 	}
+
 	float Light::fadeAngle()
 	{
 		return myFadeAngle;
+	}
+
+	void Light::setCastShadow(bool cast)
+	{
+		myCastShadow = cast;
+	}
+
+	bool Light::castShadow()
+	{
+		return myCastShadow;
 	}
 }

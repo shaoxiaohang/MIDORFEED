@@ -137,7 +137,11 @@ namespace vrv
 			lights->FirstChildElement("specular")->QueryFloatAttribute("g", &specular.y);
 			lights->FirstChildElement("specular")->QueryFloatAttribute("b", &specular.z);
 
-			createLight(type, name, position, direction, ambient, diffuse, specular);
+			std::string castShadow = lights->FirstChildElement("cast_shadow")->GetText();
+
+			bool cast = castShadow == "true";
+
+			createLight(type, name, position, direction, ambient, diffuse, specular, cast);
 		}
 	}
 
@@ -337,7 +341,7 @@ namespace vrv
 	}
 
 	void Scenario::createLight(const std::string& type, const std::string& name, Vector3f pos, Vector3f direction,
-		Vector3f ambient, Vector3f diffuse, Vector3f specular)
+		Vector3f ambient, Vector3f diffuse, Vector3f specular , bool castShadow)
 	{
 		Scene* scene = Scene::instancePtr();
 		Light* light = 0;
@@ -349,6 +353,7 @@ namespace vrv
 			light->setAmbient(ambient);
 			light->setDiffuse(diffuse);
 			light->setSpecular(specular);
+			light->setCastShadow(castShadow);
 		}
 		else if (type == "point")
 		{
@@ -358,6 +363,7 @@ namespace vrv
 			light->setAmbient(ambient);
 			light->setDiffuse(diffuse);
 			light->setSpecular(specular);
+			light->setCastShadow(castShadow);
 		}
 		else if (type == "spot")
 		{
@@ -367,6 +373,7 @@ namespace vrv
 			light->setAmbient(ambient);
 			light->setDiffuse(diffuse);
 			light->setSpecular(specular);
+			light->setCastShadow(castShadow);
 		}
 
 		if (light)

@@ -48,6 +48,9 @@ namespace vrv
 		void setFadeAngle(float fade);
 		float fadeAngle();
 
+		void setCastShadow(bool);
+		bool castShadow();
+
 	protected:
 		LightType myType;
 		Vector3f myPosition;
@@ -61,5 +64,6 @@ namespace vrv
 		float myCutoffAngle;
 		float myFadeAngle;
 		std::string myName;
+		bool myCastShadow;
 	};
 }

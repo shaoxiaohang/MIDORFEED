@@ -26,7 +26,7 @@ namespace vrv
 		void createInstancedObjects(const std::string& type, const std::string& name, const std::string& fileName,
 			Material* material, int count, std::vector<Vector3f>& offsets, std::vector<float>& scales);
 		void createLight(const std::string& type, const std::string& name, Vector3f pos, Vector3f direction,
-			Vector3f ambient, Vector3f diffuse, Vector3f specular);
+			Vector3f ambient, Vector3f diffuse, Vector3f specular, bool castShadow);
 		void createSkybox(tinyxml2::XMLElement*);
 	protected:
 		std::string myFileName;
