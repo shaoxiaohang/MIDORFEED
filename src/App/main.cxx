@@ -16,7 +16,6 @@
 #include <Render/Geometry.h>
 #include <Render/RenderState.h>
 #include <Render/DrawState.h>
-#include <Render/ShaderManager.h>
 using namespace vrv;
 int main(int argc, char** argv)
 {

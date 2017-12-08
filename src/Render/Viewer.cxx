@@ -3,7 +3,6 @@
 #include <Render/Scene.h>
 #include <Render/Camera.h>
 #include <Render/QtContext.h>
-#include <Render/ShaderManager.h>
 #include <QApplication>
 namespace vrv
 {

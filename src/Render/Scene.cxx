@@ -9,7 +9,6 @@
 #include <Render/Texture2D.h>
 #include <Render/Texture3D.h>
 #include <Render/QtContext.h>
-#include <Render/ShaderManager.h>
 #include <Render/RenderState.h>
 #include <Render/FrameBuffer.h>
 #include <Render/PostProcessorManager.h>
@@ -84,11 +83,6 @@ namespace vrv
 		}
 	}
 
-	void RenderQueue::shadowPass(DrawState* drawState, Matrix4f view, Matrix4f proj)
-	{
-
-	}
-
 	void RenderQueue::sortTransparentList(Camera* camera)
 	{
 		Vector3f cameraPosition = camera->position();
@@ -134,7 +128,6 @@ namespace vrv
 		, myPostEffectType(0)
 		, mySkybox(0)
 	{
-		myShaderManager = new ShaderManager();
 		myMasterCamera = new Camera();
 		initializeDrawState();
 		myPostProcessorManager = new PostProcessorManager(myMainWindow->width(),myMainWindow->height());
@@ -337,8 +330,8 @@ namespace vrv
 
 	void Scene::initializeDrawState()
 	{
-		myPhoneLightingDrawState = new DrawState(new RenderState(), ShaderManager::instance().
-			getProgram(ShaderManager::PhoneLighting));
+		myPhoneLightingDrawState = new DrawState(new RenderState(), new Program("../data/shader/phoneLighting.vert",
+			"../data/shader/phoneLighting.frag"));
 	}
 
 	void Scene::addLight(Light* light)
@@ -369,12 +362,6 @@ namespace vrv
 
 	void Scene::setOptimizeVisualizeDepthBuffer(bool optimize)
 	{
-		if (ShaderManager::instance().getProgram(ShaderManager::VisualizeDepthBuffer)->
-			getUniform("optimizeVisualizeDepth"))
-		{
-			ShaderManager::instance().getProgram(ShaderManager::VisualizeDepthBuffer)->
-				getUniform("optimizeVisualizeDepth")->set(optimize);
-		}
 	}
 
 	void Scene::setOutlineObjects(bool value)

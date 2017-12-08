@@ -9,7 +9,6 @@
 #include <Render/QtContext.h>
 #include <Render/Texture.h>
 #include <Render/Material.h>
-#include <Render/ShaderManager.h>
 
 namespace vrv
 {

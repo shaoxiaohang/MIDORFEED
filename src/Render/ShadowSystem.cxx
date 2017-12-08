@@ -12,7 +12,12 @@ namespace vrv
 		myCaster = light;
 	}
 
-	void ShadowSystem::run(RenderQueue*)
+	void ShadowSystem::run(RenderQueue* renderQueue)
+	{
+
+	}
+
+	void ShadowSystem::updateProgram()
 	{
 
 	}

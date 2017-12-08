@@ -31,6 +31,7 @@ namespace vrv
 		{
 			myGeometryShader = new Shader(Shader::GeometryShader, geometry);
 		}
+		link();
 	}
 
 	Program::Program(const Shader* vert, const Shader* frag)
@@ -38,6 +39,7 @@ namespace vrv
 	{
 		myVertShader = new Shader(*vert);
 		myFragShader = new Shader(*frag);
+		link();
 	}
 
 	Program::Program(Shader* vert, Shader* frag, Shader* geom)
@@ -45,7 +47,7 @@ namespace vrv
 		, myFragShader(frag)
 		, myGeometryShader(geom)
 	{
-
+		link();
 	}
 
 	Program::~Program()

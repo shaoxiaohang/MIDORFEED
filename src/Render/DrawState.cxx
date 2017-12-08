@@ -1,6 +1,5 @@
 #include <Render/DrawState.h>
 #include <Render/RenderState.h>
-#include <Render/ShaderManager.h>
 #include <Render/Program.h>
 #include <Render/VertexArrayObject.h>
 #include <Render/Scene.h>

@@ -16,7 +16,6 @@ namespace vrv
 	class RenderState;
 	class MainWindow;
 	class PostProcessorManager;
-	class ShaderManager;
 	class Skybox;
 	class Scene;
 	class ShadowSystem;
@@ -40,7 +39,6 @@ namespace vrv
 		RenderList myTransparentList;
 
 		void draw(Scene* scene,DrawState* drawState, Camera* camera);
-		void shadowPass(DrawState* drawState, Matrix4f view, Matrix4f proj);
 
 		void addToOpaqueList(const RenderInfo&);
 		void addToTransparentList(const RenderInfo&);
@@ -96,7 +94,6 @@ namespace vrv
 		PostProcessorManager* myPostProcessorManager;
 		RenderQueue myRenderQueue;
 		LightList myLights;
-		ShaderManager* myShaderManager;
 		bool myEnableDepthTest;
 		bool myVisualizeDepthBuffer;
 		bool myOptimizeVisualizeDepthBuffer;

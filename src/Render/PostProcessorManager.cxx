@@ -5,7 +5,6 @@
 #include <Render/PostProcessor.h>
 #include <Render/QtContext.h>
 #include <Render/RenderState.h>
-#include <Render/ShaderManager.h>
 #include <Render/Program.h>
 namespace vrv
 {

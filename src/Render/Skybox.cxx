@@ -2,7 +2,6 @@
 #include <Render/Geometry.h>
 #include <Render/Texture3D.h>
 #include <Render/RenderState.h>
-#include <Render/ShaderManager.h>
 #include <Render/DrawState.h>
 #include <Render/Program.h>
 #include <Render/QtContext.h>
@@ -26,7 +25,8 @@ namespace vrv
 		renderState->depthTest().setDepthTestFunction(DepthTest::DEPTH_FUNC_LEQUAL);
 		myCube = new Geometry();
 
-		myDrawState = new DrawState(renderState, ShaderManager::instance().getProgram(ShaderManager::SkyBoxShader));
+		myDrawState = new DrawState(renderState, new Program("../data/shader/skybox.vert",
+			"../data/shader/skybox.frag"));
 
 		ArrayVec3* vertex = new ArrayVec3();
 		vertex->add(Vector3f(-1,1,-1));

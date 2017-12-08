@@ -5,6 +5,7 @@ namespace vrv
 	class Light;
 	class Scene;
 	class RenderQueue;
+	class DrawState;
 
 	class ShadowSystem
 	{
@@ -15,7 +16,10 @@ namespace vrv
 
 		void run(RenderQueue*);
 
+		void updateProgram();
+
 	protected:
 		Light * myCaster;
+		DrawState* myDrawState;
 	};
 }

@@ -6,7 +6,6 @@
 #include <Render/DrawState.h>
 #include <Render/Drawable.h>
 #include <Render/Shader.h>
-#include <Render/ShaderManager.h>
 #include <Render/FrameBuffer.h>
 #include <Render/QtContext.h>
 #include <Render/Scene.h>
@@ -35,13 +34,14 @@ namespace vrv
 
 	DefaultPostProcessor::DefaultPostProcessor()
 	{
-		myDrawState = new DrawState(ShaderManager::instance().getProgram(ShaderManager::DefaultQuadShader));
+		myDrawState = new DrawState(new Program("../data/shader/defaultQuad.vert", "../data/shader/defaultQuad.frag"));
 	}
 
 	ConfigurableProcessor::ConfigurableProcessor()
 		: myPostEffectType(0)
 	{
-		myDrawState = new DrawState(ShaderManager::instance().getProgram(ShaderManager::ConfigurablePostEffectShader));
+		myDrawState = new DrawState(new Program("../data/shader/configurablePostEffect.vert",
+			"../data/shader/configurablePostEffect.frag"));
 	}
 
 	void ConfigurableProcessor::run(Drawable* quad, FrameBuffer* frameBuffer)
