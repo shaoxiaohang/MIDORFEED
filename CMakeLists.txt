@@ -1,13 +1,9 @@
 cmake_minimum_required (VERSION 2.6)
 set(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "add a postfix for Debug mode, usually d on windows")
-set(CMAKE_PREFIX_PATH "D:\\Qt5.6.2\\5.6\\msvc2013_64")
 project (DVA)
-file(GLOB CoreSources "include/Core/*.h" "src/Core/*.cxx")
-file(GLOB RenderSources "include/Render/*.h" "src/Render/*.cxx")
-file(GLOB CoreQtSources "include/CoreQt/*.h" "src/CoreQt/*.cxx" "src/CoreQt/*.cpp")
-file(GLOB DVASources "src/App/*.cxx")
-file(GLOB CoreQt_moc_src "include/CoreQt/*.h")
-file(GLOB CoreQt_form_src "src/CoreQt/*.ui")
+file(GLOB CoreSources "include/Core/*.h" "src/Core/*.cpp")
+file(GLOB RenderSources "include/Render/*.h" "src/Render/*.cpp")
+file(GLOB DVASources "src/App/*.cpp")
 
 #find include directory by looking for certain header file
 find_path(TINYXMY_INCLUDE_DIR tinyxml2.h
@@ -66,14 +62,7 @@ link_directories(${FREEIMAGE_LIB_DIR})
 include_directories(${BOOST_INCLUDE_DIR})
 link_directories(${BOOST_LIB_DIR})
 
-find_package(Qt5Widgets)
-find_package(Qt5OpenGL)
-
-set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-QT5_WRAP_CPP(CoreQt_moc ${CoreQt_moc_src})
-QT5_WRAP_UI(CoreQt_form ${CoreQt_form_src})
 
 include_directories(include)
 
@@ -81,23 +70,16 @@ add_executable(DVA ${DVASources})
 
 set_target_properties(DVA PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
 
-add_library(CoreQt STATIC ${CoreQt_moc} ${CoreQt_form} ${CoreQtSources})
 add_library(Core STATIC ${CoreSources})
 add_library(Render STATIC ${RenderSources})
 
-target_link_libraries(CoreQt Render opengl32.lib Qt5::Core Qt5::Widgets Qt5::OpenGL)
-target_link_libraries(DVA Core Render CoreQt )
+target_link_libraries(DVA Core Render)
 target_link_libraries(Render
 Core
 opengl32.lib
-Qt5::OpenGL
 FreeImaged.lib
 boost_signals-vc120-mt-1_63.lib
 assimp-vc120-mt.lib
 tinyxml2d.lib
 )
 
-add_custom_command(TARGET DVA
-                   POST_BUILD
-                   COMMAND xcopy "..\bin64"  "$(ProjectDir)Debug" /y /q
-                   COMMENT "copy dlls")

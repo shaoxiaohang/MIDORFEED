@@ -6,7 +6,6 @@
 6: Need a better way to make the depth visualization and sentencil buffer working. The modified render state and program is bull shit.
 7:Cull face is not working correctly , need figure out why.
 8: MSAA need get it working for offline rendering.
+9: FrameBuffer dont work with NSight.
 Post Effect Notes:
 The last post effect processor should write to the main frame buffer(unbind)
-
-If you want bind the same texture to a different unit, you have to unbind the texture from the old unit first.

@@ -19,12 +19,17 @@ namespace vrv
 	class Skybox;
 	class Scene;
 	class ShadowSystem;
+	class TextureQuadRender;
+	class Map;
+   class NodeVisitor;
 
 	struct RenderInfo
 	{
-		RenderInfo(Drawable* drawable, Matrix4f modelMatrix);
+		RenderInfo(Drawable* drawable, Matrix4f modelMatrix, bool isLightPoint, bool isEllipsoid);
 		Drawable* myDrawable;
 		Matrix4f myModelMatrix;
+		bool myIsLightPoint;
+		bool myIsEllipsoid;
 	};
 
 
@@ -38,13 +43,14 @@ namespace vrv
 		RenderList myOpaqueList;
 		RenderList myTransparentList;
 
-		void draw(Scene* scene,DrawState* drawState, Camera* camera);
+		void draw(Scene* scene, DrawState* drawState, Camera* camera);
 
 		void addToOpaqueList(const RenderInfo&);
 		void addToTransparentList(const RenderInfo&);
 		void clear();
 		void draw(RenderInfo& renderInfo, DrawState* drawState);
-		void updateProgram(RenderInfo& renderInfo, Program*);
+		void updateModelMatrix(RenderInfo& renderInfo, Program*);
+		void updateMaterial(RenderInfo& renderInfo, Program*);
 	};
 
 
@@ -81,15 +87,23 @@ namespace vrv
 		Skybox* skybox();
 		void visualizeNormal(bool);
 		void updateProgram(Program* program);
+		void setMap(Map* map);
+		Map* map();
+      void acceptNodeVisitor(NodeVisitor* v);
 	protected:
 		void cullTraverse();
-		void DFS(std::stack<Node*>& stack, Node* node);	
+		void DFS(std::stack<Node*>& stack, Node* node);
 		void addDrawableToRender(Node* node);
+		void updateSkybox(Program* program);
 		void updateLights(Program* program);
+		void updateShadow(Program* program);
+		void updateGlobe(Program* program);
 		void initializeDrawState();
 	protected:
 		Camera* myMasterCamera;
 		Node* myRoot;
+		Node* myLightNode;
+		Map* myMap;
 		MainWindow* myMainWindow;
 		PostProcessorManager* myPostProcessorManager;
 		RenderQueue myRenderQueue;
@@ -104,5 +118,6 @@ namespace vrv
 		bool myVisualizeNormal;
 		DrawState* myPhoneLightingDrawState;
 		ShadowSystem* myShadowSystem;
+		TextureQuadRender* myTextureQuadRender;
 	};
 }

@@ -15,7 +15,7 @@ namespace vrv
 		Node();
 
 		Node(const std::string& name);
-	
+
 		void addChild(Node* child);
 
 		void removeChild(Node* child);
@@ -38,11 +38,21 @@ namespace vrv
 
 		Vector3f position();
 
-		void setScale(float scale);
+		void setScale(Vector3f scale);
 
-		float scale();
+		Vector3f scale();
+
+		void setRotation(Matrix4f rotation);
+
+		Matrix4f rotation();
 
 		Matrix4f getModelMatrix();
+
+		void setIsLightPoint(bool);
+		bool isLightPoint();
+
+		void setIsEllipsoid(bool);
+		bool isEllipsoid();
 
 	protected:
 		Node* myParent;
@@ -50,7 +60,10 @@ namespace vrv
 		ChildrenList myChildren;
 		std::string myName;
 		Vector3f myPosition;
-		float myScale;
+		Vector3f myScale;
+		Matrix4f myRotation;
 		bool myIsInstanced;
+		bool myIsLightPoint;
+		bool myIsEllipsoid;
 	};
 }

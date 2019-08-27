@@ -17,6 +17,8 @@ namespace vrv
 		void addProcessor(PostProcessor* postProcessor);
 		void run();
 		void bind();
+      void unbind();
+      FrameBuffer* frameBuffer();
 	protected:
 		PostProcessorVector myPostProcessors;
 		Geometry* myQuadGeometry;

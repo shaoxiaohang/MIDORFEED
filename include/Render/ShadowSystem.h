@@ -6,6 +6,9 @@ namespace vrv
 	class Scene;
 	class RenderQueue;
 	class DrawState;
+	class Program;
+	class FrameBuffer;
+	class Texture2D;
 
 	class ShadowSystem
 	{
@@ -14,12 +17,19 @@ namespace vrv
 
 		void setShadowCaster(Light* light);
 
+		Light* shadowCaster();
+
 		void run(RenderQueue*);
 
-		void updateProgram();
+		void updateProgram(Program*);
+
+		void initializeFrameBuffer(int width, int height);
+
+		Texture2D* shadowTexture();
 
 	protected:
 		Light * myCaster;
 		DrawState* myDrawState;
+		FrameBuffer* myFrameBuffer;
 	};
 }

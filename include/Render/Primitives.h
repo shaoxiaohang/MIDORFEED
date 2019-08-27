@@ -15,6 +15,19 @@ namespace vrv
 		static ArrayVec3 sNormalArray;
 	};
 
+	class Sphere : public Geometry
+	{
+	public:
+		Sphere();
+
+	protected:
+		static bool myGeometryInitialized;
+		static ArrayVec3 sPosArray;
+		static ArrayUnsignedInt sIndexArray;
+		static ArrayVec2 sTexArray;
+		static ArrayVec3 sNormalArray;
+	};
+
 	class Floor : public Geometry
 	{
 	public:

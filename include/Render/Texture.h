@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <Core/Vector4.h>
 namespace vrv
 {
 	class Image;
@@ -17,7 +18,15 @@ namespace vrv
 			NEAREST,
 			LINEAR
 		};
+		enum TextureFormat
+		{
+			RGB,
+			RGBA,
+			FLOAT16,
+			FLOAT32
+		};
 		Texture();
+		Texture(TextureFormat format);
 
 		void bindToPoint(unsigned int bindingPoint);
 		unsigned int textureUnit();
@@ -30,6 +39,8 @@ namespace vrv
 
 		TextureWrapMode textureWrapMode();
 		TextureFilterMode textureFilterMode();
+
+		void setBorderColor(Vector4f);
 
 		virtual bool hasAlphaChannel() = 0;
 
@@ -49,5 +60,7 @@ namespace vrv
 		bool myGenerateMipmap;
 		unsigned int myWidth;
 		unsigned int myHeight;
+		Vector4f myBorderColor;
+		TextureFormat myTextureFormat;
 	};
 }

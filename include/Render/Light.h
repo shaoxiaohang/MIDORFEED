@@ -1,5 +1,6 @@
 #pragma once
 #include <Core/Vector3.h>
+#include <Core/Matrix4.h>
 #include <string>
 namespace vrv
 {
@@ -50,6 +51,8 @@ namespace vrv
 
 		void setCastShadow(bool);
 		bool castShadow();
+
+		Matrix4f shadowMatrix();
 
 	protected:
 		LightType myType;

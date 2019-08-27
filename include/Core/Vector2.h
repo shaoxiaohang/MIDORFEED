@@ -5,54 +5,31 @@ namespace vrv
 	class Vector2f
 	{
 	public:
-		Vector2f()
-			: x(0)
-			, y(0)
-		{}
+      Vector2f();
 
-		Vector2f(float _x, float _y)
-			: x(_x)
-			, y(_y)
-		{}
+      Vector2f(float x, float y);
 
-		void operator =(const Vector2f& right)
-		{
-			x = right.x;
-			y = right.y;
-		}
+      Vector2f& operator =(const Vector2f& right);
 
-		bool operator ==(const Vector2f& right)
-		{
-			if (x == right.x && y == right.y)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+      bool operator ==(const Vector2f& right);
 
-		bool operator !=(const Vector2f& right)
-		{
-			return !((*this) == right);
-		}
+      bool operator !=(const Vector2f& right);
 
-		Vector2f operator +(const Vector2f& right)
-		{
-			x += right.x;
-			y += right.y;
-			return *this;
-		}
+      Vector2f operator +(const Vector2f& right);
 
-		Vector2f operator -(const Vector2f& right)
-		{
-			x -= right.x;
-			y -= right.y;
-			return *this;
-		}
+      Vector2f operator -(const Vector2f& right);
 
-		float x;
-		float y;
+      float operator[] (unsigned index) const;
+
+      float x() const;
+
+      float y() const;
+
+      float& x();
+
+      float& y();
+ 
+   private:
+      float data[2];
 	};
 }

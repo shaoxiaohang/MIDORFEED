@@ -20,19 +20,33 @@ namespace vrv
 		};
 		Geometry();
 
-		virtual void setVertex(ArrayVec3* array);
-		virtual void setVertex(ArrayVec2* array);
-		virtual void setNomral(ArrayVec3* array);
-		virtual void setIndex(ArrayUnsignedInt* array);
-		virtual void setTextureCoordinate(ArrayVec2* array);
-		virtual void setInstancedMatrices(ArrayVec3* array);
+		void setVertex(ArrayVec3* array);
+		void setVertex(ArrayVec2* array);
+		void setNomral(ArrayVec3* array);
+		void setTangent(ArrayVec3* array);
+		void setIndex(ArrayUnsignedInt* array);
+		void setTextureCoordinate(ArrayVec2* array);
+		void setInstancedMatrices(ArrayVec3* array);
 
-		virtual void buildGeometry();
+		void buildGeometry();
+		void setBuildNormal(bool);
+		void setBuildTangent(bool);
+
+		
+
+	protected:
+		void calculateNormal();
+		void calculateTangent();
+
 	protected:
 		ArrayVec3* myVertexArray;
 		ArrayVec3* myNormalArray;
+		ArrayVec3* myTangentArray;
 		ArrayUnsignedInt* myIndexArray;
 		ArrayVec2* myTextureCoordinateArray;
 		ArrayVec3* myInstancedArray;
+
+		bool myBuildNormal;
+		bool myBuildTangent;
 	};
 }

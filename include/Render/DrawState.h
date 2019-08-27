@@ -3,11 +3,8 @@
 namespace vrv
 {
 	class RenderState;
-	class VertexArrayObject;
 	class Program;
-	class Scene;
-	class RenderInfo;
-	class Shader;
+
 	class DrawState
 	{
 	public:
@@ -27,8 +24,6 @@ namespace vrv
 
 		void bind();
 		void unbind();
-
-		void insertShader(Shader* shader);
 
 	protected:
 		RenderState* myRenderState;

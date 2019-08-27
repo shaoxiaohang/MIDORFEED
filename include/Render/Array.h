@@ -29,19 +29,29 @@ namespace vrv
 		unsigned int sizeInBytes();
 
 		virtual const void* dataPointer() const = 0;
+		virtual void resize(int size) = 0;
 
 		virtual void initialize();
 
 		DataType dataType();
 
-		virtual void add(int&);
-		virtual void add(unsigned int&);
-		virtual void add(float&);
-		virtual void add(Vector2f&);
-		virtual void add(Vector3f&);
-		virtual void add(Vector4f&);
-		virtual void add(Matrix3f&);
-		virtual void add(Matrix4f&);
+		virtual void add(int);
+		virtual void add(unsigned int);
+		virtual void add(float);
+		virtual void add(Vector2f);
+		virtual void add(Vector3f);
+		virtual void add(Vector4f);
+		virtual void add(Matrix3f);
+		virtual void add(Matrix4f);
+
+		virtual void set(int index,int);
+		virtual void set(int index, unsigned int);
+		virtual void set(int index, float);
+		virtual void set(int index, Vector2f);
+		virtual void set(int index, Vector3f);
+		virtual void set(int index, Vector4f);
+		virtual void set(int index, Matrix3f);
+		virtual void set(int index, Matrix4f);
 
 	protected:
 		virtual void calculateSize() = 0;
@@ -66,7 +76,11 @@ namespace vrv
 
 		int get(unsigned int i);
 
-		virtual void add(int&);
+		virtual void add(int);
+
+		virtual void set(int, int);
+
+		virtual void resize(int size);
 
 	protected:
 		virtual void calculateSize();
@@ -90,7 +104,11 @@ namespace vrv
 
 		unsigned int get(unsigned int i);
 
-		virtual void add(unsigned int&);
+		virtual void add(unsigned int);
+
+		virtual void set(int, unsigned int);
+
+		virtual void resize(int size);
 
 	protected:
 		virtual void calculateSize();
@@ -112,7 +130,11 @@ namespace vrv
 
 		float get(unsigned int i);
 
-		virtual void add(float&);
+		virtual void add(float);
+
+		virtual void set(int index, float);
+
+		virtual void resize(int size);
 
 	protected:
 		virtual void calculateSize();
@@ -136,7 +158,11 @@ namespace vrv
 
 		Vector2f get(unsigned int i);
 
-		virtual void add(Vector2f&);
+		virtual void add(Vector2f);
+
+		virtual void set(int index, Vector2f);
+
+		virtual void resize(int size);
 
 	protected:
 		virtual void calculateSize();
@@ -162,7 +188,11 @@ namespace vrv
 
 		Vector3f get(unsigned int i);
 
-		virtual void add(Vector3f&);
+		virtual void add(Vector3f);
+
+		virtual void set(int index, Vector3f);
+
+		virtual void resize(int size);
 
 	protected:
 		virtual void calculateSize();
@@ -184,7 +214,11 @@ namespace vrv
 
 		Vector4f get(unsigned int i);
 
-		virtual void add(Vector4f&);
+		virtual void add(Vector4f);
+
+		virtual void set(int index, Vector4f);
+
+		virtual void resize(int size);
 
 	protected:
 		virtual void calculateSize();
@@ -207,7 +241,11 @@ namespace vrv
 
 		Matrix3f get(unsigned int i);
 
-		virtual void add(Matrix3f&);
+		virtual void add(Matrix3f);
+
+		virtual void set(int index, Matrix3f);
+
+		virtual void resize(int size);
 
 	protected:
 		virtual void calculateSize();
@@ -229,7 +267,11 @@ namespace vrv
 
 		Matrix4f get(unsigned int i);
 
-		virtual void add(Matrix4f&);
+		virtual void add(Matrix4f);
+
+		virtual void set(int index, Matrix4f);
+
+		virtual void resize(int size);
 
 	protected:
 

@@ -18,7 +18,6 @@ namespace vrv
 
 #define MAXIMUM_TEXTURE_UNITS 16
 
-#define PI 3.1415926f
 	class Utility
 	{
 	public:
@@ -73,9 +72,29 @@ namespace vrv
 			return tanf(degreeToRadian(degree));
 		}
 
+		static float atan(float degree)
+		{
+			return atanf(degreeToRadian(degree));
+		}
+
+		static float atan2(float y, float x)
+		{
+			return atan2f(y,x);
+		}
+
 		static float sin(float degree)
 		{
 			return sinf(degreeToRadian(degree));
+		}
+
+		static float asin(float value)
+		{
+			return asinf(value);
+		}
+
+		static float acos(float value)
+		{
+			return acosf(value);
 		}
 
 		static float cos(float degree)
@@ -87,5 +106,18 @@ namespace vrv
 		{
 			return sqrtf(value);
 		}
+
+		static float pow(float base, float exponent)
+		{
+			return powf(base, exponent);
+		}
+
+		static double absd(double v)
+		{
+			return abs(v);
+		}
+
+		static float PI;
+		static float twoPI;
 	};
 }

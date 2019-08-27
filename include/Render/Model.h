@@ -17,8 +17,6 @@ namespace vrv
 	public:
 		Model(const std::string& name,const std::string& fileName);
 
-		void setPostProcessorShader(Shader*);
-
 		int numberOfMeshes();
 
 		Geometry* getMesh(int i);

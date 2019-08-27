@@ -9,6 +9,20 @@ namespace vrv
 		void run(Node*);
 	protected:
 		virtual void doSomething(Node*) = 0;
-		void DFSSearch(std::stack<Node*>& stack, Node*);
 	};
+
+   class ApplyRotationNodeVisitor : public NodeVisitor
+   {
+   public :
+      ApplyRotationNodeVisitor();
+
+      void setXRotation(float x);
+      void setYRotation(float y);
+
+   protected:
+      virtual void doSomething(Node*);
+
+      float myXRotation;
+      float myYRotation;
+   };
 }

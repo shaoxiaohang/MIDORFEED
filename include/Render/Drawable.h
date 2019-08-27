@@ -58,6 +58,7 @@ namespace vrv
 		void setInstancedCount(int);
 		bool instanced();
 		void updateProgram(Program* program);
+		Material* getOrCreateMaterial();
 	protected:
 		virtual void buildGeometry() = 0;
 	protected:

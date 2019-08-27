@@ -11,8 +11,9 @@ namespace vrv
 	public:
 		enum TextureType
 		{
-			Material_Diffuse,
-			Material_Specular
+			Diffuse,
+			Specular,
+			Normal
 		};
 		typedef std::map<unsigned int, Texture2D*> TextureMap;
 	public:
@@ -38,6 +39,7 @@ namespace vrv
 		virtual void setTexture2D(TextureType textureType, Texture2D* texture);
 		bool hasDiffuse();
 		bool hasSpecular();
+		bool hasNormal();
 		bool isTransParent();
 
 		void setPostProcessShader(Shader*);
