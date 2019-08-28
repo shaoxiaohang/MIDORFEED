@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <Render/Array.h>
-#include <Core/Node.h>
+#include <Render/Node.h>
 namespace vrv
 {
 	class DrawState;

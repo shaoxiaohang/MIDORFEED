@@ -193,7 +193,7 @@ namespace vrv
 		double cosTheta = Utility::cos(degree);
 		double sinTheta = Utility::sin(degree);
 
-		double ms = axis.magnitude()*axis.magnitude();
+      double ms = axis.length()*axis.length();
 		double m = Utility::sqrt(ms);
 
       float x = data[0];

@@ -1,6 +1,6 @@
 #include <Render/Camera.h>
 #include <Render/Viewer.h>
-#include <Core/NodeVisitor.h>
+#include <Render/NodeVisitor.h>
 #include <Core/WindowEvent.h>
 #include <boost/bind.hpp>
 #include <iostream>

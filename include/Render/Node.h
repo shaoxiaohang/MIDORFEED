@@ -55,7 +55,6 @@ namespace vrv
 
 	protected:
 		Node* myParent;
-		DrawableList myDrawables;
 		ChildrenList myChildren;
 		std::string myName;
 		Vector3f myPosition;
