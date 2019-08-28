@@ -174,7 +174,7 @@ namespace vrv
 		return (data[0] - right.x())*(data[0] - right.x()) + (data[1] - right.y())*(data[1] - right.y())+(data[2] - right.z())* (data[2] - right.z());
 	}
 
-	float Vector3f::magnitude()
+	float Vector3f::length()
 	{
 		return Utility::sqrt(x()*x() + y()*y() + z()*z());
 	}

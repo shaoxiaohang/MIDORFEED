@@ -125,7 +125,7 @@ namespace vrv
 	ArrayInt::ArrayInt(int size)
 		: Array(Array::INT,size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	void ArrayInt::add(int value)
@@ -142,7 +142,7 @@ namespace vrv
 	void ArrayInt::resize(int size)
 	{
 		myData.clear();
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	void ArrayInt::calculateSize()
@@ -173,7 +173,7 @@ namespace vrv
 	ArrayUnsignedInt::ArrayUnsignedInt(int size)
 		: Array(Array::UNSIGNED_INT, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	ArrayUnsignedInt::ArrayUnsignedInt(ArrayUnsignedInt* copy)
@@ -199,7 +199,7 @@ namespace vrv
 	void ArrayUnsignedInt::resize(int size)
 	{
 		myData.clear();
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	unsigned int& ArrayUnsignedInt::operator[](unsigned int i)
@@ -231,7 +231,7 @@ namespace vrv
 	ArrayFloat::ArrayFloat(int size)
 		: Array(Array::FLOAT, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	void ArrayFloat::calculateSize()
@@ -247,7 +247,7 @@ namespace vrv
 	void ArrayFloat::resize(int size)
 	{
 		myData.clear();
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	float& ArrayFloat::operator[](unsigned int i)
@@ -279,7 +279,7 @@ namespace vrv
 	ArrayVec2::ArrayVec2(int size)
 		: Array(Array::VEC2F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	ArrayVec2::ArrayVec2(ArrayVec2* copy)
@@ -305,7 +305,7 @@ namespace vrv
 	void ArrayVec2::resize(int size)
 	{
 		myData.clear();
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	Vector2f& ArrayVec2::operator[](unsigned int i)
@@ -337,7 +337,7 @@ namespace vrv
 	ArrayVec3::ArrayVec3(int size)
 		: Array(Array::VEC3F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	ArrayVec3::ArrayVec3(ArrayVec2* copy)
@@ -384,7 +384,7 @@ namespace vrv
 	void ArrayVec3::resize(int size)
 	{
 		myData.clear();
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	Vector3f& ArrayVec3::operator[](unsigned int i)
@@ -405,7 +405,7 @@ namespace vrv
 	ArrayVec4::ArrayVec4(int size)
 		: Array(Array::VEC4F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	void ArrayVec4::add(Vector4f value)
@@ -422,7 +422,7 @@ namespace vrv
 	void ArrayVec4::resize(int size)
 	{
 		myData.clear();
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	void ArrayVec4::calculateSize()
@@ -453,7 +453,7 @@ namespace vrv
 	ArrayMat3::ArrayMat3(int size)
 		: Array(Array::MAT3F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	void ArrayMat3::add(Matrix3f value)
@@ -475,7 +475,7 @@ namespace vrv
 	void ArrayMat3::resize(int size)
 	{
 		myData.clear();
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	Matrix3f& ArrayMat3::operator[](unsigned int i)
@@ -501,7 +501,7 @@ namespace vrv
 	ArrayMat4::ArrayMat4(int size)
 		: Array(Array::MAT4F, size)
 	{
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	void ArrayMat4::add(Matrix4f value)
@@ -523,7 +523,7 @@ namespace vrv
 	void ArrayMat4::resize(int size)
 	{
 		myData.clear();
-		myData.reserve(size);
+		myData.resize(size);
 	}
 
 	void ArrayMat4::calculateSize()

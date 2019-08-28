@@ -1,5 +1,5 @@
-#include <Core/NodeVisitor.h>
-#include <Core/Node.h>
+#include <Render/NodeVisitor.h>
+#include <Render/Node.h>
 namespace vrv
 {
 	void NodeVisitor::run(Node* root)
@@ -34,7 +34,7 @@ namespace vrv
    {
       if (node)
       {
-         node->setRotation(Matrix4f::makeRotateX(myXRotation)*Matrix4f::makeRotateX(myYRotation));
+         node->setRotation(Matrix4f::makeRotateX(myXRotation)*Matrix4f::makeRotateY(myYRotation)* node->rotation());
       }
    }
 }

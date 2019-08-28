@@ -1,4 +1,4 @@
-#include <Core/Node.h>
+#include <Render/Node.h>
 
 namespace vrv
 {
@@ -125,4 +125,10 @@ namespace vrv
 	{
 		return myIsEllipsoid;
 	}
+
+   void Node::calculateBound()
+   {
+      float min = FLT_MAX;
+      float max = 0;
+   }
 }

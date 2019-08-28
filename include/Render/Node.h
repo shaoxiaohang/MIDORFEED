@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <Core/Matrix4.h>
+#include <Core/Bound.h>
 namespace vrv
 {
 	class Drawable;
@@ -10,7 +11,7 @@ namespace vrv
 	{
 	public:
 		typedef std::vector<Node*> ChildrenList;
-		typedef std::vector<Drawable*> DrawableList;
+
 	public:
 		Node();
 
@@ -27,12 +28,6 @@ namespace vrv
 		Node* parent();
 
 		void setParent(Node* parent);
-
-		void addDrawable(Drawable* drawable);
-
-		unsigned int numberOfDrawable();
-
-		Drawable* getDrawable(unsigned int i);
 
 		void setPosition(Vector3f pos);
 
@@ -54,6 +49,10 @@ namespace vrv
 		void setIsEllipsoid(bool);
 		bool isEllipsoid();
 
+   protected:
+
+      void calculateBound();
+
 	protected:
 		Node* myParent;
 		DrawableList myDrawables;
@@ -65,5 +64,6 @@ namespace vrv
 		bool myIsInstanced;
 		bool myIsLightPoint;
 		bool myIsEllipsoid;
+      Bound myBound;
 	};
 }

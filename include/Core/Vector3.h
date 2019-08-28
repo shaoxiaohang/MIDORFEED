@@ -59,7 +59,7 @@ namespace vrv
 
 		float distanceSquare(const Vector3f& right);
 
-		float magnitude();
+		float length();
 
 		float angelBetween(const Vector3f& right);
 

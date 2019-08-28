@@ -146,23 +146,26 @@ namespace vrv
          {
             startX = e.mousePositionX();
             startY = e.mousePositionY();
+ 
          };
+         break;
          case WindowEvent::MouseUp:
          {
-            v.setXRotation(0);
-            v.setYRotation(0);
-            Scene::instance().acceptNodeVisitor(&v);
          };
+         break;
          case WindowEvent::MouseMove:
          {
-            if(e.mou)
-            float deltaX = e.mousePositionX() - startX;
-            float deltaY = e.mousePositionY() - startY;
-            float speed = 0.01;
-            v.setXRotation(deltaY*speed);
-            v.setYRotation(deltaX*speed);
-            Scene::instance().acceptNodeVisitor(&v);
+            if (e.mouseButton() == WindowEvent::LeftMouseButton)
+            {
+               float deltaX = e.mousePositionX() - startX;
+               float deltaY = e.mousePositionY() - startY;
+               float speed = 0.01;
+               v.setXRotation(deltaY*speed);
+               v.setYRotation(deltaX*speed);
+               Scene::instance().acceptNodeVisitor(&v);
+            }
          };
+         break;
       };
    }
 
