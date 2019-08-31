@@ -10,12 +10,21 @@ namespace vrv
 	class Node
 	{
 	public:
+      typedef std::vector<Drawable*> DrawableList;
 		typedef std::vector<Node*> ChildrenList;
 
 	public:
 		Node();
 
 		Node(const std::string& name);
+
+     
+
+      void addDrawable(Drawable* drawable);
+
+      unsigned int numberOfDrawable();
+
+      Drawable* getDrawable(unsigned int i);
 
 		void addChild(Node* child);
 
@@ -56,6 +65,7 @@ namespace vrv
 	protected:
 		Node* myParent;
 		ChildrenList myChildren;
+      DrawableList myDrawables;
 		std::string myName;
 		Vector3f myPosition;
 		Vector3f myScale;

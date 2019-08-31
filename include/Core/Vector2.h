@@ -2,34 +2,41 @@
 
 namespace vrv
 {
-	class Vector2f
+   template<typename T>
+	class Vector2
 	{
 	public:
-      Vector2f();
+      Vector2();
 
-      Vector2f(float x, float y);
+      Vector2(T x, T y);
 
-      Vector2f& operator =(const Vector2f& right);
+      Vector2<T>& operator =(const Vector2<T>& right);
 
-      bool operator ==(const Vector2f& right);
+      bool operator ==(const Vector2<T>& right);
 
-      bool operator !=(const Vector2f& right);
+      bool operator !=(const Vector2<T>& right);
 
-      Vector2f operator +(const Vector2f& right);
+      Vector2<T> operator +(const Vector2<T>& right);
 
-      Vector2f operator -(const Vector2f& right);
+      Vector2<T> operator -(const Vector2<T>& right);
 
-      float operator[] (unsigned index) const;
+      T operator[] (unsigned index) const;
 
-      float x() const;
+      T x() const;
 
-      float y() const;
+      T y() const;
 
-      float& x();
+      T& x();
 
-      float& y();
+      T& y();
  
    private:
-      float data[2];
+      T data[2];
 	};
+
+   typedef Vector2<float> Vector2f;
+   typedef Vector2<double> Vector2d;
+   typedef Vector2<int> Vector2i;
 }
+
+#include <Core/Vector2.cpp>

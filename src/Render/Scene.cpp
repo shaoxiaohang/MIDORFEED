@@ -14,9 +14,9 @@
 #include <Render/Primitives.h>
 #include <Render/Skybox.h>
 #include <Render/Model.h>
-#include <Core/Node.h>
+#include <Render/Node.h>
 #include <Core/Utility.h>
-#include <Core/NodeVisitor.h>
+#include <Render/NodeVisitor.h>
 #include <Render/ShadowSystem.h>
 #include <Render/TextureQuadRender.h>
 #include <Render/Map.h>

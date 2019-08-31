@@ -1,5 +1,5 @@
 #include <Render/Viewer.h>
-#include <Core/Node.h>
+#include <Render/Node.h>
 #include <Render/Array.h>
 #include <Render/Primitives.h>
 #include <Render/Texture.h>

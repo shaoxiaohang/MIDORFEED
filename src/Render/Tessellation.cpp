@@ -87,7 +87,7 @@ namespace vrv
 		int numberOfVertices = 0;
 		for (int i = 0; i < numberOfSubdivisions; ++i)
 		{
-			numberOfVertices += Utility::pow(4, i);
+			numberOfVertices += Utility::powi(4, i);
 		}
 		numberOfVertices = 4 + (12 * numberOfVertices);
 		return numberOfVertices;
@@ -98,7 +98,7 @@ namespace vrv
 		int numberOfTriangles = 0;
 		for (int i = 0; i <= numberOfSubdivisions; ++i)
 		{
-			numberOfTriangles += Utility::pow(4, i);
+         numberOfTriangles += Utility::powi(4, i);
 		}
 		numberOfTriangles *= 4;
 
@@ -146,7 +146,7 @@ namespace vrv
 		//bottom point
 		positions.add(Vector3f(0, 0, -c));
 
-		for (int i = 0; i < positions.size(); ++i)
+		for (unsigned i = 0; i < positions.size(); ++i)
 		{
 			Vector3f position = positions[i];
 			Vector3f normal = Vector3f(position.x() / a*a, position.y() / b*b, position.z() / c*c);
@@ -154,8 +154,8 @@ namespace vrv
 			normals.add(normal);
 
 			Vector2f st;
-			st.x() = Utility::atan2(normal.y(), normal.x()) / Utility::twoPI + 0.5;
-			st.y() = Utility::asin(normal.z()) / Utility::PI + 0.5;
+			st.x() = Utility::atan2(normal.y(), normal.x()) / Utility::twoPI + 0.5f;
+			st.y() = Utility::asin(normal.z()) / Utility::PI + 0.5f;
 			sts.add(st);
 		}
 

@@ -2,52 +2,45 @@
 #include <Core/Vector3.h>
 namespace vrv
 {
-	class Vector4f
+   template<typename T>
+	class Vector4
 	{
 	public:
-		Vector4f();
+      Vector4();
 
-		Vector4f(float _x, float _y, float _z, float _w);
+      Vector4(float _x, float _y, float _z, float _w);
 
-		Vector4f(Vector3f vec3, float w);
+      Vector4(Vector3 vec3, float w);
 
-		Vector4f(Vector3f vec3);
+      Vector4(Vector3 vec3);
 
-      Vector4f& operator =(const Vector4f& right);
+      Vector4& operator =(const Vector4& right);
 
-		bool operator ==(const Vector4f& right);
+      bool operator ==(const Vector4& right);
 
-		bool operator !=(const Vector4f& right);
+      bool operator !=(const Vector4& right);
 
-		Vector4f operator +(const Vector4f& right);
+      Vector4 operator +(const Vector4& right);
 
-		Vector4f operator -(const Vector4f& right);
+      Vector4 operator -(const Vector4& right);
 
-		Vector4f operator -() const;
+      Vector4 operator -() const;
 
-		Vector4f operator / (float d);
+      Vector4 operator / (float d);
 
-      float operator[](unsigned int index) const;
+      T operator[](unsigned int index) const;
 
-      float x() const;
+      T x() const;
 
-      float y() const;
+      T y() const;
 
-      float z() const;
+      T z() const;
 
-      float w() const;
-
-      float x() ;
-
-      float y() ;
-
-      float z() ;
-
-      float w() ;
+      T w() const;
 
    protected:
 
-      float data[4];
+      T data[4];
 
 	};
 

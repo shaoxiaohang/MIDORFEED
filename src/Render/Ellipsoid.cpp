@@ -87,7 +87,7 @@ namespace vrv
 	{
 		Vector3f normal = geodeticSurfaceNormal(geocentric);
 		double longtitude = Utility::atan2(normal.y(), normal.x());
-		double lantitude = Utility::asin(normal.z() / normal.magnitude());
+		double lantitude = Utility::asin(normal.z() / normal.length());
 		return Geodetic2D(longtitude, lantitude);
 	}
 
@@ -107,8 +107,8 @@ namespace vrv
 		double n = Vector3f(
 			beta * position.x() * myOneSquareXAxes,
 			beta * position.y() * myOneSquareYAxes,
-			beta * position.z() * myOneSquareZAxes).magnitude();
-		double alpha = (1.0 - beta) * (position.magnitude() / n);
+         beta * position.z() * myOneSquareZAxes).length();
+      double alpha = (1.0 - beta) * (position.length() / n);
 
 		double x2 = position.x() * position.x();
 		double y2 = position.y() * position.y();
@@ -159,7 +159,7 @@ namespace vrv
 		Vector3f h = geocentric - surfacePoint;
 		int sign = h.dotProduct(geocentric) > 0 ? 1:-1;
 		Geodetic2D geodetic2D = surfacePointToGeodetic2D(surfacePoint);
-		double height = sign * h.magnitude();
+      double height = sign * h.length();
 
 		return Geodetic3D(geodetic2D.longtitude(), geodetic2D.lantitude(), height);
 	}

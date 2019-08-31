@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Node.h>
+#include <Render/Node.h>
 #include <string>
 #include <Core/Vector3.h>
 #include <Core/Matrix4.h>

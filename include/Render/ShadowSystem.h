@@ -4,7 +4,7 @@ namespace vrv
 {
 	class Light;
 	class Scene;
-	class RenderQueue;
+	struct RenderQueue;
 	class DrawState;
 	class Program;
 	class FrameBuffer;

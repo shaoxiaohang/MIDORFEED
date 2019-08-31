@@ -1,6 +1,6 @@
 #include <Render/PostProcessor.h>
-#include <Core/NodeVisitor.h>
-#include <Core/Node.h>
+#include <Render/NodeVisitor.h>
+#include <Render/Node.h>
 #include <Render/Program.h>
 #include <Render/RenderState.h>
 #include <Render/DrawState.h>

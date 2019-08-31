@@ -2,72 +2,79 @@
 #include <Core/Vector2.h>
 namespace vrv
 {
-	class Vector3f
+   template<typename T>
+	class Vector3
 	{
 	public:
-		Vector3f();
+      Vector3();
 
-		Vector3f(float);
+      Vector3(T);
 
-		Vector3f(Vector2f);
+      Vector3(Vector2<T>);
 
-		Vector3f(float x, float y, float z);
+      Vector3(T x, T y, T z);
 
-      Vector3f& operator =(const Vector3f& right);
+      Vector3<T>& operator =(const Vector3<T>& right);
 
-		bool operator ==(const Vector3f& right);
+      bool operator ==(const Vector3<T>& right);
 
-		bool operator !=(const Vector3f& right);
+      bool operator !=(const Vector3<T>& right);
 
-		Vector3f operator +=(const Vector3f& right);
+      Vector3<T> operator +=(const Vector3<T>& right);
 
-		Vector3f operator -=(const Vector3f& right);
+      Vector3<T> operator -=(const Vector3<T>& right);
 
-		Vector3f operator +(const Vector3f& right);
+      Vector3<T> operator +(const Vector3<T>& right);
 
-		Vector3f operator -(const Vector3f& right);
+      Vector3<T> operator -(const Vector3<T>& right);
 
-		Vector3f operator *(const Vector3f& right);
+      Vector3<T> operator *(const Vector3<T>& right);
 
-		Vector3f operator /(float mag) const;
+      Vector3<T> operator /(T mag) const;
 
-		Vector3f operator -() const;
+      Vector3<T> operator -() const;
 
-		Vector3f operator *(float);
+      Vector3<T> operator *(T);
 
-      float x() const;
+      T x() const;
 
-      float y() const;
+      T y() const;
 
-      float z() const;
+      T z() const;
 
-      float& x() ;
+      T& x();
 
-      float& y() ;
+      T& y();
 
-      float& z() ;
+      T& z();
 
-      float operator[] (unsigned int) const;
+      T operator[] (unsigned int) const;
 
 		void normalize();
 
-      Vector3f normalizedVector() const;
+      Vector3<T> normalizedVector() const;
 
-		float dotProduct(const Vector3f& right);
+      T dotProduct(const Vector3<T>& right);
 
-		Vector3f crossProduct(const Vector3f& right);
+      Vector3<T> crossProduct(const Vector3<T>& right);
 
-		float distanceSquare(const Vector3f& right);
+      T distanceSquare(const Vector3<T>& right);
 
-		float length();
+      T length();
 
-		float angelBetween(const Vector3f& right);
+      T angelBetween(const Vector3<T>& right);
 
-		Vector3f Vector3f::rotateAroundAxis(Vector3f axis, double degree);
+      Vector3<T> rotateAroundAxis(Vector3<T> axis, float degree);
 
    private:
-      float data[3];
+      T data[3];
 
 	};
 
+
+   typedef Vector3<float> Vector3f;
+   typedef Vector3<int> Vector3i;
+   typedef Vector3<double> Vector3d;
 }
+
+#include <Core/Vector3.cpp>

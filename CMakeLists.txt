@@ -44,11 +44,11 @@ $ENV{FREEIMAGE_ROOT}/x64
 #find include directory by looking for certain header file
 find_path(BOOST_INCLUDE_DIR boost/signals2.hpp
 PATHS
-$ENV{BOOST_ROOT}/include/boost-1_63
+$ENV{BOOST_ROOT}/include
 )
 
 #find library directory by looking for certain library file
-find_path(BOOST_LIB_DIR boost_atomic-vc120-mt-1_63.lib
+find_path(BOOST_LIB_DIR libboost_math_c99-vc120-mt.lib
 PATHS
 $ENV{BOOST_ROOT}/lib/
 )

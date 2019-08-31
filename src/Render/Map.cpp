@@ -3,7 +3,7 @@
 #include <Render/ImageLayer.h>
 #include <Render/Geometry.h>
 #include <Render/Ellipsoid.h>
-#include <Core/Node.h>
+#include <Render/Node.h>
 namespace vrv
 {
 	Map::Map()
