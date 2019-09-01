@@ -1,20 +1,16 @@
 #pragma once
-#include <Core/Vector3.h>
+#include <Core/Vector3i.h>
 namespace vrv
 {
-   template<typename T>
-	class Vector4
+	class Vector4i
 	{
    public:
-
-      template<typename T>
-      Vector4<T>::Vector4()
+      Vector4i::Vector4i()
       {
          memset(data, 0, sizeof(data));
       }
 
-      template<typename T>
-      Vector4<T>::Vector4(T x, T y, T z, T w)
+      Vector4i::Vector4i(int x, int y, int z, int w)
       {
          data[0] = x;
          data[1] = y;
@@ -22,8 +18,7 @@ namespace vrv
          data[3] = z;
       }
 
-      template<typename T>
-      Vector4<T>::Vector4(Vector3<T> vec3, T w)
+      Vector4i::Vector4i(Vector3i vec3, int w)
       {
          data[0] = vec3.x();
          data[1] = vec3.y();
@@ -31,8 +26,7 @@ namespace vrv
          data[3] = w;
       }
 
-      template<typename T>
-      Vector4<T>::Vector4(Vector3<T> vec3)
+      Vector4i::Vector4i(Vector3i vec3)
       {
          data[0] = vec3.x();
          data[1] = vec3.y();
@@ -40,8 +34,7 @@ namespace vrv
          data[3] = 0;
       }
 
-      template<typename T>
-      Vector4<T>& Vector4<T>::operator =(const Vector4<T>& right)
+      Vector4i& Vector4i::operator =(const Vector4i& right)
       {
          data[0] = right.x();
          data[1] = right.y();
@@ -51,8 +44,7 @@ namespace vrv
          return *this;
       }
 
-      template<typename T>
-      bool Vector4<T>::operator ==(const Vector4<T>& right)
+      bool Vector4i::operator ==(const Vector4i& right)
       {
          if (x() == right.x() && y() == right.y() && z() == right.z() && w() == right.w())
          {
@@ -64,14 +56,12 @@ namespace vrv
          }
       }
 
-      template<typename T>
-      bool Vector4<T>::operator !=(const Vector4<T>& right)
+      bool Vector4i::operator !=(const Vector4i& right)
       {
          return !((*this) == right);
       }
 
-      template<typename T>
-      Vector4<T> Vector4<T>::operator +(const Vector4<T>& right)
+      Vector4i Vector4i::operator +(const Vector4i& right)
       {
          data[0] += right.x();
          data[1] += right.y();
@@ -80,8 +70,7 @@ namespace vrv
          return *this;
       }
 
-      template<typename T>
-      Vector4<T> Vector4<T>::operator -(const Vector4<T>& right)
+      Vector4i Vector4i::operator -(const Vector4i& right)
       {
          data[0] -= right.x();
          data[1] -= right.y();
@@ -90,80 +79,65 @@ namespace vrv
          return *this;
       }
 
-      template<typename T>
-      Vector4<T> Vector4<T>::operator -() const
+      Vector4i Vector4i::operator -() const
       {
-         return Vector4<T>(-data[0], -data[1], -data[2], -data[3]);
+         return Vector4i(-data[0], -data[1], -data[2], -data[3]);
       }
 
-      template<typename T>
-      Vector4<T> Vector4<T>::operator / (float d)
+      Vector4i Vector4i::operator / (float d)
       {
-         return Vector4<T>(x() / d, y() / d, z() / d, w() / d);
+         return Vector4i(x() / d, y() / d, z() / d, w() / d);
       }
 
-      template<typename T>
-      T Vector4<T>::operator[](unsigned int index) const
+      int Vector4i::operator[](unsigned int index) const
       {
          return data[index];
       }
 
-      template<typename T>
-      T Vector4<T>::x() const
+      int Vector4i::x() const
       {
          return data[0];
       }
 
-      template<typename T>
-      T Vector4<T>::y() const
+      int Vector4i::y() const
       {
          return data[1];
       }
 
-      template<typename T>
-      T Vector4<T>::z() const
+      int Vector4i::z() const
       {
          return data[2];
       }
 
-      template<typename T>
-      T Vector4<T>::w() const
+      int Vector4i::w() const
       {
          return data[3];
       }
 
-      template<typename T>
-      T& Vector4<T>::x()
+      int& Vector4i::x()
       {
          return data[0];
       }
 
-      template<typename T>
-      T& Vector4<T>::y()
+      int& Vector4i::y()
       {
          return data[1];
       }
 
-      template<typename T>
-      T& Vector4<T>::z()
+      int& Vector4i::z()
       {
          return data[2];
       }
 
-      template<typename T>
-      T& Vector4<T>::w()
+      int& Vector4i::w()
       {
          return data[3];
       }
 
    protected:
 
-      T data[4];
+      int data[4];
 
 	};
-
-   typedef Vector4<float> Vector4f;
-   typedef Vector4<int> Vector4i;
-   typedef Vector4<double> Vector4d;
 
 }

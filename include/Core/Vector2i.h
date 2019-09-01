@@ -1,80 +1,76 @@
 #pragma once
+#include<memory>
 
 namespace vrv
 {
-   template<typename T>
-	class Vector2
+	class Vector2i
 	{
 	public:
-      Vector2()
+      Vector2i()
       {
          memset(data, 0, sizeof(data));
       }
 
-      Vector2(T x, T y)
+      Vector2i(int x, int y)
       {
          data[0] = x;
          data[1] = y;
       }
 
 
-      Vector2<T>& operator =(const Vector2<T>& right)
+      Vector2i& operator =(const Vector2i& right)
       {
          data[0] = right[0];
          data[1] = right[1];
          return *this;
       }
 
-      bool operator ==(const Vector2<T>& right)
+      bool operator ==(const Vector2i& right)
       {
          return data[0] == right[0] && data[1] == right[1];
       }
 
-      bool operator !=(const Vector2<T>& right)
+      bool operator !=(const Vector2i& right)
       {
          return data[0] != right[0] || data[1] != right[1];
       }
 
-      Vector2<T> operator +(const Vector2<T>& right)
+      Vector2i operator +(const Vector2i& right)
       {
-         return Vector2<T>(data[0] + right[0], data[1] + right[1]);
+         return Vector2i(data[0] + right[0], data[1] + right[1]);
       }
 
-      Vector2<T> operator -(const Vector2<T>& right)
+      Vector2i operator -(const Vector2i& right)
       {
-         return Vector2<T>(data[0] - right[0], data[1] - right[1]);
+         return Vector2i(data[0] - right[0], data[1] - right[1]);
       }
 
-      T operator[] (unsigned index) const
+      int operator[] (unsigned index) const
       {
          return data[index];
       }
 
-      T x() const
+      int x() const
       {
          return data[0];
       }
 
-      T y() const
+      int y() const
       {
          return data[1];
       }
 
-      T& x()
+      int& x()
       {
          return data[0];
       }
 
-      T& y()
+      int& y()
       {
          return data[1];
       }
  
    private:
-      T data[2];
+      int data[2];
 	};
-
-   typedef Vector2<float> Vector2f;
-   typedef Vector2<double> Vector2d;
-   typedef Vector2<int> Vector2i;
 }
