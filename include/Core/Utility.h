@@ -114,7 +114,7 @@ namespace vrv
 
       static int powi(int base, int exponent)
       {
-         return pow(base, exponent);
+         return powf(base, exponent);
       }
 
 		static double absd(double v)

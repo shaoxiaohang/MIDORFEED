@@ -3,10 +3,10 @@
 #include <Render/Array.h>
 #include <Render/Primitives.h>
 #include <Render/Texture.h>
-#include <Core/Matrix4.h>
-#include <Core/Matrix3.h>
-#include <Core/Vector3.h>
-#include <Core/Vector4.h>
+#include <Core/Matrix4f.h>
+#include <Core/Matrix3f.h>
+#include <Core/Vector3f.h>
+#include <Core/Vector4f.h>
 #include <Render/Camera.h>
 #include <Render/Light.h>
 #include <Render/Scene.h>

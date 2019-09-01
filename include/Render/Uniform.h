@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include <Core/Vector2.h>
-#include <Core/Vector3.h>
-#include <Core/Vector4.h>
-#include <Core/Matrix3.h>
-#include <Core/Matrix4.h>
+#include <Core/Vector2f.h>
+#include <Core/Vector3f.h>
+#include <Core/Vector4f.h>
+#include <Core/Matrix3f.h>
+#include <Core/Matrix4f.h>
 #include <map>
 namespace vrv
 {

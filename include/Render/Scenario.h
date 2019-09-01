@@ -2,8 +2,8 @@
 
 #include <Render/Node.h>
 #include <string>
-#include <Core/Vector3.h>
-#include <Core/Matrix4.h>
+#include <Core/Vector3f.h>
+#include <Core/Matrix4f.h>
 
 namespace tinyxml2
 {

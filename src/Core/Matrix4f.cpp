@@ -1,5 +1,5 @@
-#include <Core/Matrix4.h>
-#include <Core/Matrix3.h>
+#include <Core/Matrix4f.h>
+#include <Core/Matrix3f.h>
 #include <Core/Utility.h>
 #include <cstring>
 namespace vrv
@@ -13,10 +13,10 @@ namespace vrv
 		m[12] = 0; m[13] = 0;  m[14] = 0; m[15] = 1;
 	}
 
-	Matrix4f::Matrix4f(value_type a00, value_type a01, value_type a02, value_type a03,
-					       value_type a10, value_type a11, value_type a12, value_type a13,
-					       value_type a20, value_type a21, value_type a22, value_type a23,
-		                value_type a30, value_type a31, value_type a32, value_type a33)
+	Matrix4f::Matrix4f(float a00, float a01, float a02, float a03,
+					       float a10, float a11, float a12, float a13,
+					       float a20, float a21, float a22, float a23,
+		                float a30, float a31, float a32, float a33)
 	{
 		m.resize(16);
 		m[0]  = a00; m[1]  = a10; m[2]  = a20; m[3] = a30;
@@ -68,7 +68,7 @@ namespace vrv
 						0, 0, 0, 1);
 	}
 
-	Matrix4f Matrix4f::makeTranslate(value_type x, value_type y, value_type z)
+	Matrix4f Matrix4f::makeTranslate(float x, float y, float z)
 	{
 		return Matrix4f(1, 0, 0, x,
 						0, 1, 0, y,
@@ -76,7 +76,7 @@ namespace vrv
 						0, 0, 0, 1);
 	}
 
-	Matrix4f Matrix4f::makeScale(value_type x, value_type y, value_type z)
+	Matrix4f Matrix4f::makeScale(float x, float y, float z)
 	{
 		return Matrix4f(x, 0, 0, 0,
 						0, y, 0, 0,
@@ -117,7 +117,7 @@ namespace vrv
       );
    }
 
-	void Matrix4f::scale(value_type x, value_type y, value_type z)
+	void Matrix4f::scale(float x, float y, float z)
 	{
 		*this =	*this * Matrix4f(x, 0, 0, 0,
 						0, y, 0, 0,
@@ -125,7 +125,7 @@ namespace vrv
 						0, 0, 0, 1);
 	}
 
-	void Matrix4f::scale(value_type uniformScale)
+	void Matrix4f::scale(float uniformScale)
 	{
 		*this = *this * Matrix4f(uniformScale, 0, 0, 0,
 						0, uniformScale, 0, 0,
@@ -158,15 +158,15 @@ namespace vrv
 			 m[3] * r.m[0] + m[7] * r.m[1] + m[11] * r.m[2] + m[15] * r.m[3], m[3] * r.m[4] + m[7] * r.m[5] + m[11] * r.m[6] + m[15] * r.m[7], m[3] * r.m[8] + m[7] * r.m[9] + m[11] * r.m[10] + m[15]  * r.m[11], m[3] * r.m[12] + m[7] * r.m[13] + m[11] * r.m[14] + m[15] * r.m[15]);
 	}
 
-	Matrix4f Matrix4f::makeWindowingTransformation(value_type l1, value_type b1, value_type n1,
-												   value_type r1, value_type t1, value_type f1,
-							                       value_type l2, value_type b2, value_type n2,
-		                                           value_type r2, value_type t2, value_type f2)
+	Matrix4f Matrix4f::makeWindowingTransformation(float l1, float b1, float n1,
+												   float r1, float t1, float f1,
+							                       float l2, float b2, float n2,
+		                                           float r2, float t2, float f2)
 	{
 		return makeTranslate(l2, b2, n2)*makeScale((r2-l2)/(r1-l1), (t2-b2)/(t1-b1),(f2-n2)/(f1-n1))*makeTranslate(-l1,-b1,-n1);
 	}
 
-	Matrix4f Matrix4f::makeProjection(value_type l, value_type r, value_type b, value_type t, value_type n, value_type f)
+	Matrix4f Matrix4f::makeProjection(float l, float r, float b, float t, float n, float f)
 	{
 		return Matrix4f(2.0f*n / (r - l), 0, (r + l) / (r - l), 0,
 						0, 2.0f*n / (t - b), (t + b) / (t - b), 0,
@@ -175,7 +175,7 @@ namespace vrv
 
 	}
 
-	Matrix4f Matrix4f::makeProjection(value_type verticalFieldOfView, value_type ratioWDivedeH, value_type n, value_type f)
+	Matrix4f Matrix4f::makeProjection(float verticalFieldOfView, float ratioWDivedeH, float n, float f)
 	{
 		float tanHalfTheta = Utility::tan(verticalFieldOfView / 2.0f);
 		float t = tanHalfTheta*n;

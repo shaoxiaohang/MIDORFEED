@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Render/Node.h>
-#include <Core/Vector3.h>
+#include <Core/Vector3f.h>
 #include <Render/Array.h>
 #include <vector>
 namespace vrv

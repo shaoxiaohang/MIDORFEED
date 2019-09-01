@@ -1,5 +1,5 @@
 #pragma once
-#include <Core/Vector3.h>
+#include <Core/Vector3f.h>
 #include <Render/Ellipsoid.h>
 namespace vrv
 {

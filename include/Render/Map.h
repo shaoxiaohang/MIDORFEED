@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <Core/Vector3.h>
+#include <Core/Vector3f.h>
 namespace vrv
 {
 	class ImageLayer;

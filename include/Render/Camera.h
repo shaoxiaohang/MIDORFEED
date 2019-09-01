@@ -1,6 +1,6 @@
 #pragma once
-#include<Core/Matrix4.h>
-#include<Core/Vector3.h>
+#include<Core/Matrix4f.h>
+#include<Core/Vector3f.h>
 
 namespace vrv
 {

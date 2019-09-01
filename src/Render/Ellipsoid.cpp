@@ -6,7 +6,7 @@
 namespace vrv
 {
 
-	Ellipsoid::Ellipsoid(double a, double b, double c)
+	Ellipsoid::Ellipsoid(float a, float b, float c)
 		: myXAxesLength(a)
 		, myYAxesLength(b)
 		, myZAxesLength(c)
@@ -23,22 +23,22 @@ namespace vrv
 		myGeometry = BoxTessellator::compute(myRadius * 2);
 	}
 
-	double Ellipsoid::xAxes() const
+   float Ellipsoid::xAxes() const
 	{
 		return myXAxesLength;
 	}
 
-	double Ellipsoid::yAxes() const
+   float Ellipsoid::yAxes() const
 	{
 		return myYAxesLength;
 	}
 
-	double Ellipsoid::zAxes() const
+   float Ellipsoid::zAxes() const
 	{
 		return myZAxesLength;
 	}
 
-	double Ellipsoid::maximumRadius() const
+   float Ellipsoid::maximumRadius() const
 	{
 		return myMaximumRadius;
 	}
@@ -69,13 +69,13 @@ namespace vrv
 	Vector3f Ellipsoid::geodeticToGeocentric(Geodetic3D point)
 	{
 		Vector3f normal = geodeticSurfaceNormal(point);
-		double squareA = myXAxesLength*myXAxesLength;
-		double squareB = myYAxesLength*myYAxesLength;
-		double squareC = myZAxesLength*myZAxesLength;
+      float squareA = myXAxesLength*myXAxesLength;
+      float squareB = myYAxesLength*myYAxesLength;
+      float squareC = myZAxesLength*myZAxesLength;
 		
 		Vector3f square = Vector3f(squareA, squareB, squareC);
 		Vector3f squareNormal = normal*normal;
-		double d = Utility::sqrt(squareNormal.dotProduct(square));
+      float d = Utility::sqrt(squareNormal.dotProduct(square));
 
 		Vector3f surface = Vector3f(normal.x() * squareA / d, normal.y()*squareB / d, normal.z()*squareC / d);
 
@@ -86,40 +86,40 @@ namespace vrv
 	Geodetic2D Ellipsoid::surfacePointToGeodetic2D(Vector3f geocentric)
 	{
 		Vector3f normal = geodeticSurfaceNormal(geocentric);
-		double longtitude = Utility::atan2(normal.y(), normal.x());
-		double lantitude = Utility::asin(normal.z() / normal.length());
+      float longtitude = Utility::atan2(normal.y(), normal.x());
+      float lantitude = Utility::asin(normal.z() / normal.length());
 		return Geodetic2D(longtitude, lantitude);
 	}
 
 	Vector3f Ellipsoid::scaleToGeocentricSurface(Vector3f geocentric)
 	{
 		Vector3f square = geocentric*geocentric;
-		double beta = Utility::sqrt(1.0 / (square.dotProduct(Vector3f(myOneSquareXAxes, myOneSquareYAxes, myOneSquareZAxes))));
+      float beta = Utility::sqrt(1.0 / (square.dotProduct(Vector3f(myOneSquareXAxes, myOneSquareYAxes, myOneSquareZAxes))));
 		return geocentric*beta;
 	}
 
 	Vector3f Ellipsoid::scaleToGeodeticSurface(Vector3f position)
 	{
-		double beta = 1.0 / Utility::sqrt(
+      float beta = 1.0 / Utility::sqrt(
 			(position.x() * position.x()) * myOneSquareXAxes +
 			(position.y() * position.y()) * myOneSquareYAxes +
 			(position.z() * position.z()) * myOneSquareZAxes);
-		double n = Vector3f(
+      float n = Vector3f(
 			beta * position.x() * myOneSquareXAxes,
 			beta * position.y() * myOneSquareYAxes,
          beta * position.z() * myOneSquareZAxes).length();
-      double alpha = (1.0 - beta) * (position.length() / n);
+      float alpha = (1.0 - beta) * (position.length() / n);
 
-		double x2 = position.x() * position.x();
-		double y2 = position.y() * position.y();
-		double z2 = position.z() * position.z();
+      float x2 = position.x() * position.x();
+      float y2 = position.y() * position.y();
+      float z2 = position.z() * position.z();
 
-		double da = 0.0;
-		double db = 0.0;
-		double dc = 0.0;
+      float da = 0.0;
+      float db = 0.0;
+      float dc = 0.0;
 
-		double s = 0.0;
-		double dSdA = 1.0;
+      float s = 0.0;
+      float dSdA = 1.0;
 
 		do
 		{
@@ -129,13 +129,13 @@ namespace vrv
 			db = 1.0 + (alpha * myOneSquareYAxes);
 			dc = 1.0 + (alpha * myOneSquareZAxes);
 
-			double da2 = da * da;
-			double db2 = db * db;
-			double dc2 = dc * dc;
+         float da2 = da * da;
+         float db2 = db * db;
+         float dc2 = dc * dc;
 
-			double da3 = da * da2;
-			double db3 = db * db2;
-			double dc3 = dc * dc2;
+         float da3 = da * da2;
+         float db3 = db * db2;
+         float dc3 = dc * dc2;
 
 			s = x2 / (mySquareXAxes * da2) +
 				y2 / (mySquareYAxes * db2) +
@@ -164,7 +164,7 @@ namespace vrv
 		return Geodetic3D(geodetic2D.longtitude(), geodetic2D.lantitude(), height);
 	}
 
-	std::vector<Vector3f> Ellipsoid::computeCurve(Vector3f p, Vector3f q, double granularity)
+	std::vector<Vector3f> Ellipsoid::computeCurve(Vector3f p, Vector3f q, float granularity)
 	{
 		std::vector<Vector3f> points;
 		double angle = p.angelBetween(q);
@@ -180,7 +180,7 @@ namespace vrv
 		return points;
 	}
 
-	double Ellipsoid::height(Vector3f geocentric)
+   float Ellipsoid::height(Vector3f geocentric)
 	{
 		return geocentricToGeodetic(geocentric).height();
 	}

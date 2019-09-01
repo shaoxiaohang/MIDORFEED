@@ -1,5 +1,5 @@
 #pragma once
-#include <Core/Vector3.h>
+#include <Core/Vector3f.h>
 #include <Core/Geodetic.h>
 #include <vector>
 namespace vrv
@@ -8,14 +8,14 @@ namespace vrv
 	class Ellipsoid
 	{
 	public:
-		Ellipsoid(double x, double y, double z);
+		Ellipsoid(float x, float y, float z);
 
-		double xAxes() const;
-		double yAxes() const;
-		double zAxes() const;
+      float xAxes() const;
+      float yAxes() const;
+      float zAxes() const;
 
 		Vector3f radius() const;
-		double maximumRadius() const;
+      float maximumRadius() const;
 
 		//Gets the geodetic normal for a point on the ellipsoid.
 		Vector3f geodeticSurfaceNormal(Vector3f geocentric);
@@ -37,24 +37,24 @@ namespace vrv
 
 		Geodetic3D geocentricToGeodetic(Vector3f geocentric);
 
-		std::vector<Vector3f> computeCurve(Vector3f p, Vector3f q, double granularity);
+		std::vector<Vector3f> computeCurve(Vector3f p, Vector3f q, float granularity);
 
-		double height(Vector3f geocentric);
+      float height(Vector3f geocentric);
 
 		Geometry* geometry();
 
 	protected:
-		double myXAxesLength;
-		double myYAxesLength;
-		double myZAxesLength;
-		double myMaximumRadius;
+      float myXAxesLength;
+      float myYAxesLength;
+      float myZAxesLength;
+      float myMaximumRadius;
 		Vector3f myRadius;
-		double mySquareXAxes;
-		double mySquareYAxes;
-		double mySquareZAxes;
-		double myOneSquareXAxes;
-		double myOneSquareYAxes;
-		double myOneSquareZAxes;
+      float mySquareXAxes;
+      float mySquareYAxes;
+      float mySquareZAxes;
+      float myOneSquareXAxes;
+      float myOneSquareYAxes;
+      float myOneSquareZAxes;
 		bool myUseGPURayCasting;
 		Geometry* myGeometry;
 		

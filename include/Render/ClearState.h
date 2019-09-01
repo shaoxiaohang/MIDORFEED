@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Vector4.h>
+#include <Core/Vector4f.h>
 namespace vrv
 {
 	class ClearState
