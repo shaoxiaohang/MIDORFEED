@@ -18,8 +18,6 @@ namespace vrv
 
 		Node(const std::string& name);
 
-     
-
       void addDrawable(Drawable* drawable);
 
       unsigned int numberOfDrawable();

@@ -48,7 +48,7 @@ $ENV{BOOST_ROOT}/include
 )
 
 #find library directory by looking for certain library file
-find_path(BOOST_LIB_DIR libboost_math_c99-vc120-mt.lib
+find_path(BOOST_LIB_DIR libboost_wave-vc120-mt-1_63.lib
 PATHS
 $ENV{BOOST_ROOT}/lib/
 )

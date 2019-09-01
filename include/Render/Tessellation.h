@@ -6,7 +6,6 @@ namespace vrv
 	class ArrayVec3;
 	class ArrayVec2;
 	class ArrayUnsignedInt;
-	class Vector3f;
 	class Geometry;
 	class SubdivisionSphereTessellatorSimple
 	{
