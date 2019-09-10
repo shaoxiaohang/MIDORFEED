@@ -10,6 +10,14 @@
 #include <Render/Material.h>
 #include <Render/OpenGLContext.h>
 
+#ifdef min
+#undef min
+#endif
+
+#ifdef max
+#undef max
+#endif
+
 namespace vrv
 {
 	Geometry::Geometry()
@@ -120,6 +128,8 @@ namespace vrv
 			}
 
 			setVertexArrayObject(vao);
+
+         calculateBound();
 			myBuildGeometry = true;
 		}
 	}
@@ -260,4 +270,44 @@ namespace vrv
 
 		setTangent(tangents);
 	}
+
+   void Geometry::calculateBound()
+   {
+      int vertexSize;
+
+      if (myIndexArray)
+      {
+         vertexSize = myIndexArray->size();
+      }
+      else
+      {
+         vertexSize = myVertexArray->size();
+      }
+
+      Vector3f minV(FLT_MAX, FLT_MAX, FLT_MAX);
+      Vector3f maxV(FLT_MIN, FLT_MIN, FLT_MIN);
+      for (int i = 0; i < vertexSize; i++)
+      {
+         Vector3f vertex;
+         if (myIndexArray)
+         {
+            int index = myIndexArray->get(i);
+            vertex = myVertexArray->get(index);
+         }
+         else
+         {
+            vertex = myVertexArray->get(i);
+         }
+
+         minV.x() = std::min(minV.x(), vertex.x());
+         minV.y() = std::min(minV.y(), vertex.y());
+         minV.z() = std::min(minV.z(), vertex.z());
+         maxV.x() = std::max(maxV.x(), vertex.x());
+         maxV.y() = std::max(maxV.y(), vertex.y());
+         maxV.z() = std::max(maxV.z(), vertex.z());
+      }
+
+      myBound.setMinVector(minV);
+      myBound.setMaxVector(maxV);
+   }
 }

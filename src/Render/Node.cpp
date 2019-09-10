@@ -128,7 +128,19 @@ namespace vrv
 
    void Node::calculateBound()
    {
-      float min = FLT_MAX;
-      float max = 0;
+      if (myChildren.size() == 0)
+      {
+         for (Drawable* draw : myDrawables)
+         {
+            if (draw)
+            {
+               myBound.expand(()
+            }
+         }
+      }
+      else
+      {
+
+      }
    }
 }

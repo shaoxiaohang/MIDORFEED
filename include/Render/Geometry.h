@@ -31,7 +31,7 @@ namespace vrv
 		void buildGeometry();
 		void setBuildNormal(bool);
 		void setBuildTangent(bool);
-
+      void calculateBound();
 		
 
 	protected:

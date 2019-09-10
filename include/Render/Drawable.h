@@ -2,6 +2,7 @@
 #include <vector>
 #include <Render/Array.h>
 #include <Render/Node.h>
+#include <Core/Bound.h>
 namespace vrv
 {
 	class DrawState;
@@ -59,6 +60,7 @@ namespace vrv
 		bool instanced();
 		void updateProgram(Program* program);
 		Material* getOrCreateMaterial();
+      virtual void calculateBound() = 0;
 	protected:
 		virtual void buildGeometry() = 0;
 	protected:
@@ -68,5 +70,6 @@ namespace vrv
 		Material* myMaterial;
 		bool myIsInstanced;
 		int myInstancedCount;
+      Bound myBound;
 	};
 }
