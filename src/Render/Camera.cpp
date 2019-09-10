@@ -28,7 +28,7 @@ namespace vrv
       , myNearPlane(0.1f)
       , myFarPlane(100.0f)
       , myInitialPosition(Vector3f(0, 0, 10))
-      , myWDivideH(4.0 / 3.0)
+      , myWDivideH(4.0f / 3.0f)
       , myCameraMode(OrbitMode)
    {
    }
@@ -125,7 +125,7 @@ namespace vrv
 
    void Camera::focousOnTarget(Vector3f position, float radius)
    {
-      myNearPlane = 0.01 * radius;
+      myNearPlane = 0.01f * radius;
       myFarPlane = 10 * radius;
 
       float distance = radius / Utility::sin(myFOV / 2.0f);
@@ -159,7 +159,7 @@ namespace vrv
             {
                float deltaX = e.mousePositionX() - startX;
                float deltaY = e.mousePositionY() - startY;
-               float speed = 0.01;
+               float speed = 0.01f;
                v.setXRotation(deltaY*speed);
                v.setYRotation(deltaX*speed);
                Scene::instance().acceptNodeVisitor(&v);
@@ -216,8 +216,8 @@ namespace vrv
          }
          if (e.mouseButton() == WindowEvent::RightMouseButton)
          {
-            double deltaX = e.mousePositionX() - myLastMouseX;
-            double deltaY = e.mousePositionY() - myLastMouseY;
+            float deltaX = e.mousePositionX() - myLastMouseX;
+            float deltaY = e.mousePositionY() - myLastMouseY;
             myLastMouseX = e.mousePositionX();
             myLastMouseY = e.mousePositionY();
             myYaw += deltaX * myRotateSpeed;

@@ -37,22 +37,22 @@ namespace vrv
 		}
 	}
 
-	unsigned int Node::numberOfChildren()
+	int Node::numberOfChildren()
 	{
 		return myChildren.size();
 	}
 
-	Node* Node::getChild(unsigned int i)
+	Node* Node::getChild(int i)
 	{
 		return myChildren[i];
 	}
 
-	unsigned int Node::numberOfDrawable()
+	int Node::numberOfDrawable()
 	{
 		return myDrawables.size();
 	}
 
-	Drawable* Node::getDrawable(unsigned int i)
+	Drawable* Node::getDrawable(int i)
 	{
 		return myDrawables[i];
 	}

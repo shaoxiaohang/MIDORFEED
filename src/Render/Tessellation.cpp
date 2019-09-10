@@ -11,14 +11,14 @@ namespace vrv
 		positions.resize(numberOfVertices(numberOfSubdivisions));
 		indexes.resize(3 * numberOfTriangles(numberOfSubdivisions));
 		static Vector3f p0 = Vector3f(0, 0, 1);
-		static Vector3f p1 = Vector3f(0, 2.0*Utility::sqrt(2) / 3.0, -1.0 / 3.0);
-		static Vector3f p2 = Vector3f(-Utility::sqrt(6) / 3.0, -Utility::sqrt(2) / 3.0, -1.0 / 3.0);
-		static Vector3f p3 = Vector3f(Utility::sqrt(6) / 3.0, -Utility::sqrt(2) / 3.0, -1.0 / 3.0);
+		static Vector3f p1 = Vector3f(0, 2.0f*Utility::sqrt(2) / 3.0f, -1.0f / 3.0f);
+		static Vector3f p2 = Vector3f(-Utility::sqrt(6) / 3.0f, -Utility::sqrt(2) / 3.0f, -1.0f / 3.0f);
+		static Vector3f p3 = Vector3f(Utility::sqrt(6) / 3.0f, -Utility::sqrt(2) / 3.0f, -1.0f / 3.0f);
 
-		p0 = p0 * Vector3f(1, 1, 1.2);
-		p1 = p1 * Vector3f(1, 1, 1.2);
-		p2 = p2 * Vector3f(1, 1, 1.2);
-		p3 = p3 * Vector3f(1, 1, 1.2);
+		p0 = p0 * Vector3f(1, 1, 1.2f);
+		p1 = p1 * Vector3f(1, 1, 1.2f);
+		p2 = p2 * Vector3f(1, 1, 1.2f);
+		p3 = p3 * Vector3f(1, 1, 1.2f);
 
 		positions.add(p0);
 		positions.add(p1);
@@ -50,9 +50,9 @@ namespace vrv
 			v12 = v12.normalizedVector();
 			v20 = v20.normalizedVector();
 
-			v01 = v01 * Vector3f(1, 1, 1.2);
-			v12 = v12 * Vector3f(1, 1, 1.2);
-			v20 = v20 * Vector3f(1, 1, 1.2);
+			v01 = v01 * Vector3f(1, 1, 1.2f);
+			v12 = v12 * Vector3f(1, 1, 1.2f);
+			v20 = v20 * Vector3f(1, 1, 1.2f);
 
 			positions.add(v01);
 			positions.add(v12);
@@ -117,7 +117,7 @@ namespace vrv
 		std::vector<Vector2f> lookupTable;
 		for (int j = 0; j < numberOfSlices; ++j)
 		{
-			float theta = 360.0 / numberOfSlices;
+			float theta = 360.0f / numberOfSlices;
 			float cosTheta = Utility::cos(theta * j);
 			float sinTheta = Utility::sin(theta * j);
 			lookupTable.push_back(Vector2f(cosTheta, sinTheta));
@@ -131,12 +131,12 @@ namespace vrv
 		//mid points
 		for (int i = 1; i < numberOfStacks; ++i)
 		{
-			float phi = 180.0 / numberOfStacks;
+			float phi = 180.0f / numberOfStacks;
 			float sinPhi = Utility::sin(phi * i);
 			float cosPhi = Utility::cos(phi * i);
 			for (int j = 0; j < numberOfSlices; ++j)
 			{
-				float theta = 360.0 / numberOfSlices;
+				float theta = 360.0f / numberOfSlices;
 				float cosTheta = lookupTable[j].x();
 				float sinTheta = lookupTable[j].y();
 				positions.add(Vector3f(a*cosTheta*sinPhi, b*sinTheta*sinPhi, c*cosPhi));

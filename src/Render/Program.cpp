@@ -325,7 +325,7 @@ namespace vrv
 			GLenum uniformType;
 			char* uniformName = new char[maxNameLength];
 			int location = -1;
-			for (unsigned int i = 0; i < totalUniforms;++i)
+			for (int i = 0; i < totalUniforms;++i)
 			{
             OpenGLContext::instance().glGetActiveUniform(myID, i, maxNameLength, NULL, &uniformSize, &uniformType, uniformName);
 				location = OpenGLContext::instance().glGetUniformLocation(myID, uniformName);

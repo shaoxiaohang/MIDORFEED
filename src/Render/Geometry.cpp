@@ -254,7 +254,7 @@ namespace vrv
 			float deltaV2 = st2.y() - st0.y();
 
 
-			float f = 1.0 / (deltaU1*deltaV2 - deltaU2*deltaV1);
+			float f = 1.0f / (deltaU1*deltaV2 - deltaU2*deltaV1);
 
 			Vector3f tangent;
 			tangent.x() = f*(deltaV2*E1.x() - deltaV1*E2.x());

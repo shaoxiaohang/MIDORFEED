@@ -13,11 +13,11 @@ namespace vrv
       , myHeight(height)
    {
       ArrayFloat filters(5);
-      filters.add(0.227027);
-      filters.add(0.1945946);
-      filters.add(0.1216216);
-      filters.add(0.054054);
-      filters.add(0.016216);
+      filters.add(0.227027f);
+      filters.add(0.1945946f);
+      filters.add(0.1216216f);
+      filters.add(0.054054f);
+      filters.add(0.016216f);
 
       myGaussianBlur = new GaussianBlur(myWidth, myHeight, 5, filters, 5);
 

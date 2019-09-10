@@ -170,7 +170,7 @@ namespace vrv
 	{
 		addDrawableToRender(node);
 		stack.pop();
-		for (unsigned int i = 0; i < node->numberOfChildren(); ++i)
+		for (int i = 0; i < node->numberOfChildren(); ++i)
 		{
 			Node* child = node->getChild(i);
 			stack.push(child);
@@ -381,7 +381,7 @@ namespace vrv
 			material->setSpecular(light->specular());
 			lightNode->setPosition(light->position());
 			cube->setMaterial(material);
-			lightNode->setScale(Vector3f(0.3, 0.3, 0.3));
+			lightNode->setScale(Vector3f(0.3f, 0.3f, 0.3f));
 			lightNode->addDrawable(cube);
 			myLightNode->addChild(lightNode);
 		}

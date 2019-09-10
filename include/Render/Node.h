@@ -20,17 +20,17 @@ namespace vrv
 
       void addDrawable(Drawable* drawable);
 
-      unsigned int numberOfDrawable();
+      int numberOfDrawable();
 
-      Drawable* getDrawable(unsigned int i);
+      Drawable* getDrawable(int i);
 
 		void addChild(Node* child);
 
 		void removeChild(Node* child);
 
-		unsigned int numberOfChildren();
+		int numberOfChildren();
 
-		Node* getChild(unsigned int i);
+		Node* getChild(int i);
 
 		Node* parent();
 

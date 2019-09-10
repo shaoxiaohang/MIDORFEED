@@ -16,9 +16,9 @@ namespace vrv
 		mySquareXAxes = a*a;
 		mySquareYAxes = b*b;
 		mySquareZAxes = c*c;
-		myOneSquareXAxes = 1.0 / (a*a);
-		myOneSquareYAxes = 1.0 / (b*b);
-		myOneSquareZAxes = 1.0 / (c*c);
+		myOneSquareXAxes = 1.0f / (a*a);
+		myOneSquareYAxes = 1.0f / (b*b);
+		myOneSquareZAxes = 1.0f / (c*c);
 
 		myGeometry = BoxTessellator::compute(myRadius * 2);
 	}
@@ -94,13 +94,13 @@ namespace vrv
 	Vector3f Ellipsoid::scaleToGeocentricSurface(Vector3f geocentric)
 	{
 		Vector3f square = geocentric*geocentric;
-      float beta = Utility::sqrt(1.0 / (square.dotProduct(Vector3f(myOneSquareXAxes, myOneSquareYAxes, myOneSquareZAxes))));
+      float beta = Utility::sqrt(1.0f / (square.dotProduct(Vector3f(myOneSquareXAxes, myOneSquareYAxes, myOneSquareZAxes))));
 		return geocentric*beta;
 	}
 
 	Vector3f Ellipsoid::scaleToGeodeticSurface(Vector3f position)
 	{
-      float beta = 1.0 / Utility::sqrt(
+      float beta = 1.0f / Utility::sqrt(
 			(position.x() * position.x()) * myOneSquareXAxes +
 			(position.y() * position.y()) * myOneSquareYAxes +
 			(position.z() * position.z()) * myOneSquareZAxes);
@@ -108,26 +108,26 @@ namespace vrv
 			beta * position.x() * myOneSquareXAxes,
 			beta * position.y() * myOneSquareYAxes,
          beta * position.z() * myOneSquareZAxes).length();
-      float alpha = (1.0 - beta) * (position.length() / n);
+      float alpha = (1.0f - beta) * (position.length() / n);
 
       float x2 = position.x() * position.x();
       float y2 = position.y() * position.y();
       float z2 = position.z() * position.z();
 
-      float da = 0.0;
-      float db = 0.0;
-      float dc = 0.0;
+      float da = 0.0f;
+      float db = 0.0f;
+      float dc = 0.0f;
 
       float s = 0.0;
-      float dSdA = 1.0;
+      float dSdA = 1.0f;
 
 		do
 		{
 			alpha -= (s / dSdA);
 
-			da = 1.0 + (alpha * myOneSquareXAxes);
-			db = 1.0 + (alpha * myOneSquareYAxes);
-			dc = 1.0 + (alpha * myOneSquareZAxes);
+			da = 1.0f + (alpha * myOneSquareXAxes);
+			db = 1.0f + (alpha * myOneSquareYAxes);
+			dc = 1.0f + (alpha * myOneSquareZAxes);
 
          float da2 = da * da;
          float db2 = db * db;
@@ -139,9 +139,9 @@ namespace vrv
 
 			s = x2 / (mySquareXAxes * da2) +
 				y2 / (mySquareYAxes * db2) +
-				z2 / (mySquareZAxes * dc2) - 1.0;
+				z2 / (mySquareZAxes * dc2) - 1.0f;
 
-			dSdA = -2.0 *
+			dSdA = -2.0f *
 				(x2 / (mySquareXAxes*mySquareXAxes * da3) +
 				y2 / (mySquareYAxes*mySquareYAxes * db3) +
 				z2 / (mySquareZAxes*mySquareZAxes * dc3));
@@ -159,7 +159,7 @@ namespace vrv
 		Vector3f h = geocentric - surfacePoint;
 		int sign = h.dotProduct(geocentric) > 0 ? 1:-1;
 		Geodetic2D geodetic2D = surfacePointToGeodetic2D(surfacePoint);
-      double height = sign * h.length();
+      float height = sign * h.length();
 
 		return Geodetic3D(geodetic2D.longtitude(), geodetic2D.lantitude(), height);
 	}
@@ -169,7 +169,7 @@ namespace vrv
 		std::vector<Vector3f> points;
 		double angle = p.angelBetween(q);
 		Vector3f planeNormal = q.crossProduct(q).normalizedVector();
-		int num = angle / granularity ;
+		int num = (int)(angle / granularity) ;
 		for (int i = 1; i <= num; ++i)
 		{
 			Vector3f point = p.rotateAroundAxis(planeNormal, i*granularity);

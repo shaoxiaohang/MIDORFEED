@@ -20,7 +20,7 @@ namespace vrv
 
 	void InstancedNode::setUpInstanced()
 	{
-		for (size_t i = 0; i < numberOfDrawable(); i++)
+		for (int i = 0; i < numberOfDrawable(); i++)
 		{
 			Drawable* drawable = getDrawable(i);
 			Geometry* geometry = dynamic_cast<Geometry*>(drawable);
