@@ -61,6 +61,7 @@ namespace vrv
 		void updateProgram(Program* program);
 		Material* getOrCreateMaterial();
       virtual void calculateBound() = 0;
+      Bound bound();
 	protected:
 		virtual void buildGeometry() = 0;
 	protected:

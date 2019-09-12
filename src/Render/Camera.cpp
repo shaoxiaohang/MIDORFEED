@@ -6,6 +6,7 @@
 #include <iostream>
 #include <Core/Utility.h>
 #include <Render/Scene.h>
+#include <Render/Node.h>
 
 namespace vrv
 {
@@ -133,6 +134,16 @@ namespace vrv
       myPosition = (Vector3f(0, 0, 1) - position).normalizedVector() * distance + position;
       setInitialPosition(myPosition);
       myIsProjectionDirty = true;
+   }
+
+   void Camera::focousOnTarget(Node* node)
+   {
+      if (node)
+      {
+         Vector3f position = node->position();
+         Bound bound = node->bound();
+         focousOnTarget(position, bound.radius());
+      }
    }
 
    void Camera::orbitMode(const WindowEvent& e)

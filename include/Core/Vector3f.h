@@ -25,6 +25,13 @@ namespace vrv
          data[2] = 0;
       }
 
+      Vector3f(Vector4f vec)
+      {
+         data[0] = vec[0];
+         data[1] = vec[1];
+         data[2] = vec[2];
+      }
+
       Vector3f(float x, float y, float z)
       {
          data[0] = x;
@@ -38,6 +45,14 @@ namespace vrv
          data[1] = right[1];
          data[2] = right[2];
 
+         return *this;
+      }
+
+      Vector3f& Vector3f::operator = (const Vector4f& vec4)
+      {
+         data[0] = vec4.x();
+         data[1] = vec4.y();
+         data[2] = vec4.z();
          return *this;
       }
 

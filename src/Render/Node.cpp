@@ -1,4 +1,5 @@
 #include <Render/Node.h>
+#include <Render/Drawable.h>
 
 namespace vrv
 {
@@ -20,12 +21,14 @@ namespace vrv
 	void Node::addDrawable(Drawable* drawable)
 	{
 		myDrawables.push_back(drawable);
+      calculateBound();
 	}
 
 	void Node::addChild(Node* child)
 	{
 		child->setParent(this);
 		myChildren.push_back(child);
+      calculateBound();
 	}
 
 	void Node::removeChild(Node* child)
@@ -35,6 +38,7 @@ namespace vrv
 		{
 			myChildren.erase(itor);
 		}
+      calculateBound();
 	}
 
 	int Node::numberOfChildren()
@@ -126,6 +130,11 @@ namespace vrv
 		return myIsEllipsoid;
 	}
 
+   Bound Node::bound()
+   {
+      return myBound.scale(myScale);
+   }
+
    void Node::calculateBound()
    {
       if (myChildren.size() == 0)
@@ -134,13 +143,19 @@ namespace vrv
          {
             if (draw)
             {
-               myBound.expand(()
+               myBound.expand(draw->bound());
             }
          }
       }
       else
       {
-
+         for (Node* node : myChildren)
+         {
+            if (node)
+            {
+               myBound.expand(node->bound());
+            }
+         }
       }
    }
 }

@@ -56,6 +56,7 @@ namespace vrv
 		void setIsEllipsoid(bool);
 		bool isEllipsoid();
 
+      Bound bound();
    protected:
 
       void calculateBound();

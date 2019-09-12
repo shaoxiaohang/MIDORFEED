@@ -5,6 +5,7 @@
 namespace vrv
 {
    class WindowEvent;
+   class Node;
 
 	class Camera
 	{
@@ -35,6 +36,8 @@ namespace vrv
 		void setInitialPosition(Vector3f position);
 
 		void focousOnTarget(Vector3f position, float radius);
+
+      void focousOnTarget(Node* node);
 
       void handleWindowEvent(const WindowEvent& e);
 

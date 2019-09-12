@@ -206,4 +206,9 @@ namespace vrv
 		}
 		return myMaterial;
 	}
+
+   Bound Drawable::bound()
+   {
+      return myBound;
+   }
 }

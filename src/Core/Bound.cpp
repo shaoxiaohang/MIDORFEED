@@ -7,6 +7,12 @@ namespace vrv
 
    }
 
+   Bound::Bound(Vector3f min, Vector3f max)
+   {
+      myMinVector = min;
+      myMaxVector = max;
+   }
+
    void Bound::setMinVector(Vector3f v)
    {
       myMinVector = v;
@@ -42,5 +48,20 @@ namespace vrv
       myMaxVector.x() = std::max(myMaxVector.x(), bound.maxVector().x());
       myMaxVector.y() = std::max(myMaxVector.y(), bound.maxVector().y());
       myMaxVector.z() = std::max(myMaxVector.z(), bound.maxVector().z());
+   }
+
+   Bound Bound::scale(Matrix4f m)
+   {
+      return Bound(m * myMinVector, m * myMaxVector);
+   }
+
+   Bound Bound::scale(float scalar)
+   {
+      return Bound(myMinVector*scalar, myMaxVector * scalar);
+   }
+
+   Bound Bound::scale(Vector3f scalar)
+   {
+      return Bound(myMinVector*scalar, myMaxVector * scalar);
    }
 }

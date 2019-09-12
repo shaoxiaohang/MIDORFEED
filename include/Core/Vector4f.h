@@ -18,6 +18,23 @@ namespace vrv
          data[3] = z;
       }
 
+      Vector4f::Vector4f(const Vector3f& vec3)
+      {
+         data[0] = vec3.x();
+         data[1] = vec3.y();
+         data[2] = vec3.z();
+         data[3] = 1.0f;
+      }
+
+      Vector4f& Vector4f::operator = (const Vector3f& vec3)
+      {
+         data[0] = vec3.x();
+         data[1] = vec3.y();
+         data[2] = vec3.z();
+         data[3] = 1.0f;
+         return *this;
+      }
+
       Vector4f::Vector4f(Vector3f vec3, float w)
       {
          data[0] = vec3.x();
