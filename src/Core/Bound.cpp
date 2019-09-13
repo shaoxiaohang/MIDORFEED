@@ -52,7 +52,7 @@ namespace vrv
 
    Bound Bound::scale(Matrix4f m)
    {
-      return Bound(m * myMinVector, m * myMaxVector);
+      return Bound((m * myMinVector).xyz(), (m * myMaxVector).xyz());
    }
 
    Bound Bound::scale(float scalar)

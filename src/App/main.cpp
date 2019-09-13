@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 
 	Scenario* test = new Scenario("model.scene");
 	viewer->setSceneData(test);
-   viewer->masterCamera()->focousOnTarget(Vector3f(0, 0, 0), 1.0);
+   viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
 	viewer->run();
 	
 	return 0;

@@ -376,9 +376,9 @@ namespace vrv
 			lightNode->setIsLightPoint(true);
 			Cube* cube = new Cube();
 			Material* material = new Material();
-			material->setAmbient(light->ambient());
-			material->setDiffuse(light->diffuse());
-			material->setSpecular(light->specular());
+			material->setAmbient(Vector4f(light->ambient(), 1.0f));
+			material->setDiffuse(Vector4f(light->diffuse(), 1.0f)); 
+			material->setSpecular(Vector4f(light->specular(), 10.f));
 			lightNode->setPosition(light->position());
 			cube->setMaterial(material);
 			lightNode->setScale(Vector3f(0.3f, 0.3f, 0.3f));

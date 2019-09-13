@@ -27,6 +27,7 @@ namespace vrv
 		}
 		myBaseDirectory = Utility::getBaseDirectory(myFileName);
 		processNode(scene->mRootNode, scene);
+      calculateBound();
 		VRV_INFO("finish loading file")
 	}
 
