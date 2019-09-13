@@ -1,0 +1,49 @@
+<scene>
+	<camera>
+	<position x="0.1" y="0.5" z="38.75"/>
+	</camera>
+	<objects>
+		<cube>
+			<name>tunnel</name>
+			<position x="0" y="0" z="25"/>
+			<scale x="2.5" y="2.5" z="27.5"/>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>wood.png</filename>
+					</diffuse>
+				</TexturePlatte>
+			</material>
+		</cube>
+	</objects>
+	<lights>
+		<light1>
+			<type>point</type>
+			<position x="0" y="0" z= "0"/>
+			<ambient r="0" g="0" b="0"/>
+			<diffuse r="200" g="200" b="200"/>s
+			<specular r="0.3" g="0.3" b="0.3"/>
+		</light1>
+		<light2>
+			<type>point</type>
+			<position x="-1.4" y="-1.9" z= "31"/>
+			<ambient r="0" g="0" b="0"/>
+			<diffuse r="0.2" g="0" b="0"/>s
+			<specular r="0.3" g="0.3" b="0.3"/>
+		</light2>
+		<light3>
+			<type>point</type>
+			<position x="0" y="-1.8" z= "36"/>
+			<ambient r="0" g="0" b="0"/>
+			<diffuse r="0" g="0" b="0.2"/>s
+			<specular r="0.3" g="0.3" b="0.3"/>
+		</light3>
+		<light4>
+			<type>point</type>
+			<position x="0.8" y="-1.7" z= "34"/>
+			<ambient r="0" g="0" b=""/>
+			<diffuse r="0" g="0.2" b="0"/>s
+			<specular r="0.3" g="0.3" b="0.3"/>
+		</light4>
+	</lights>
+</scene>

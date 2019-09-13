@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>		
+	<objects>
+		<model>
+			<name>nanosuit</name>
+			<position x="-2" y="0" z="-1"/>
+			<scale>0.1</scale>
+			<filename>nanosuit/nanosuit.obj</filename>
+		</model>
+	</objects>
+	<lights>
+		<light1>
+			<type>direction</type>
+			<position x="-2" y="4" z= "3"/>
+		    <direction x="0" y="0" z= "-1"/>
+			<ambient r="0.7" g="0.7" b="0.7"/>
+			<diffuse r="0.8" g="0.8" b="0.8"/>
+			<specular r="0.3" g="0.3" b="0.3"/>
+			<cast_shadow>false</cast_shadow>
+		</light1>
+	</lights>
+</scene>

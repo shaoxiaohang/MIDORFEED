@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>		
+	<objects>
+		<floor>
+			<name>floor</name>
+			<position x="0" y="0" z="0"/>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>brickwall.jpg</filename>
+						<filtermode>linear</filtermode>
+					</diffuse>
+					<normal>
+						<filename>brickwall_normal.jpg</filename>
+					</normal>
+				</TexturePlatte>
+			</material>
+		</floor>
+		<cube>
+			<name>cube1</name>
+		    <position x="0" y="1.5" z="0"/>
+			<scale x="0.5" y="0.5" z="0.5"/>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>marble.jpg</filename>
+						<filtermode>linear</filtermode>
+					</diffuse>
+				</TexturePlatte>
+			</material>
+		</cube>
+		<sphere>
+			<name>sphere</name>
+		    <position x="0" y="3" z="0"/>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>NE2_50M_SR_W.jpg</filename>
+						<wrapmode>repeat</wrapmode>
+					</diffuse>
+				</TexturePlatte>
+			</material>
+		</sphere>
+		<cube>
+			<name>cube2</name>
+		    <position x="2" y="0" z="1"/>
+			<scale x="0.5" y="0.5" z="0.5"/>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>marble.jpg</filename>
+						<filtermode>linear</filtermode>
+					</diffuse>
+				</TexturePlatte>
+			</material>
+		</cube>
+		<cube>
+			<name>cube5</name>
+		    <position x="-2" y="1" z="-3"/>
+			<rotation axis="y" degree= "124"/>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>marble.jpg</filename>
+						<filtermode>linear</filtermode>
+					</diffuse>
+				</TexturePlatte>
+			</material>
+		</cube>
+		<cube>
+			<name>cube6</name>
+		    <position x="-3" y="0" z="0"/>
+			<rotation axis="z" degree= "23"/>
+			<scale x="0.5" y="0.5" z="0.5"/>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>marble.jpg</filename>
+						<filtermode>linear</filtermode>
+					</diffuse>
+				</TexturePlatte>
+			</material>
+		</cube>
+	</objects>
+	<lights>
+		<light1>
+			<type>point</type>
+			<position x="0" y="0.5" z= "1.5"/>
+			<ambient r="0.2" g="0.2" b="0.2"/>
+			<diffuse r="2" g="2" b="2"/>s
+			<specular r="0.3" g="0.3" b="0.3"/>
+			<cast_shadow>true</cast_shadow>
+		</light1>
+	    <light2>
+			<type>point</type>
+			<position x="-4" y="0.5" z= "-3"/>
+			<ambient r="0.2" g="0.2" b="0.2"/>
+			<diffuse r="1.5" g="0" b="0"/>s
+			<specular r="0.3" g="0.3" b="0.3"/>
+		</light2>
+		<light3>
+			<type>point</type>
+			<position x="3" y="0.5" z= "1.0"/>
+			<ambient r="0.2" g="0.2" b="0.2"/>
+			<diffuse r="0" g="0" b="1.5"/>s
+			<specular r="0.3" g="0.3" b="0.3"/>
+		</light3>
+		<light4>
+			<type>point</type>
+			<position x="-0.8" y="2.4" z= "-1.0"/>
+			<ambient r="0.2" g="0.2" b="0.2"/>
+			<diffuse r="0" g="1.5" b="0"/>s
+			<specular r="0.3" g="0.3" b="0.3"/>
+		</light4>
+	</lights>
+</scene>

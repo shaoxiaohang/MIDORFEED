@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scene>
+	<earth>
+		<image_layer>
+			<url>NE2_50M_SR_W.jpg</url>
+		</image_layer>
+    </earth>
+	<projection>
+	</projection>
+</scene>
