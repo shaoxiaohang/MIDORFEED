@@ -3,9 +3,9 @@
 namespace vrv
 {
 	Light::Light(const std::string& name)
-		: myConstantTerm(0)
-		, myLinearTerm(1)
-		, myQuadraticTerm(1)
+		: myConstantTerm(1)
+		, myLinearTerm(0)
+		, myQuadraticTerm(0)
 		, myName(name)
 		, myCastShadow(false)
 	{

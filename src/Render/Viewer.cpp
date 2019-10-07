@@ -2,6 +2,8 @@
 #include <Render/Scene.h>
 #include <Render/Camera.h>
 #include <Render/MainWindow.h>
+#include <GUI/DtGuiManager.h>
+#include <time.h>
 
 namespace vrv
 {
@@ -10,14 +12,43 @@ namespace vrv
 	Viewer::Viewer(int &argc, char **argv)
 		: myScene(0)
       , myMainWindow(0)
+      , myQuit(false)
+      , mySecondsPerCycle(0)
 	{
-		
+      LARGE_INTEGER cycles;
+      QueryPerformanceFrequency(&cycles);
+      mySecondsPerCycle = 1.0 / cycles.QuadPart;
 	}
 
 	void Viewer::run()
 	{
-      myMainWindow->eventLoop();
+      LARGE_INTEGER previous;
+      QueryPerformanceCounter(&previous);
+    
+      double deltaT = 1.0 / 60.0;
+      LARGE_INTEGER end;
+
+      while (!myQuit)
+      {
+         handleMessage();
+         onUpdateTick(deltaT);
+         onRenderTick(deltaT);
+         swapBuffer();
+
+         QueryPerformanceCounter(&end);
+
+         deltaT = (end.QuadPart - previous.QuadPart) * mySecondsPerCycle;
+
+         myScene->masterCamera()->setLastFrame(deltaT);
+         previous = end;
+      }
+      
 	}
+
+   void Viewer::handleMessage()
+   {
+      myMainWindow->pickMessage();
+   }
 
 	void Viewer::initialize(int _width, int _height, const std::string& _title)
 	{
@@ -31,7 +62,7 @@ namespace vrv
 	
 	}
 
-	void Viewer::onRenderTick()
+	void Viewer::onRenderTick(double dt)
 	{
 		if (myScene)
 		{
@@ -63,4 +94,9 @@ namespace vrv
       }
    }
 
+   void Viewer::swapBuffer()
+   {
+      if (myMainWindow)
+         myMainWindow->swapBuffer();
+   }
 }

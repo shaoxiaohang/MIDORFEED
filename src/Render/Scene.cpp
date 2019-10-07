@@ -150,6 +150,7 @@ namespace vrv
 		myShadowSystem->initializeFrameBuffer(window->width(), window->height());
 		myTextureQuadRender = new TextureQuadRender();
 		myLightNode = new Node();
+      myGuiNode = new Node();
 	}
 
 	void Scene::setSceneData(Node* root)
@@ -391,6 +392,11 @@ namespace vrv
 	{
 		return myRoot;
 	}
+
+   Node* Scene::guiRoot()
+   {
+      return myGuiNode;
+   }
 
 	void Scene::setVisualizeDepthBuffer(bool visualize)
 	{

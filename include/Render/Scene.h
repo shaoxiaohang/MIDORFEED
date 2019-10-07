@@ -76,6 +76,7 @@ namespace vrv
 		Camera* masterCamera();
 		void addLight(Light* light);
 		Node* root();
+      Node* guiRoot();
 		void setVisualizeDepthBuffer(bool optimize);
 		void setOptimizeVisualizeDepthBuffer(bool);
 		void setOutlineObjects(bool);
@@ -90,6 +91,7 @@ namespace vrv
 		void setMap(Map* map);
 		Map* map();
       void acceptNodeVisitor(NodeVisitor* v);
+
 	protected:
 		void cullTraverse();
 		void DFS(std::stack<Node*>& stack, Node* node);
@@ -99,10 +101,12 @@ namespace vrv
 		void updateShadow(Program* program);
 		void updateGlobe(Program* program);
 		void initializeDrawState();
+
 	protected:
 		Camera* myMasterCamera;
 		Node* myRoot;
 		Node* myLightNode;
+      Node* myGuiNode;
 		Map* myMap;
 		MainWindow* myMainWindow;
 		PostProcessorManager* myPostProcessorManager;

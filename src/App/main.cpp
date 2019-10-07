@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	Viewer* viewer = new Viewer(argc,argv);
 	viewer->initialize(800, 600, "main window");
 
-	Scenario* test = new Scenario("model.scene");
+	Scenario* test = new Scenario("transparent.scene");
 	viewer->setSceneData(test);
    viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
 	viewer->run();

@@ -12,6 +12,7 @@ namespace vrv
          MouseMove,
          KeyBoardUp,
          KeyBoardDown,
+         Wheel,
          NoneEvent
       };
 
@@ -70,11 +71,15 @@ namespace vrv
       void setKeyButton(KeyButton button);
       KeyButton keyButton() const;
 
+      void setWheelDelta(int);
+      int wheelDelta() const;
+
    protected:
       EventType myEventType;
       int myMousePositionX;
       int myMousePositionY;
       MouseButton myMouseButton;
       KeyButton myKeyButton;
+      int myWheelDelta;
    };
 };

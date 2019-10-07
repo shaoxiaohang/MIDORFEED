@@ -21,6 +21,8 @@ namespace vrv
 
 		Geometry* getMesh(int i);
 
+      void calculateBound();
+
 	protected:
 		void initialize();
 

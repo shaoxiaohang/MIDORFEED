@@ -81,7 +81,7 @@
 		<light1>
 			<type>point</type>
 			<position x="-2" y="4" z= "3"/>
-			<ambient r="0.2" g="0.2" b="0.2"/>
+			<ambient r="0.8" g="0.8" b="0.8"/>
 			<diffuse r="0.8" g="0.8" b="0.8"/>s
 			<specular r="0.3" g="0.3" b="0.3"/>
 			<cast_shadow>true</cast_shadow>

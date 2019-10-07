@@ -4,6 +4,7 @@ project (DVA)
 file(GLOB CoreSources "include/Core/*.h" "src/Core/*.cpp")
 file(GLOB RenderSources "include/Render/*.h" "src/Render/*.cpp")
 file(GLOB DVASources "src/App/*.cpp")
+file(GLOB GUISources "include/GUI/*.h" "src/GUI/*.cpp")
 
 #find include directory by looking for certain header file
 find_path(TINYXMY_INCLUDE_DIR tinyxml2.h
@@ -72,8 +73,9 @@ set_target_properties(DVA PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
 
 add_library(Core STATIC ${CoreSources})
 add_library(Render STATIC ${RenderSources})
+add_library(GUI STATIC ${GUISources})
 
-target_link_libraries(DVA Core Render)
+target_link_libraries(DVA Core Render GUI)
 target_link_libraries(Render
 Core
 opengl32.lib
@@ -81,5 +83,9 @@ FreeImaged.lib
 boost_signals-vc120-mt-1_63.lib
 assimp-vc120-mt.lib
 tinyxml2d.lib
+)
+target_link_libraries(GUI
+Core
+Render
 )
 

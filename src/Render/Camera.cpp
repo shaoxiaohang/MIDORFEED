@@ -18,9 +18,9 @@ namespace vrv
       , myFront(0, 0, -1)
       , myRight(1, 0, 0)
       , myPosition(0, 0, 10)
-      , myMoveSpeed(0.2f)
+      , myMoveSpeed(40.0f)
       , myRotateSpeed(0.02f)
-      , myZoomSpeed(0.1f)
+      , myZoomSpeed(0.02f)
       , myFirstMouse(true)
       , myLastMouseX(0)
       , myLastMouseY(0)
@@ -30,7 +30,8 @@ namespace vrv
       , myFarPlane(100.0f)
       , myInitialPosition(Vector3f(0, 0, 10))
       , myWDivideH(4.0f / 3.0f)
-      , myCameraMode(OrbitMode)
+      , myCameraMode(FreeMove)
+      , myLastFrame(0)
    {
    }
 
@@ -98,20 +99,18 @@ namespace vrv
       return myProjectionMatrix;
    }
 
-
-   //bool Camera::handlerWheelEvent()
-   //{
-   //	//if (myFOV >= 1.0f && myFOV <= 45.0f)
-   //	//{
-   //	//	myFOV += event->delta()*myZoomSpeed;
-   //	//}
-   //	//if (myFOV <= 1.0f)
-   //	//	myFOV = 1.0f;
-   //	//if (myFOV >= 45.0f)
-   //	//	myFOV = 45.0f;
-   //	//myIsProjectionDirty = true;
-   //	return true;
-   //}
+   void Camera::handleWheelEvent(const WindowEvent& e)
+   {
+      if (myFOV >= 1.0f && myFOV <= 45.0f)
+      {
+         myFOV += e.wheelDelta()*myZoomSpeed;
+      }
+      if (myFOV <= 1.0f)
+         myFOV = 1.0f;
+      if (myFOV >= 45.0f)
+         myFOV = 45.0f;
+      myIsProjectionDirty = true;
+   }
 
    Vector3f Camera::position()
    {
@@ -131,7 +130,7 @@ namespace vrv
 
       float distance = radius / Utility::sin(myFOV / 2.0f);
 
-      myPosition = (Vector3f(0, 0, 1) - position).normalizedVector() * distance + position;
+      myPosition = Vector3f(0, 0, 1) * distance + position;
       setInitialPosition(myPosition);
       myIsProjectionDirty = true;
    }
@@ -142,7 +141,7 @@ namespace vrv
       {
          Vector3f position = node->position();
          Bound bound = node->bound();
-         focousOnTarget(position, bound.radius());
+         focousOnTarget(bound.center(), bound.radius());
       }
    }
 
@@ -180,6 +179,11 @@ namespace vrv
       };
    }
 
+   void Camera::setLastFrame(double t)
+   {
+      myLastFrame = t;
+   }
+
    void Camera::freeMode(const WindowEvent& e)
    {
       switch (e.eventType())
@@ -190,22 +194,22 @@ namespace vrv
          {
          case WindowEvent::W:
          {
-            myPosition += myFront * myMoveSpeed;
+            myPosition += myFront * myMoveSpeed * myLastFrame;
          }
          break;
          case WindowEvent::S:
          {
-            myPosition -= myFront * myMoveSpeed;
+            myPosition -= myFront * myMoveSpeed * myLastFrame;
          }
          break;
          case WindowEvent::A:
          {
-            myPosition -= myRight * myMoveSpeed;
+            myPosition -= myRight * myMoveSpeed * myLastFrame;
          }
          break;
          case WindowEvent::D:
          {
-            myPosition += myRight * myMoveSpeed;
+            myPosition += myRight * myMoveSpeed * myLastFrame;
          }
          break;
          case WindowEvent::Z:
@@ -217,6 +221,7 @@ namespace vrv
             break;
          }
       }
+      break;
       case WindowEvent::MouseMove:
       {
          if (myFirstMouse)
@@ -229,10 +234,18 @@ namespace vrv
          {
             float deltaX = e.mousePositionX() - myLastMouseX;
             float deltaY = e.mousePositionY() - myLastMouseY;
+
+
             myLastMouseX = e.mousePositionX();
             myLastMouseY = e.mousePositionY();
+
             myYaw += deltaX * myRotateSpeed;
             myPitch -= deltaY * myRotateSpeed;
+
+            if (myPitch > 89.0f)
+               myPitch = 89.0f;
+            if (myPitch < -89.0f)
+               myPitch = -89.0f;
 
             myFront.x() = Utility::cos(myPitch)*Utility::cos(myYaw);
             myFront.y() = Utility::sin(myPitch);
@@ -253,6 +266,27 @@ namespace vrv
 
    void Camera::handleWindowEvent(const WindowEvent& e)
    {
+      switch (e.eventType())
+      {
+      case WindowEvent::KeyBoardDown:
+      {
+         switch (e.keyButton())
+         {
+            case WindowEvent::X:
+            {
+               myCameraMode = (CameraMode) ( (myCameraMode + 1) % 2 );
+            }
+         }
+      }
+      break;
+      case WindowEvent::Wheel:
+      {
+         handleWheelEvent(e);
+      }
+      break;
+      }
+
+
       switch (myCameraMode)
       {
       case vrv::Camera::OrbitMode:

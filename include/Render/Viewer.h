@@ -11,6 +11,7 @@ namespace vrv
 	class Camera;
    class MainWindow;
    class WindowEvent;
+   class DtGuiManager;
 	class Viewer
 	{	
 	public:
@@ -19,15 +20,23 @@ namespace vrv
 		void initialize(int width, int height, const std::string& title);
 		void setSceneData(Node* node);
 		void onUpdateTick(double dt);
-		void onRenderTick();
+		void onRenderTick(double dt);
 		Camera* masterCamera();
       Scene* scene();
       void handleWindowEvent(const WindowEvent& e);
+
+   protected:
+
+      void handleMessage();
+      void swapBuffer();
 
 	public:
 	    static boost::signals2::signal<void()> signal_update;
 	protected:
 		Scene* myScene;
       MainWindow* myMainWindow;
+      DtGuiManager* myGuiManager;
+      bool myQuit;
+      double mySecondsPerCycle;
 	};
 }

@@ -21,7 +21,9 @@ namespace vrv
       int width();
       int height();
 
-      void eventLoop();
+      void pickMessage();
+
+      bool swapBuffer();
 
    protected:
 
@@ -35,7 +37,7 @@ namespace vrv
 
       void onResize(UINT flag, int width, int height);
 
-      bool swapBuffer();
+ 
 
    protected:
       HWND myWindowHandle;

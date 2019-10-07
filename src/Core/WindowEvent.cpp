@@ -57,4 +57,14 @@ namespace vrv
    {
       return myKeyButton;
    }
+
+   void WindowEvent::setWheelDelta(int delta)
+   {
+      myWheelDelta = delta;
+   }
+
+   int WindowEvent::wheelDelta() const
+   {
+      return myWheelDelta;
+   }
 }

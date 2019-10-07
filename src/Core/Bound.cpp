@@ -64,4 +64,9 @@ namespace vrv
    {
       return Bound(myMinVector*scalar, myMaxVector * scalar);
    }
+
+   Vector3f Bound::center()
+   {
+      return (myMinVector + myMaxVector) / 2;
+   }
 }

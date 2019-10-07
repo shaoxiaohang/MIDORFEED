@@ -44,9 +44,12 @@ namespace vrv
       void orbitMode(const WindowEvent& e);
       void freeMode(const WindowEvent& e);
 
+      void setLastFrame(double);
+
 	protected:
 		void reset();
 		void updateVectors();
+      void handleWheelEvent(const WindowEvent& e);
 	protected:
 		float myYaw;
 		float myPitch;
@@ -69,5 +72,6 @@ namespace vrv
 		float myNearPlane;
 		float myFarPlane;
       CameraMode myCameraMode;
+      double myLastFrame;
 	};
 }

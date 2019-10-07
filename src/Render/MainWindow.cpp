@@ -76,14 +76,12 @@ namespace vrv
       return myHeight;
    }
 
-   void MainWindow::eventLoop()
+   void MainWindow::pickMessage()
    {
       MSG msg = {};
-      while (GetMessage(&msg,NULL,0,0))
-      {
-         TranslateMessage(&msg);
-         DispatchMessage(&msg);
-      }
+      GetMessage(&msg, NULL, 0, 0);
+      TranslateMessage(&msg);
+      DispatchMessage(&msg);
    }
 
    void MainWindow::initiailze()
@@ -105,12 +103,6 @@ namespace vrv
 
          onResize(uMsg, width, height);
 
-         return 0;
-      }
-      case WM_PAINT:
-      {
-         myViewer->onRenderTick();
-         swapBuffer();
          return 0;
       }
       case WM_CLOSE:
@@ -204,6 +196,14 @@ namespace vrv
          e.setKeyButton((WindowEvent::KeyButton)wParam);
          myViewer->handleWindowEvent(e);
          return 0;
+      }
+      case WM_MOUSEWHEEL:
+      {
+         short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+         WindowEvent e;
+         e.setEventType(WindowEvent::Wheel);
+         e.setWheelDelta(zDelta);
+         myViewer->handleWindowEvent(e);
       }
       default:
          return DefWindowProc(hwnd, uMsg, wParam, lParam);

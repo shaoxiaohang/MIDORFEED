@@ -137,18 +137,6 @@ namespace vrv
 		case vrv::Array::UNSIGNED_INT:
 			type = PrimitiveSet::IndexType::UNSIGNED_INT;
 			break;
-		case vrv::Array::FLOAT:
-			break;
-		case vrv::Array::VEC2F:
-			break;
-		case vrv::Array::VEC3F:
-			break;
-		case vrv::Array::VEC4F:
-			break;
-		case vrv::Array::MAT3F:
-			break;
-		case vrv::Array::MAT4F:
-			break;
 		default:
 			break;
 		}
@@ -209,6 +197,7 @@ namespace vrv
 
    Bound Drawable::bound()
    {
+      calculateBound();
       return myBound;
    }
 }

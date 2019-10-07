@@ -128,4 +128,15 @@ namespace vrv
 	{
 		return myMeshes[i];
 	}
+
+   void Model::calculateBound()
+   {
+      for (Geometry* geo : myMeshes)
+      {
+         if (geo)
+         {
+            myBound.expand(geo->bound());
+         }
+      }
+   }
 }

@@ -28,6 +28,8 @@ namespace vrv
       Bound scale(float scalar);
 
       Bound scale(Vector3f scalar);
+
+      Vector3f center();
    protected:
 
       Vector3f myMinVector;
