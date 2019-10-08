@@ -4,8 +4,8 @@
 namespace vrv
 {
 	class Texture2D;
-	class Shader;
 	class Program;
+   class StateSet;
 	class Material
 	{
 	public:
@@ -26,6 +26,8 @@ namespace vrv
 		void setDiscardAlpha(bool);
 		void setDiscardAlphaThreshold(float);
 		void setTransparent(bool);
+      void setStateSet(StateSet* state);
+      StateSet* stateSet();
 
 		Vector4f ambient();
 		Vector4f diffuse();
@@ -42,10 +44,9 @@ namespace vrv
 		bool hasNormal();
 		bool isTransParent();
 
-		void setPostProcessShader(Shader*);
-		Shader* postProcessShader();
+      Program* program();
 
-		void updateProgram(Program* program);
+		void updateProgram();
 
 	protected:
 		Vector4f		myAmbient;
@@ -57,5 +58,6 @@ namespace vrv
 		float		   myDiscardAlphaThreshold;
 		bool myIsTransparent;
 		Shader* myShader;
+      StateSet* myStateSet;
 	};
 }

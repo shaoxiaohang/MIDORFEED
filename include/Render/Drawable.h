@@ -49,7 +49,7 @@ namespace vrv
 			void mapToGLIndexType();
 		};
 	public:
-		virtual void drawImplementation(DrawState*);
+		virtual void drawImplementation();
 		void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
 		void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType = Array::UNSIGNED_INT);
 		virtual void buildGeometryIfNeeded();
@@ -58,7 +58,7 @@ namespace vrv
 		Material* material();
 		void setInstancedCount(int);
 		bool instanced();
-		void updateProgram(Program* program);
+		void updateProgram();
 		Material* getOrCreateMaterial();
       virtual void calculateBound() = 0;
       Bound bound();

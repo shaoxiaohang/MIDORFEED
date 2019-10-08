@@ -9,7 +9,7 @@ namespace vrv
 	class Camera;
 	class Node;
 	class Drawable;
-	class DrawState;
+	class StateSet;
 	class Light;
 	class Material;
 	class Program;
@@ -43,14 +43,15 @@ namespace vrv
 		RenderList myOpaqueList;
 		RenderList myTransparentList;
 
-		void draw(Scene* scene, DrawState* drawState, Camera* camera);
+		void draw(Scene* scene, Camera* camera);
 
 		void addToOpaqueList(const RenderInfo&);
 		void addToTransparentList(const RenderInfo&);
 		void clear();
-		void draw(RenderInfo& renderInfo, DrawState* drawState);
-		void updateModelMatrix(RenderInfo& renderInfo, Program*);
-		void updateMaterial(RenderInfo& renderInfo, Program*);
+		void draw(RenderInfo& renderInfo);
+		void updateModelMatrix(RenderInfo& renderInfo);
+		void updateMaterial(RenderInfo& renderInfo);
+      void updateScene(Scene* scene, RenderInfo& renderInfo);
 	};
 
 
@@ -100,7 +101,7 @@ namespace vrv
 		void updateLights(Program* program);
 		void updateShadow(Program* program);
 		void updateGlobe(Program* program);
-		void initializeDrawState();
+		void initializeStateSet();
 
 	protected:
 		Camera* myMasterCamera;
@@ -120,7 +121,7 @@ namespace vrv
 		int myPostEffectType;
 		Skybox* mySkybox;
 		bool myVisualizeNormal;
-		DrawState* myPhoneLightingDrawState;
+      StateSet* myPhoneLightingStateSet;
 		ShadowSystem* myShadowSystem;
 		TextureQuadRender* myTextureQuadRender;
 	};

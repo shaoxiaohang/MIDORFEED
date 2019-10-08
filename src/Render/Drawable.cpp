@@ -78,49 +78,57 @@ namespace vrv
 		, myVertexArrayObject(0)
 	{}
 
-	void Drawable::drawImplementation(DrawState* drawState)
+	void Drawable::drawImplementation()
 	{
-		drawState->bind();
-		drawState->program()->updateUniforms();
-		drawState->renderState()->apply();
-		myVertexArrayObject->bind();
-		for (unsigned int i = 0; i < myPrimitiveSets.size();++i)
-		{
-			const PrimitiveSet& set = myPrimitiveSets[i];
-			switch (set.myRenderApproach)
-			{
-			case PrimitiveSet::DRAW_ARRAYS:
-				if (myIsInstanced)
-				{
-               OpenGLContext::instance().glDrawArraysInstanced(myPrimitiveSets[i].myGLPrimitiveType,
-						myPrimitiveSets[i].myStart, myPrimitiveSets[i].myCount,myInstancedCount);
-				}
-				else
-				{
-					glDrawArrays(myPrimitiveSets[i].myGLPrimitiveType, 
-						myPrimitiveSets[i].myStart, myPrimitiveSets[i].myCount);
-				}		
-				break;
-			case PrimitiveSet::DRAW_ELEMENTS:
-				if (myIsInstanced)
-				{
-               OpenGLContext::instance().glDrawElementsInstanced(myPrimitiveSets[i].myGLPrimitiveType,
-						myPrimitiveSets[i].myCount, myPrimitiveSets[i].myGLIndexType, 0,myInstancedCount);
-				}
-				else
-				{
-					glDrawElements(myPrimitiveSets[i].myGLPrimitiveType,
-						myPrimitiveSets[i].myCount, myPrimitiveSets[i].myGLIndexType, 0);
-				}
-				break;
-			default:
-				break;
-			}
-		
-		}
+      if (myMaterial)
+      {
+         DrawState* drawState = myMaterial->drawState();
+         if (drawState)
+         {
+            drawState->bind();
+            drawState->program()->updateUniforms();
+            drawState->renderState()->apply();
+            myVertexArrayObject->bind();
+            for (unsigned int i = 0; i < myPrimitiveSets.size(); ++i)
+            {
+               const PrimitiveSet& set = myPrimitiveSets[i];
+               switch (set.myRenderApproach)
+               {
+               case PrimitiveSet::DRAW_ARRAYS:
+                  if (myIsInstanced)
+                  {
+                     OpenGLContext::instance().glDrawArraysInstanced(myPrimitiveSets[i].myGLPrimitiveType,
+                        myPrimitiveSets[i].myStart, myPrimitiveSets[i].myCount, myInstancedCount);
+                  }
+                  else
+                  {
+                     glDrawArrays(myPrimitiveSets[i].myGLPrimitiveType,
+                        myPrimitiveSets[i].myStart, myPrimitiveSets[i].myCount);
+                  }
+                  break;
+               case PrimitiveSet::DRAW_ELEMENTS:
+                  if (myIsInstanced)
+                  {
+                     OpenGLContext::instance().glDrawElementsInstanced(myPrimitiveSets[i].myGLPrimitiveType,
+                        myPrimitiveSets[i].myCount, myPrimitiveSets[i].myGLIndexType, 0, myInstancedCount);
+                  }
+                  else
+                  {
+                     glDrawElements(myPrimitiveSets[i].myGLPrimitiveType,
+                        myPrimitiveSets[i].myCount, myPrimitiveSets[i].myGLIndexType, 0);
+                  }
+                  break;
+               default:
+                  break;
+               }
 
-		drawState->unbind();
-		myVertexArrayObject->unbind();
+            }
+
+            drawState->unbind();
+            myVertexArrayObject->unbind();
+         }
+      }
+		
 	}
 	
 	void Drawable::addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout)
@@ -177,8 +185,20 @@ namespace vrv
 		return myIsInstanced;
 	}
 
-	void Drawable::updateProgram(Program* program)
+	void Drawable::updateProgram()
 	{
+      if (myMaterial)
+      {
+         DrawState* state = myMaterial->drawState();
+         if (state)
+         {
+            Program* program = state->program();
+            if (program)
+            {
+
+            }
+         }
+      }
 		program->set("vrv_instanced", myIsInstanced);
 		if (myMaterial)
 		{

@@ -3,7 +3,7 @@
 #include <Render/Program.h>
 #include <Render/ClearState.h>
 #include <Render/Camera.h>
-#include <Render/DrawState.h>
+#include <Render/StateSet.h>
 #include <Render/Light.h>
 #include <Render/Material.h>
 #include <Render/Texture2D.h>
@@ -25,9 +25,6 @@
 #include <algorithm>
 #include <sstream>
 
-#ifdef DrawState
-#undef DrawState
-#endif // DrawState
 
 #define VRV_MAX_NUM_LIGHTS 4
 namespace vrv
@@ -63,19 +60,17 @@ namespace vrv
 	RenderQueue::RenderQueue()
 	{}
 
-	void RenderQueue::draw(Scene* scene, DrawState* drawState, Camera* camera)
+	void RenderQueue::draw(Scene* scene, Camera* camera)
 	{
-		Program* program = drawState->program();
-		scene->updateProgram(program);
-
 		//draw opaque list first 
 		RenderList::iterator itor = myOpaqueList.begin();
 		RenderList::iterator end = myOpaqueList.end();
 		for (; itor != end; ++itor)
 		{
-			updateModelMatrix(*itor, program);
-			updateMaterial(*itor, program);
-			draw(*itor, drawState);
+			updateModelMatrix(*itor);
+			updateMaterial(*itor);
+         updateScene(scene, *itor);
+			draw(*itor);
 		}
 
 		//sort the transparent list from back to front
@@ -84,9 +79,10 @@ namespace vrv
 		end = myTransparentList.end();
 		for (; itor != end; ++itor)
 		{
-			updateModelMatrix(*itor, program);
-			updateMaterial(*itor, program);
-			draw(*itor, drawState);
+			updateModelMatrix(*itor);
+			updateMaterial(*itor);
+         updateScene(scene, *itor);
+			draw(*itor);
 		}
 	}
 
@@ -113,22 +109,52 @@ namespace vrv
 		myTransparentList.clear();
 	}
 
-	void RenderQueue::draw(RenderInfo& renderInfo, DrawState* drawState)
+	void RenderQueue::draw(RenderInfo& renderInfo)
 	{
-		renderInfo.myDrawable->drawImplementation(drawState);
+		renderInfo.myDrawable->drawImplementation();
 	}
 
-	void RenderQueue::updateModelMatrix(RenderInfo& renderInfo, Program* program)
+	void RenderQueue::updateModelMatrix(RenderInfo& renderInfo)
 	{
-		program->set("vrv_model_matrix", renderInfo.myModelMatrix);
-		program->set("isLightPoint", renderInfo.myIsLightPoint);
-		program->set("isEllipsoid", renderInfo.myIsEllipsoid);
+      Drawable* draw = renderInfo.myDrawable;
+      if (draw)
+      {
+         Material* material = draw->material();
+         if (material)
+         {
+            StateSet* state = material->stateSet();
+            if (state)
+            {
+               Program* program = state->program();
+               if (program)
+               {
+                  program->set("vrv_model_matrix", renderInfo.myModelMatrix);
+                  program->set("isLightPoint", renderInfo.myIsLightPoint);
+                  program->set("isEllipsoid", renderInfo.myIsEllipsoid);
+               }
+            }
+         }
+      }
+
 	}
 
-	void RenderQueue::updateMaterial(RenderInfo& renderInfo, Program* program)
+	void RenderQueue::updateMaterial(RenderInfo& renderInfo)
 	{
-		renderInfo.myDrawable->updateProgram(program);
+		renderInfo.myDrawable->updateProgram();
 	}
+
+   void RenderQueue::updateScene(Scene* scene, RenderInfo& renderInfo)
+   {
+      if (scene)
+      {
+         Drawable* draw = renderInfo.myDrawable;
+         if (draw)
+         {
+            Program* pro = draw->material()->program();
+            scene->updateProgram(pro);
+         }
+      }
+   }
 
 	Scene::Scene(MainWindow* window)
 		: myRoot(0)
@@ -144,7 +170,7 @@ namespace vrv
 		, myMap(0)
 	{
 		myMasterCamera = new Camera();
-		initializeDrawState();
+		initializeStateSet();
 		myPostProcessorManager = new PostProcessorManager(myMainWindow->width(), myMainWindow->height());
 		myShadowSystem = new ShadowSystem();
 		myShadowSystem->initializeFrameBuffer(window->width(), window->height());
@@ -195,7 +221,7 @@ namespace vrv
 			//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			myRenderQueue.draw(this, myPhoneLightingDrawState, myMasterCamera);
+			myRenderQueue.draw(this, myMasterCamera);
 
 			if (mySkybox)
 			{
@@ -358,10 +384,9 @@ namespace vrv
       }
 	}
 
-	void Scene::initializeDrawState()
+	void Scene::initializeStateSet()
 	{
-		myPhoneLightingDrawState = new DrawState(new RenderState(), new Program("../data/shader/phoneLighting.vert",
-			"../data/shader/phoneLighting.frag"));
+
 	}
 
 	void Scene::addLight(Light* light)
