@@ -6,7 +6,7 @@ namespace vrv
 	class Texture3D;
 	class Geometry;
 	class RenderState;
-	class DrawState;
+	class StateSet;
 	class Program;
 	class Skybox
 	{
@@ -22,7 +22,7 @@ namespace vrv
 
 	protected:
 		Geometry* myCube;
-		DrawState* myDrawState;
+		StateSet* myStateSet;
 		std::vector<std::string> myFileNames;
 		Texture3D* myCubeMap;
 	};

@@ -6,6 +6,7 @@ namespace vrv
 	class Texture2D;
 	class Program;
    class StateSet;
+   class Shader;
 	class Material
 	{
 	public:

@@ -4,7 +4,7 @@ namespace vrv
 {
    class Geometry;
    class Texture2D;
-   class DrawState;
+   class StateSet;
    class FrameBuffer;
    class GaussianBlur
    {
@@ -18,7 +18,7 @@ namespace vrv
       int myFilterSize;
       ArrayFloat myFilters;
       int myFilterTime;
-      DrawState* myDrawState;
+      StateSet* myStateSet;
       FrameBuffer* myPingFrameBuffer;
       FrameBuffer* myPongFrameBuffer;
       int myWidth;

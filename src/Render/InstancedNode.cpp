@@ -1,6 +1,6 @@
 #include <Render/InstancedNode.h>
 #include <Render/Drawable.h>
-#include <Render/DrawState.h>
+#include <Render/StateSet.h>
 #include <Render/VertexArrayObject.h>
 #include <Render/Geometry.h>
 namespace vrv

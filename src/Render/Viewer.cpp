@@ -14,6 +14,7 @@ namespace vrv
       , myMainWindow(0)
       , myQuit(false)
       , mySecondsPerCycle(0)
+      , myGuiManager(0)
 	{
       LARGE_INTEGER cycles;
       QueryPerformanceFrequency(&cycles);
@@ -55,6 +56,7 @@ namespace vrv
       myMainWindow = new MainWindow(this);
       myMainWindow->initiailze();
       myScene = new Scene(myMainWindow);
+      myGuiManager = new DtGuiManager(myScene);
 	}
 
 	void Viewer::onUpdateTick(double dt)
@@ -67,6 +69,7 @@ namespace vrv
 		if (myScene)
 		{
 			myScene->renderScene();
+         
 		}
 	}
 

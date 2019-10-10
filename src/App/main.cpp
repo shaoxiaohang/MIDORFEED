@@ -15,10 +15,10 @@
 #include <Render/Scenario.h>
 #include <Render/Geometry.h>
 #include <Render/RenderState.h>
-#include <Render/DrawState.h>
 #include <Render/Scene.h>
 #include <Render/Map.h>
 #include <Render/Ellipsoid.h>
+#include <GUI/Button.h>
 
 using namespace vrv;
 int main(int argc, char** argv)
@@ -26,7 +26,9 @@ int main(int argc, char** argv)
 	Viewer* viewer = new Viewer(argc,argv);
 	viewer->initialize(800, 600, "main window");
 
-	Scenario* test = new Scenario("transparent.scene");
+	Scenario* test = new Scenario("simple.scene");
+   Button* button = new Button(0);
+   button->initialize();
 	viewer->setSceneData(test);
    viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
 	viewer->run();

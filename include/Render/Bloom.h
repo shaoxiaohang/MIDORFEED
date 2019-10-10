@@ -3,7 +3,7 @@
 namespace vrv
 {
    class Geometry;
-   class DrawState;
+   class StateSet;
    class Texture2D;
    class GaussianBlur;
    class FrameBuffer;
@@ -19,6 +19,6 @@ namespace vrv
       int myHeight;
       GaussianBlur* myGaussianBlur;
       Geometry* myQuadGeometry;
-      DrawState* myDrawState;
+      StateSet* myStateSet;
    };
 }

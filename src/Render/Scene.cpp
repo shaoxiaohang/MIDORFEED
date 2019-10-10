@@ -175,14 +175,15 @@ namespace vrv
 		myShadowSystem = new ShadowSystem();
 		myShadowSystem->initializeFrameBuffer(window->width(), window->height());
 		myTextureQuadRender = new TextureQuadRender();
-		myLightNode = new Node();
-      myGuiNode = new Node();
+		myLightNode = new Node("light");
+      myGuiNode = new Node("gui");
 	}
 
 	void Scene::setSceneData(Node* root)
 	{
 		myRoot = root;
 		myRoot->addChild(myLightNode);
+      myRoot->addChild(myGuiNode);
 	}
 
 	void Scene::cullTraverse()
@@ -399,6 +400,7 @@ namespace vrv
 				myShadowSystem->setShadowCaster(light);
 			}
 			Node* lightNode = new Node();
+         
 			lightNode->setIsLightPoint(true);
 			Cube* cube = new Cube();
 			Material* material = new Material();

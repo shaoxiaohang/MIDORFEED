@@ -2,7 +2,6 @@
 #include <Render/Geometry.h>
 #include <Render/Material.h>
 #include <Render/Program.h>
-#include <Render/DrawState.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>

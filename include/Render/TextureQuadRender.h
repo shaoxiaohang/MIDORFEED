@@ -3,7 +3,7 @@
 namespace vrv
 {
 	class Geometry;
-	class DrawState;
+	class StateSet;
 	class Texture2D;
 
 	class TextureQuadRender
@@ -18,6 +18,6 @@ namespace vrv
 
 	protected:
 		Geometry* myQuadGeometry;
-		DrawState* myDrawState;
+      StateSet* myStateSet;
 	};
 }

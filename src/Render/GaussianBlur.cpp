@@ -1,6 +1,6 @@
 #include <Render/GaussianBlur.h>
 #include <Render/Geometry.h>
-#include <Render/DrawState.h>
+#include <Render/StateSet.h>
 #include <Render/Program.h>
 #include <Render/RenderState.h>
 #include <Render/FrameBuffer.h>
@@ -18,7 +18,7 @@ namespace vrv
    {
       RenderState* renderState = new RenderState();
       renderState->depthTest().setEnabled(false);
-      myDrawState = new DrawState(renderState
+      myStateSet = new StateSet(renderState
          , new Program("../data/shader/defaultQuad.vert", "../data/shader/gaussianBlur.frag"));
       myPingFrameBuffer = new FrameBuffer(myWidth, myHeight);
       myPongFrameBuffer = new FrameBuffer(myWidth, myHeight);
@@ -52,7 +52,7 @@ namespace vrv
 
    Texture2D* GaussianBlur::blur(Texture2D* texture)
    {
-      Program* program = myDrawState->program();
+      Program* program = myStateSet->program();
       program->set("texture", 0);
       program->set("filterSize", myFilterSize );
       for (int i=0; i < myFilterSize; ++i)
@@ -76,13 +76,13 @@ namespace vrv
          {
             myPongFrameBuffer->textureBuffer()->bindToPoint(0);
          }
-         myQuadGeometry->drawImplementation(myDrawState);
+         myQuadGeometry->drawImplementation();
 
          myPongFrameBuffer->bind();
          program->set("horizontal", false);
          myPingFrameBuffer->textureBuffer()->bindToPoint(0);
          
-         myQuadGeometry->drawImplementation(myDrawState);
+         myQuadGeometry->drawImplementation();
       }
 
       myPongFrameBuffer->unbind();

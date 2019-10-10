@@ -1,5 +1,5 @@
 #include <Render/Drawable.h>
-#include <Render/DrawState.h>
+#include <Render/StateSet.h>
 #include <Render/Program.h>
 #include <Render/VertexArrayObject.h>
 #include <Render/Material.h>
@@ -82,12 +82,12 @@ namespace vrv
 	{
       if (myMaterial)
       {
-         DrawState* drawState = myMaterial->drawState();
-         if (drawState)
+         StateSet* stateSet = myMaterial->stateSet();
+         if (stateSet)
          {
-            drawState->bind();
-            drawState->program()->updateUniforms();
-            drawState->renderState()->apply();
+            stateSet->bind();
+            stateSet->program()->updateUniforms();
+            stateSet->renderState()->apply();
             myVertexArrayObject->bind();
             for (unsigned int i = 0; i < myPrimitiveSets.size(); ++i)
             {
@@ -124,7 +124,7 @@ namespace vrv
 
             }
 
-            drawState->unbind();
+            stateSet->unbind();
             myVertexArrayObject->unbind();
          }
       }
@@ -189,21 +189,18 @@ namespace vrv
 	{
       if (myMaterial)
       {
-         DrawState* state = myMaterial->drawState();
+         StateSet* state = myMaterial->stateSet();
          if (state)
          {
             Program* program = state->program();
             if (program)
             {
-
+               program->set("vrv_instanced", myIsInstanced);
             }
          }
+         myMaterial->updateProgram();
       }
-		program->set("vrv_instanced", myIsInstanced);
-		if (myMaterial)
-		{
-			myMaterial->updateProgram(program);
-		}
+
 	}
 
 	Material* Drawable::getOrCreateMaterial()

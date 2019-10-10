@@ -1,15 +1,11 @@
 #include <Render/ShadowSystem.h>
 #include <Render/Scene.h>
-#include <Render/DrawState.h>
+#include <Render/StateSet.h>
 #include <Render/Program.h>
 #include <Render/Light.h>
 #include <Render/FrameBuffer.h>
 #include <Render/Texture2D.h>
 #include <Render/OpenGLContext.h>
-
-#ifdef DrawState
-#undef DrawState
-#endif
 
 namespace vrv
 {
@@ -17,7 +13,7 @@ namespace vrv
 		: myCaster(0)
 		, myFrameBuffer(0)
 	{
-		myDrawState = new DrawState(new Program("../data/shader/shadow.vert", "../data/shader/shadow.frag"));
+		myStateSet = new StateSet(new Program("../data/shader/shadow.vert", "../data/shader/shadow.frag"));
 	}
 
 	void ShadowSystem::setShadowCaster(Light* light)
@@ -38,23 +34,23 @@ namespace vrv
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			Program* program = myDrawState->program();
+			Program* program = myStateSet->program();
 			updateProgram(program);
 
 			RenderQueue::RenderList::iterator itor = renderQueue->myOpaqueList.begin();
 			RenderQueue::RenderList::iterator end = renderQueue->myOpaqueList.end();
 			for (; itor != end; ++itor)
 			{
-				renderQueue->updateModelMatrix(*itor, program);
-				renderQueue->draw(*itor, myDrawState);
+				renderQueue->updateModelMatrix(*itor);
+				renderQueue->draw(*itor);
 			}
 
 			itor = renderQueue->myTransparentList.begin();
 			end = renderQueue->myTransparentList.end();
 			for (; itor != end; ++itor)
 			{
-				renderQueue->updateModelMatrix(*itor, program);
-				renderQueue->draw(*itor, myDrawState);
+				renderQueue->updateModelMatrix(*itor);
+				renderQueue->draw(*itor);
 			}
 
 			myFrameBuffer->unbind();

@@ -1,11 +1,12 @@
 #include <Render/Bloom.h>
 #include <Render/GaussianBlur.h>
 #include <Render/Geometry.h>
-#include <Render/DrawState.h>
+#include <Render/StateSet.h>
 #include <Render/Program.h>
 #include <Render/RenderState.h>
 #include <Render/Texture2D.h>
 #include <Render/FrameBuffer.h>
+
 namespace vrv
 {
    Bloom::Bloom(int width, int height)
@@ -23,7 +24,7 @@ namespace vrv
 
       RenderState* renderState = new RenderState();
       renderState->depthTest().setEnabled(false);
-      myDrawState = new DrawState(renderState
+      myStateSet = new StateSet(renderState
          , new Program("../data/shader/defaultQuad.vert", "../data/shader/bloom.frag"));
 
       myQuadGeometry = new Geometry();
@@ -50,11 +51,11 @@ namespace vrv
       Texture2D* blur = myGaussianBlur->blur(highLight);
 
       frameBuffer->bind();
-      Program* program = myDrawState->program();
+      Program* program = myStateSet->program();
       frag->bindToPoint(0);
       blur->bindToPoint(1);
       program->set("fragColor", 0);
       program->set("highLightColor", 1);
-      myQuadGeometry->drawImplementation(myDrawState);
+      myQuadGeometry->drawImplementation();
    }
 }

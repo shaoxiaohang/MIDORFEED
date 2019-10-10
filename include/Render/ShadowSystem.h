@@ -5,7 +5,7 @@ namespace vrv
 	class Light;
 	class Scene;
 	struct RenderQueue;
-	class DrawState;
+	class StateSet;
 	class Program;
 	class FrameBuffer;
 	class Texture2D;
@@ -29,7 +29,7 @@ namespace vrv
 
 	protected:
 		Light * myCaster;
-		DrawState* myDrawState;
+      StateSet* myStateSet;
 		FrameBuffer* myFrameBuffer;
 	};
 }

@@ -37,7 +37,7 @@ $ENV{FREEIMAGE_ROOT}/x64
 )
 
 #find library directory by looking for certain library file
-find_path(FREEIMAGE_LIB_DIR FreeImage.lib
+find_path(FREEIMAGE_LIB_DIR FreeImaged.lib
 PATHS
 $ENV{FREEIMAGE_ROOT}/x64
 )
@@ -49,7 +49,7 @@ $ENV{BOOST_ROOT}/include
 )
 
 #find library directory by looking for certain library file
-find_path(BOOST_LIB_DIR boost_graph-vc120-mt.lib
+find_path(BOOST_LIB_DIR boost_graph-vc120-mt-1_63.lib
 PATHS
 $ENV{BOOST_ROOT}/lib/
 )

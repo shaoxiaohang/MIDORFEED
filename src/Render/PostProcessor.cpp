@@ -3,20 +3,18 @@
 #include <Render/Node.h>
 #include <Render/Program.h>
 #include <Render/RenderState.h>
-#include <Render/DrawState.h>
+#include <Render/StateSet.h>
 #include <Render/Drawable.h>
 #include <Render/Shader.h>
 #include <Render/FrameBuffer.h>
 #include <Render/Scene.h>
 #include <Render/FrameBuffer.h>
 #include <Render/Texture2D.h>
-#ifdef DrawState
-#undef DrawState
-#endif
+
 namespace vrv
 {
 	PostProcessor::PostProcessor()
-		: myDrawState(0)
+		: myStateSet(0)
 	{
 	}
 
@@ -28,29 +26,29 @@ namespace vrv
 	void PostProcessor::drawQuad(Drawable* quad, FrameBuffer* frameBuffer)
 	{
 		frameBuffer->textureBuffer(0)->bindToPoint(0);
-		myDrawState->program()->set("scene",0);
-		quad->drawImplementation(myDrawState);
+      myStateSet->program()->set("scene",0);
+		quad->drawImplementation();
 	}
 
 	DefaultPostProcessor::DefaultPostProcessor()
 	{
 		RenderState* renderState = new RenderState();
 		renderState->depthTest().setEnabled(false);
-		myDrawState = new DrawState(renderState
+      myStateSet = new StateSet(renderState
 			,new Program("../data/shader/defaultQuad.vert", "../data/shader/defaultQuad.frag"));
 	}
 
 	ConfigurableProcessor::ConfigurableProcessor()
 		: myPostEffectType(0)
 	{
-		myDrawState = new DrawState(new Program("../data/shader/configurablePostEffect.vert",
+      myStateSet = new StateSet(new Program("../data/shader/configurablePostEffect.vert",
 			"../data/shader/configurablePostEffect.frag"));
 	}
 
 	void ConfigurableProcessor::run(Drawable* quad, FrameBuffer* frameBuffer)
 	{
 		myPostEffectType = Scene::instance().postEffectType();
-		myDrawState->program()->set("effectType", myPostEffectType);
+      myStateSet->program()->set("effectType", myPostEffectType);
 		PostProcessor::run(quad, frameBuffer);
 	}
 

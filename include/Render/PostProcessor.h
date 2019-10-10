@@ -8,7 +8,7 @@ namespace vrv
 	class Drawable;
 	class RenderState;
 	class Program;
-	class DrawState;
+	class StateSet;
 
 	class PostProcessor
 	{
@@ -17,7 +17,7 @@ namespace vrv
 		virtual void run(Drawable* quad, FrameBuffer* frameBuffer);
 		void drawQuad(Drawable* quad, FrameBuffer* frameBuffer);
 	protected:
-		DrawState* myDrawState;
+      StateSet* myStateSet;
 	};
 
 	class DefaultPostProcessor : public PostProcessor

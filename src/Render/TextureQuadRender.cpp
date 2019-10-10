@@ -2,7 +2,7 @@
 #include <Render/Array.h>
 #include <Render/Geometry.h>
 #include <Render/RenderState.h>
-#include <Render/DrawState.h>
+#include <Render/StateSet.h>
 #include <Render/Program.h>
 #include <Render/Texture2D.h>
 
@@ -37,16 +37,16 @@ namespace vrv
 		RenderState* renderState = new RenderState();
 		renderState->depthTest().setEnabled(false);
 
-		myDrawState = new DrawState(renderState, new Program("../data/shader/defaultQuad.vert",
+      myStateSet = new StateSet(renderState, new Program("../data/shader/defaultQuad.vert",
 			"../data/shader/defaultQuad.frag"));
 	}
 
 	void TextureQuadRender::drawTexture(Texture2D* texture)
 	{
 		texture->bindToPoint(0);
-		myDrawState->program()->set("scene", 0);
+      myStateSet->program()->set("scene", 0);
 
-		myQuadGeometry->drawImplementation(myDrawState);
+		myQuadGeometry->drawImplementation();
 
 	}
 }
