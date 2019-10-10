@@ -5,12 +5,12 @@ namespace vrv
 	class RenderState;
 	class Program;
 
-	class DrawState
+	class StateSet
 	{
 	public:
-		DrawState();
-		DrawState(Program* shader);
-		DrawState(RenderState* state, Program* shader);
+      StateSet();
+      StateSet(Program* shader);
+      StateSet(RenderState* state, Program* shader);
 
 		void setRenderState(RenderState*);
 		RenderState* renderState();
@@ -20,7 +20,7 @@ namespace vrv
 		Program* program();
 		Program* program() const;
 
-		bool operator < (DrawState& state) const;
+		bool operator < (StateSet& state) const;
 
 		void bind();
 		void unbind();
