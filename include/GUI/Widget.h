@@ -10,11 +10,11 @@ namespace vrv
    class Widget
    {
    public:
-      friend class DtGuiManager;
+      friend class GuiManager;
 
       Widget(Widget* parent);
 
-      virtual void initialize() = 0;
+      virtual void initialize();
 
    protected:
       

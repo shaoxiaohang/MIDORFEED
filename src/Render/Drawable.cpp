@@ -6,9 +6,6 @@
 #include <Render/RenderState.h>
 #include <Render/OpenGLContext.h>
 
-#ifdef DrawState
-#undef DrawState
-#endif
 namespace vrv
 {
 	Drawable::PrimitiveSet::PrimitiveSet(Primitive pri, unsigned int start, unsigned int count)
@@ -76,7 +73,9 @@ namespace vrv
 		, myIsInstanced(false)
 		, myInstancedCount(0)
 		, myVertexArrayObject(0)
-	{}
+	{
+      myVertexArrayObject = new VertexArrayObject();
+   }
 
 	void Drawable::drawImplementation()
 	{
@@ -217,4 +216,5 @@ namespace vrv
       calculateBound();
       return myBound;
    }
+
 }

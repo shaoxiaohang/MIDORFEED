@@ -30,7 +30,9 @@ namespace vrv
 		, myInstancedArray(0)
 		, myBuildNormal(false)
 		, myBuildTangent(false)
-	{}
+	{
+
+   }
 
 	void Geometry::setVertex(ArrayVec3* array)
 	{
@@ -71,7 +73,7 @@ namespace vrv
 
 	void Geometry::buildGeometry()
 	{
-		if (!myBuildGeometry)
+		/*if (!myBuildGeometry)
 		{
 			VertexArrayObject* vao = new VertexArrayObject();
 			VertexBufferObject* vbo_pos = new VertexBufferObject();
@@ -130,8 +132,8 @@ namespace vrv
 			setVertexArrayObject(vao);
 
          calculateBound();
-			myBuildGeometry = true;
-		}
+			myBuildGeometry = true;*/
+		//}
 	}
 
 	void Geometry::setBuildNormal(bool b)
@@ -309,5 +311,13 @@ namespace vrv
 
       myBound.setMinVector(minV);
       myBound.setMaxVector(maxV);
+   }
+
+   void Geometry::addVertexAttribute(unsigned int pos, Array* array)
+   {
+      VertexBufferObject* vbo = new VertexBufferObject();
+      vbo->addVertexAttribute(new VertexAttributeVector3f(0));
+      vbo_pos->copyFromSystemMemory(myVertexArray);
+      vao->bindVertexBufferObject(vbo_pos);
    }
 }

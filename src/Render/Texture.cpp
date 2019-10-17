@@ -98,4 +98,14 @@ namespace vrv
 	{
 		myBorderColor = color;
 	}
+
+   unsigned int Texture::width()
+   {
+      return myWidth;
+   }
+
+   unsigned int Texture::height()
+   {
+      return myHeight;
+   }
 }

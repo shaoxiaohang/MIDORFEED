@@ -2,7 +2,7 @@
 #include <Render/Scene.h>
 #include <Render/Camera.h>
 #include <Render/MainWindow.h>
-#include <GUI/DtGuiManager.h>
+#include <GUI/GuiManager.h>
 #include <time.h>
 
 namespace vrv
@@ -56,12 +56,12 @@ namespace vrv
       myMainWindow = new MainWindow(this);
       myMainWindow->initiailze();
       myScene = new Scene(myMainWindow);
-      myGuiManager = new DtGuiManager(myScene);
+      myGuiManager = new GuiManager(myScene);
 	}
 
 	void Viewer::onUpdateTick(double dt)
 	{
-	
+      myGuiManager->update(dt);
 	}
 
 	void Viewer::onRenderTick(double dt)

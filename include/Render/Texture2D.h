@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <Render/Texture.h>
+#include <Render/OpenGLDefines.h>
 namespace vrv
 {
 	class Image;
@@ -11,8 +12,12 @@ namespace vrv
 		Texture2D(const std::string& fileName);
 		Texture2D(Image* image);
 		bool hasAlphaChannel();
+
+      void fillData(GLvoid* data);
+
+      
 	protected:
-		void initialize();
+      void initialize();
 		void update();
 	};
 }

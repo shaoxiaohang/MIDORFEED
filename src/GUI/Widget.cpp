@@ -5,7 +5,7 @@
 #include <Render/StateSet.h>
 #include <Render/RenderState.h>
 #include <Render/Program.h>
-#include <GUI/DtGuiManager.h>
+#include <GUI/GuiManager.h>
 
 namespace vrv
 {
@@ -19,17 +19,23 @@ namespace vrv
       myNode = new Node();
      
       myMaterial = new Material();
-      StateSet* ss = new StateSet(new Program("../data/shader/hud.vert",
-         "../data/shader/hud.frag"));
+      StateSet* ss = new StateSet();
       ss->renderState()->depthTest().setEnabled(false);
-
-      myMaterial->setStateSet(ss);
-      
-      DtGuiManager::instance().registerWidget(this);
+      myMaterial->setStateSet(ss);   
+      GuiManager::instance().registerWidget(this);
    }
 
    Node* Widget::node()
    {
       return myNode;
+   }
+
+   void Widget::initialize()
+   {
+      if (!myInitialized)
+      {
+         initializeGeometry();
+         myInitialized = true;
+      }
    }
 }

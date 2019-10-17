@@ -6,6 +6,10 @@ typedef __int64 GLsizeiptr;
 #endif
 
 typedef char GLchar;
+typedef unsigned int GLuint;
+typedef unsigned int GLenum;
+typedef char GLubyte;
+typedef void GLvoid;
 
 #define GL_ARRAY_BUFFER               0x8892
 #define GL_ELEMENT_ARRAY_BUFFER       0x8893

@@ -53,6 +53,19 @@ find_path(BOOST_LIB_DIR boost_graph-vc120-mt-1_63.lib
 PATHS
 $ENV{BOOST_ROOT}/lib/
 )
+
+#find library directory by looking for certain library file
+find_path(FREETYPE_INCLUDE_DIR ft2build.h
+PATHS
+$ENV{FREETYPE_ROOT}/include/freetype2
+)
+
+#find library directory by looking for certain library file
+find_path(FREETYPE_LIB_DIR freetyped.lib
+PATHS
+$ENV{FREETYPE_ROOT}/lib
+)
+
 #apply them to following projects
 include_directories(${TINYXMY_INCLUDE_DIR})
 link_directories(${TINYXMY_LIB_DIR})
@@ -62,6 +75,8 @@ include_directories(${FREEIMAGE_INCLUDE_DIR})
 link_directories(${FREEIMAGE_LIB_DIR})
 include_directories(${BOOST_INCLUDE_DIR})
 link_directories(${BOOST_LIB_DIR})
+include_directories(${FREETYPE_INCLUDE_DIR})
+link_directories(${FREETYPE_LIB_DIR})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -87,5 +102,6 @@ tinyxml2d.lib
 target_link_libraries(GUI
 Core
 Render
+freetyped.lib
 )
 

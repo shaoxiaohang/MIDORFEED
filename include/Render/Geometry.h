@@ -32,6 +32,8 @@ namespace vrv
 		void setBuildNormal(bool);
 		void setBuildTangent(bool);
       void calculateBound();
+
+      void addVertexAttribute(unsigned int pos, Array* array);
 		
 
 	protected:

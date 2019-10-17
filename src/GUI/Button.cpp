@@ -1,27 +1,25 @@
 #include <GUI/Button.h>
-#include <GUI/DtGuiManager.h>
+#include <GUI/GuiManager.h>
 #include <Render/Geometry.h>
 #include <Render/Array.h>
+#include <Render/Program.h>
+#include <Render/Material.h>
+#include <Render/StateSet.h>
 
 namespace vrv
 {
    Button::Button(Widget* parent)
       : Widget(parent)
    {
-      DtGuiManager::instance().registerWidget(this);
+      GuiManager::instance().registerWidget(this);
    }
 
-   void Button::initialize()
-   {
-      if (!myInitialized)
-      {
-         initializeGeometry();
-         myInitialized = true;
-      }
-   }
+
 
    void Button::initializeGeometry()
    {
+      myMaterial->stateSet()->setProgram(new Program("../data/shader/button.vert", "../data/shader/button.frag"));
+
       myGeometry = new Geometry();
 
       ArrayVec2 pos;

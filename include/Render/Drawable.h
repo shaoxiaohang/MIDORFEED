@@ -5,7 +5,6 @@
 #include <Core/Bound.h>
 namespace vrv
 {
-	class DrawState;
 	class VertexArrayObject;
 	class Program;
 	class Array;
@@ -50,20 +49,34 @@ namespace vrv
 		};
 	public:
 		virtual void drawImplementation();
+
 		void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
+
 		void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType = Array::UNSIGNED_INT);
+
 		virtual void buildGeometryIfNeeded();
+
 		void setVertexArrayObject(VertexArrayObject* vao);
+
 		void setMaterial(Material*);
+
 		Material* material();
+
 		void setInstancedCount(int);
+
 		bool instanced();
+
 		void updateProgram();
+
 		Material* getOrCreateMaterial();
+
       virtual void calculateBound() = 0;
+
       Bound bound();
+
 	protected:
 		virtual void buildGeometry() = 0;
+
 	protected:
 		bool myBuildGeometry;
 		VertexArrayObject* myVertexArrayObject;

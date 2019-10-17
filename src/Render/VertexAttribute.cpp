@@ -3,10 +3,9 @@
 
 namespace vrv
 {
-	VertexAttribute::VertexAttribute(const std::string& name, Array::DataType type, unsigned int location,
+	VertexAttribute::VertexAttribute(Array::DataType type, unsigned int location,
 		unsigned int stride, unsigned int offset)
-		: myName(name)
-		, myLocation(location)
+		: myLocation(location)
 		, myType(type)
 		, myNormalized(false)
 		, myStride(stride)
@@ -44,11 +43,6 @@ namespace vrv
 		return myLocation;
 	}
 
-	const std::string& VertexAttribute::name()
-	{
-		return myName;
-	}
-
 	unsigned int VertexAttribute::baseType()
 	{
 		return myBaseType;
@@ -74,24 +68,24 @@ namespace vrv
 		return myOffset;
 	}
 
-	VertexAttributeInt::VertexAttributeInt(std::string name, unsigned int location, unsigned int stride, unsigned int offset)
-		: VertexAttribute(name, Array::INT,location, stride, offset)
+	VertexAttributeInt::VertexAttributeInt(unsigned int location, unsigned int stride, unsigned int offset)
+		: VertexAttribute(Array::INT,location, stride, offset)
 	{}
 	std::string VertexAttributeInt::typeToGLSL()
 	{
 		return "int";
 	}
 
-	VertexAttributefloat::VertexAttributefloat(std::string name, unsigned int location, unsigned int stride, unsigned int offset)
-		: VertexAttribute(name, Array::FLOAT, location, stride,offset)
+	VertexAttributefloat::VertexAttributefloat(unsigned int location, unsigned int stride, unsigned int offset)
+		: VertexAttribute(Array::FLOAT, location, stride,offset)
 	{}
 	std::string VertexAttributefloat::typeToGLSL()
 	{
 		return "float";
 	}
 
-	VertexAttributeVector2f::VertexAttributeVector2f(std::string name, unsigned int location, unsigned int stride, unsigned int offset)
-		: VertexAttribute(name, Array::VEC2F, location, stride,offset)
+	VertexAttributeVector2f::VertexAttributeVector2f(unsigned int location, unsigned int stride, unsigned int offset)
+		: VertexAttribute(Array::VEC2F, location, stride,offset)
 	{}
 
 	std::string VertexAttributeVector2f::typeToGLSL()
@@ -99,16 +93,16 @@ namespace vrv
 		return "vec2";
 	}
 
-	VertexAttributeVector3f::VertexAttributeVector3f(std::string name, unsigned int location, unsigned int stride, unsigned int offset)
-		: VertexAttribute(name, Array::VEC3F, location, stride, offset)
+	VertexAttributeVector3f::VertexAttributeVector3f(unsigned int location, unsigned int stride, unsigned int offset)
+		: VertexAttribute(Array::VEC3F, location, stride, offset)
 	{}
 	std::string VertexAttributeVector3f::typeToGLSL()
 	{
 		return "vec3";
 	}
 
-	VertexAttributeVector4f::VertexAttributeVector4f(std::string name, unsigned int location, unsigned int stride, unsigned int offset)
-		: VertexAttribute(name, Array::VEC4F, location, stride, offset)
+	VertexAttributeVector4f::VertexAttributeVector4f(unsigned int location, unsigned int stride, unsigned int offset)
+		: VertexAttribute(Array::VEC4F, location, stride, offset)
 	{}
 	std::string VertexAttributeVector4f::typeToGLSL()
 	{

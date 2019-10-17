@@ -11,7 +11,7 @@ namespace vrv
 	class Camera;
    class MainWindow;
    class WindowEvent;
-   class DtGuiManager;
+   class GuiManager;
 	class Viewer
 	{	
 	public:
@@ -35,7 +35,7 @@ namespace vrv
 	protected:
 		Scene* myScene;
       MainWindow* myMainWindow;
-      DtGuiManager* myGuiManager;
+      GuiManager* myGuiManager;
       bool myQuit;
       double mySecondsPerCycle;
 	};

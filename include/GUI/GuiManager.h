@@ -7,10 +7,10 @@ namespace vrv
 {
    class Widget;
    class Scene;
-   class DtGuiManager : public Singleton<DtGuiManager>
+   class GuiManager : public Singleton<GuiManager>
    {
    public:
-      DtGuiManager(Scene* scene);
+      GuiManager(Scene* scene);
 
       void update(double dt);
 

@@ -20,6 +20,7 @@ namespace vrv
 		};
 		enum TextureFormat
 		{
+         RED,
 			RGB,
 			RGBA,
 			FLOAT16,
@@ -44,6 +45,9 @@ namespace vrv
 
 		virtual bool hasAlphaChannel() = 0;
 
+      unsigned int width();
+      unsigned int height();
+
 	protected:
 		virtual void initialize() = 0;
 		virtual void update() = 0;
@@ -62,5 +66,8 @@ namespace vrv
 		unsigned int myHeight;
 		Vector4f myBorderColor;
 		TextureFormat myTextureFormat;
+      GLenum myInternelFormat;
+      GLenum myFormat;
+      GLenum myDataType;
 	};
 }

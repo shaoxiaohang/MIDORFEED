@@ -28,7 +28,6 @@ int main(int argc, char** argv)
 
 	Scenario* test = new Scenario("simple.scene");
    Button* button = new Button(0);
-   button->initialize();
 	viewer->setSceneData(test);
    viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
 	viewer->run();
