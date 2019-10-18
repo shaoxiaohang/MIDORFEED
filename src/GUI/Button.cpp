@@ -32,7 +32,7 @@ namespace vrv
       pos.add(Vector2f(-0.9f, -1));
       pos.add(Vector2f(-0.9f, -0.9f));
 
-      myGeometry->setVertex(&pos);
+      myGeometry->addVertexAttribute(0, &pos);
       myGeometry->addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
 
       myGeometry->setMaterial(myMaterial);

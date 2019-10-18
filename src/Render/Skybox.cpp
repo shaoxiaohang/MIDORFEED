@@ -66,9 +66,8 @@ namespace vrv
 		vertex->add(Vector3f(-1,-1,1));
 		vertex->add(Vector3f(1,-1,1));
 		
-		myCube->setVertex(vertex);
+		myCube->addVertexAttribute(0, vertex);
 		myCube->addPrimitiveSet(Drawable::TRIANGLES, 0, 36);
-		myCube->buildGeometry();
 	}
 
 	void Skybox::draw()

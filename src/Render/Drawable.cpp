@@ -68,12 +68,12 @@ namespace vrv
 	}
 
 	Drawable::Drawable()
-		: myBuildGeometry(false)
-		, myMaterial(0)
+		: myMaterial(0)
 		, myIsInstanced(false)
 		, myInstancedCount(0)
 		, myVertexArrayObject(0)
 	{
+      myMaterial = new Material();
       myVertexArrayObject = new VertexArrayObject();
    }
 
@@ -150,14 +150,6 @@ namespace vrv
 		myPrimitiveSets.push_back(PrimitiveSet(pri, cout, type));
 	}
 
-	void Drawable::buildGeometryIfNeeded()
-	{
-		if (!myBuildGeometry)
-		{
-			buildGeometry();
-		}
-	}
-
 	void Drawable::setVertexArrayObject(VertexArrayObject* vao)
 	{
 		myVertexArrayObject = vao;
@@ -213,7 +205,6 @@ namespace vrv
 
    Bound Drawable::bound()
    {
-      calculateBound();
       return myBound;
    }
 

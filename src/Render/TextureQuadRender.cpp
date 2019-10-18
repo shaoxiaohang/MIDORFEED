@@ -28,11 +28,9 @@ namespace vrv
 		st->add(Vector2f(1, 1));
 
 		myQuadGeometry = new Geometry();
-		myQuadGeometry->setVertex(pos);
-		myQuadGeometry->setTextureCoordinate(st);
+		myQuadGeometry->addVertexAttribute(0, pos);
+      myQuadGeometry->addVertexAttribute(1, st);
 		myQuadGeometry->addPrimitiveSet(Drawable::QUADS,0, 4);
-
-		myQuadGeometry->buildGeometry();
 
 		RenderState* renderState = new RenderState();
 		renderState->depthTest().setEnabled(false);

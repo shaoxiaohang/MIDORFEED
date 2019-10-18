@@ -70,15 +70,9 @@ namespace vrv
 
 		Material* getOrCreateMaterial();
 
-      virtual void calculateBound() = 0;
-
       Bound bound();
 
 	protected:
-		virtual void buildGeometry() = 0;
-
-	protected:
-		bool myBuildGeometry;
 		VertexArrayObject* myVertexArrayObject;
 		std::vector<PrimitiveSet> myPrimitiveSets;
 		Material* myMaterial;

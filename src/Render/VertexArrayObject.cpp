@@ -23,7 +23,8 @@ namespace vrv
 	void VertexArrayObject::bindVertexAttribute(VertexAttribute* att)
 	{
 		enableVertexAttribute(att->location());
-      OpenGLContext::instance().glVertexAttribPointer(att->location(), att->count(), att->baseType(), att->normalized(), att->stride(), (GLvoid*)att->offset());
+      OpenGLContext::instance().glVertexAttribPointer(att->location(), att->count(), 
+         att->baseType(), att->normalized(), att->stride(), (GLvoid*)att->offset());
 	}
 	void VertexArrayObject::enableVertexAttribute(unsigned int i)
 	{

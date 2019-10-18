@@ -25,17 +25,6 @@ namespace vrv
 		mySource = shaderStream.str();
 	}
 
-	void Shader::addVertexAttribute(VertexAttribute* attribute)
-	{
-		if (attribute)
-		{
-			if (myVertexAttributesMap.find(attribute->name()) == myVertexAttributesMap.end())
-			{
-				myVertexAttributesMap.insert(std::make_pair(attribute->name(), attribute));
-			}
-		}
-	}
-
 	void Shader::initialize()
 	{
 		if (!myInitialized)

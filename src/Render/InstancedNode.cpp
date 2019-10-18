@@ -24,8 +24,8 @@ namespace vrv
 		{
 			Drawable* drawable = getDrawable(i);
 			Geometry* geometry = dynamic_cast<Geometry*>(drawable);
-			geometry->setInstancedMatrices(&myMatrices);
-			geometry->setInstancedCount(myMatrices.size());
+			//geometry->setInstancedMatrices(&myMatrices);
+			//geometry->setInstancedCount(myMatrices.size());
 		}
 	}
 }

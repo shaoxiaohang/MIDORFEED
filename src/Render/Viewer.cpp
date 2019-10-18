@@ -68,8 +68,7 @@ namespace vrv
 	{
 		if (myScene)
 		{
-			myScene->renderScene();
-         
+			myScene->renderScene();       
 		}
 	}
 

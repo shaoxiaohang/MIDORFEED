@@ -33,7 +33,7 @@ namespace vrv
       pos->add(Vector2f(1, -1));
       pos->add(Vector2f(1, 1));
       pos->add(Vector2f(-1, 1));
-      myQuadGeometry->setVertex(pos);
+      myQuadGeometry->addVertexAttribute(0, pos);
 
       ArrayVec2* tex = new ArrayVec2(4);
       tex->add(Vector2f(0, 0));
@@ -41,9 +41,8 @@ namespace vrv
       tex->add(Vector2f(1, 1));
       tex->add(Vector2f(0, 1));
 
-      myQuadGeometry->setTextureCoordinate(tex);
+      myQuadGeometry->addVertexAttribute(1,tex);
       myQuadGeometry->addPrimitiveSet(Drawable::QUADS, 0, 4);
-      myQuadGeometry->buildGeometry();
    }
 
    void Bloom::run(FrameBuffer* frameBuffer, Texture2D* frag, Texture2D* highLight)

@@ -139,9 +139,9 @@ namespace vrv
 
 			myGeometryInitialized = true;
 		}
-		setVertex(&sPosArray);
-		setTextureCoordinate(&sTexArray);
-		setNomral(&sNormalArray);
+		addVertexAttribute(0, &sPosArray);
+      addVertexAttribute(1, &sTexArray);
+      addVertexAttribute(2, &sNormalArray);
 		addPrimitiveSet(Drawable::TRIANGLES, 0, 36);
 	}
 
@@ -160,10 +160,10 @@ namespace vrv
 			myGeometryInitialized = true;
 		}
 
-		setVertex(&sPosArray);
-		setIndex(&sIndexArray);
-		setNomral(&sNormalArray);
-		setTextureCoordinate(&sTexArray);
+		addVertexIndex(&sIndexArray);
+      addVertexAttribute(0, &sPosArray);
+      addVertexAttribute(1, &sTexArray);
+      addVertexAttribute(2, &sNormalArray);
 	}
 
 	bool Floor::myGeometryInitialized = false;
@@ -198,11 +198,10 @@ namespace vrv
 
 			myGeometryInitialized = true;
 		}
-		setVertex(&sPosArray);
-		setTextureCoordinate(&sTexArray);
-		setNomral(&sNormalArray);
+      addVertexAttribute(0, &sPosArray);
+      addVertexAttribute(1, &sTexArray);
+      addVertexAttribute(2, &sNormalArray);
 		addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
-		setBuildTangent(true);
 	}
 
 	bool Billboard::myGeometryInitialized = false;
@@ -237,9 +236,9 @@ namespace vrv
 
 			myGeometryInitialized = true;
 		}
-		setVertex(&sPosArray);
-		setTextureCoordinate(&sTexArray);
-		setNomral(&sNormalArray);
+      addVertexAttribute(0, &sPosArray);
+      addVertexAttribute(1, &sTexArray);
+      addVertexAttribute(2, &sNormalArray);
 		addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
 	}
 }

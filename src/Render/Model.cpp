@@ -74,13 +74,13 @@ namespace vrv
 		}
 
 		Geometry* vrvmesh = new Geometry();
-		vrvmesh->setVertex(vertices);
-		vrvmesh->setIndex(indices);
-		vrvmesh->setNomral(normals);
-		vrvmesh->setTangent(tangents);
+		vrvmesh->addVertexAttribute(0, vertices);
+		vrvmesh->addVertexIndex(indices);
+		vrvmesh->addVertexAttribute(2, normals);
+		vrvmesh->addVertexAttribute(3, tangents);
 		if (hasST)
 		{
-			vrvmesh->setTextureCoordinate(textureUVs);
+         vrvmesh->addVertexAttribute(1, textureUVs);
 		}
 		
 		Material* vrvMaterial = new Material();

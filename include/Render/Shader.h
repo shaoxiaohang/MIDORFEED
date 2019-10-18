@@ -8,9 +8,6 @@ namespace vrv
 	class Shader
 	{
 	public:
-		typedef std::map<std::string, float> ConstantsMap;
-		typedef std::map<std::string, VertexAttribute*> VertexAttributesMap;
-
 		enum ShaderType
 		{
 			VertexShader,
@@ -36,7 +33,5 @@ namespace vrv
 		std::string myFileName;
 		bool myIsCompiled;
 		bool myInitialized;
-
-		VertexAttributesMap myVertexAttributesMap;
 	};
 }
