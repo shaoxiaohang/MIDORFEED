@@ -1,6 +1,7 @@
 #include <GUI/FontManager.h>
 #include <Core/Utility.h>
 #include <Render/OpenGLContext.h>
+#include <Render/Node.h>
 #include <Render/Texture2D.h>
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -10,8 +11,8 @@ namespace vrv
    FontManager* FontManager::myInstance = 0;
 
    FontManager::FontManager()
+      : myFontRoot(0)
    {
-
    }
 
    FontManager::CharacterMetric FontManager::metric(char c)
@@ -22,6 +23,11 @@ namespace vrv
    FontManager::CharacterMetricsMap FontManager::characterMetricsMap()
    {
       return myCharacterMetricsMap;
+   }
+
+   void FontManager::setFontRoot(Node* node)
+   {
+      myFontRoot = node;
    }
 
    void FontManager::initialize()

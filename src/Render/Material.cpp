@@ -7,6 +7,27 @@
 
 namespace vrv
 {
+   BuiltTexNameGenerator::BuiltTexNameGenerator()
+   {
+
+   }
+
+   std::string BuiltTexNameGenerator::diffuseTexName()
+   {
+      return "vrv_material.diffuse";
+   }
+
+   std::string BuiltTexNameGenerator::specularTexName()
+   {
+      return "vrv_material.specular";
+   }
+
+   std::string BuiltTexNameGenerator::normalTexName()
+   {
+      return "vrv_material.normal";
+   }
+
+
 	Material::Material()
 		: myDiffuse(1,1,1,1)
 		, myAmbient(0.2,0.2,0.2,1)
@@ -17,9 +38,17 @@ namespace vrv
 		, myIsTransparent(false)
 		, myShader(0)
       , myStateSet(0)
+      , myMaximumTextureUnit(16)
+      , myUseDiffuseTex(false)
+      , myUseSpecularTex(false)
+      , myUseNormalTex(false)
 	{
       myStateSet = new StateSet(new RenderState(), new Program("../data/shader/phoneLighting.vert",
          "../data/shader/phoneLighting.frag"));
+      for (int i = 0; i < myMaximumTextureUnit; ++i)
+      {
+         myTextureSlotsMap.push_back(false);
+      }
    }
 
 	void Material::setAmbient(Vector4f ambient)
@@ -97,45 +126,6 @@ namespace vrv
 		return myDiscardAlphaThreshold;
 	}
 
-
-	Texture2D* Material::getTexture2D(TextureType type)
-	{
-		if (myTextureMap.find(type) != myTextureMap.end())
-		{
-			return myTextureMap[type];
-		}
-		else
-		{
-			return NULL;
-		}
-	}
-
-
-	void Material::setTexture2D(TextureType textureType, Texture2D* texture)
-	{
-		myTextureMap[textureType] = texture;
-	}
-
-	void Material::setTexture2D(TextureType textureType, const std::string& texture)
-	{
-		myTextureMap[textureType] = new Texture2D(texture);
-	}
-
-	bool Material::hasDiffuse()
-	{
-		return myTextureMap.find(Diffuse) != myTextureMap.end();
-	}
-
-	bool Material::hasSpecular()
-	{
-		return myTextureMap.find(Specular) != myTextureMap.end();
-	}
-
-	bool Material::hasNormal()
-	{
-		return myTextureMap.find(Normal) != myTextureMap.end();
-	}
-
    Program* Material::program()
    {
       if (myStateSet)
@@ -145,61 +135,112 @@ namespace vrv
       return 0;
    }
 
-	bool Material::isTransParent()
-	{
-		bool possibleTrans = false;
+   void Material::setBuiltInDiffuseTex(Texture2D* tex)
+   {
+      setTexture(tex, myBuiltTexNameGenerator.diffuseTexName());
+      myUseDiffuseTex = true;
+   }
 
-		if (myDiffuse.w() != 1)
-		{
-			possibleTrans = true;
-		}
-		else
-		{
-			if (hasDiffuse() && myTextureMap[Diffuse]->hasAlphaChannel())
-			{
-				possibleTrans = true;
-			}
-		}
-	
-		return myIsTransparent && possibleTrans;
-	}
+   void Material::setBuiltInSpecularTex(Texture2D* tex)
+   {
+      setTexture(tex, myBuiltTexNameGenerator.specularTexName());
+      myUseSpecularTex = true;
+   }
+
+   void Material::setBuiltInNormalTex(Texture2D* tex)
+   {
+      setTexture(tex, myBuiltTexNameGenerator.normalTexName());
+      myUseNormalTex = true;
+   }
+
+   bool Material::findNextAvailableSlot(int& slot)
+   {
+      for (int i = 0; i < myMaximumTextureUnit; ++i)
+      {
+         if (!myTextureSlotsMap[i])
+         {
+            slot = i;
+            return true;
+         }        
+      }
+
+      VRV_ERROR("No texture unit available")
+      return false;
+   }
+
+   void Material::setTexture(Texture2D* tex, const std::string& texName)
+   {
+      int unit = 0;
+      if (findNextAvailableSlot(unit))
+      {
+         if (myTextureMap.find(unit) != myTextureMap.end())
+         {
+            VRV_ERROR("Texture unit already existed")
+         }
+         OpenGLContext::instance().glActiveTexture(GL_TEXTURE0 + unit);
+         glBindTexture(GL_TEXTURE_2D, tex->id());
+         myTextureMap[unit] = std::make_pair(texName, tex);
+      }
+   }
 
 	void Material::updateProgram()
 	{
-      Program* pro = program();
-      if (pro)
+      if (myIsDirty)
       {
-         pro->set("vrv_isTransparent", myIsTransparent);
-         Texture2D* diffuse = getTexture2D(Diffuse);
-         if (diffuse)
+         Program* pro = program();
+         if (pro)
          {
-            OpenGLContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Diffuse);
-            glBindTexture(GL_TEXTURE_2D, diffuse->id());
+            pro->set("vrv_isTransparent", myIsTransparent);
+            pro->set("vrv_discardAlpha", myDiscardAlpha);
+            pro->set("vrv_discardAlphaThreshold", myDiscardAlphaThreshold);
+            pro->set("vrv_material.hasDiffuse", myUseDiffuseTex);
+            pro->set("vrv_material.hasSpecular", myUseSpecularTex);
+            pro->set("vrv_material.hasNormal", myUseNormalTex);
+
+            pro->set("vrv_material.ambient", myAmbient);
+            pro->set("vrv_material.diffuse", myDiffuse);
+            pro->set("vrv_material.specular", mySpecular);
+            pro->set("vrv_material.shininess", myShininess);
+
+            for (auto& tex : myTextureMap)
+            {
+               int id = tex.first;
+               std::string name = tex.second.first;
+               pro->set(name, id);
+            }
          }
-         Texture2D* specular = getTexture2D(Specular);
-         if (specular)
-         {
-            OpenGLContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Specular);
-            glBindTexture(GL_TEXTURE_2D, specular->id());
-         }
-         Texture2D* normal = getTexture2D(Normal);
-         if (normal)
-         {
-            OpenGLContext::instance().glActiveTexture(GL_TEXTURE0 + Material::Normal);
-            glBindTexture(GL_TEXTURE_2D, normal->id());
-         }
-         pro->set("vrv_discardAlpha", myDiscardAlpha);
-         pro->set("vrv_discardAlphaThreshold", myDiscardAlphaThreshold);
-         pro->set("vrv_material.hasDiffuse", hasDiffuse());
-         pro->set("vrv_material.hasSpecular", hasSpecular());
-         pro->set("vrv_material.hasNormal", hasNormal());
-         pro->set("vrv_material.diffuse_tex", Diffuse);
-         pro->set("vrv_material.specular_tex", Specular);
-         pro->set("vrv_material.normal_tex", Normal);
-         pro->set("vrv_material.ambient", myAmbient);
-         pro->set("vrv_material.diffuse", myDiffuse);
-         pro->set("vrv_material.specular", mySpecular);
-         pro->set("vrv_material.shininess", myShininess);
+
+         myIsDirty = false;
       }
 	}
+
+   void Material::setUseDiffuseTex(bool use)
+   {
+      myUseDiffuseTex = use;
+   }
+
+   void Material::setUseSpecularTex(bool use)
+   {
+      myUseSpecularTex = use;
+   }
+
+   void Material::setUseNormalTex(bool use)
+   {
+      myUseNormalTex = use;
+   }
+
+   bool Material::useDiffuseTex()
+   {
+      return myUseDiffuseTex;
+   }
+
+   bool Material::useSpecularTex()
+   {
+      return myUseSpecularTex;
+   }
+
+   bool Material::useNormalTex()
+   {
+      return myUseNormalTex;
+   }
 }

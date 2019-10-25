@@ -177,6 +177,7 @@ namespace vrv
 		myTextureQuadRender = new TextureQuadRender();
 		myLightNode = new Node("light");
       myGuiNode = new Node("gui");
+      myFontNode = new Node("Font");
 	}
 
 	void Scene::setSceneData(Node* root)
@@ -184,6 +185,7 @@ namespace vrv
 		myRoot = root;
 		myRoot->addChild(myLightNode);
       myRoot->addChild(myGuiNode);
+      myRoot->addChild(myFontNode);
 	}
 
 	void Scene::cullTraverse()
@@ -247,7 +249,7 @@ namespace vrv
 			Drawable* drawable = node->getDrawable(i);
 			Material* material = drawable->material();
 			Model* model = dynamic_cast<Model*>(drawable);
-			bool isTransParent = material && material->isTransParent();
+			bool isTransParent = false;
 
 			if (model)
 			{

@@ -8,6 +8,7 @@
 namespace vrv
 {
    class Texture2D;
+   class Node;
 
    class FontManager : public Singleton<FontManager>
    {
@@ -31,9 +32,11 @@ namespace vrv
 
       CharacterMetricsMap characterMetricsMap();
 
+      void setFontRoot(Node* node);
+
    protected:
 
       CharacterMetricsMap myCharacterMetricsMap;
-
+      Node* myFontRoot;
    };
 }

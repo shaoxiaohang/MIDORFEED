@@ -47,6 +47,8 @@ namespace vrv
          vert.add(Vector4f(xPos + width, yPos + height, 1, 1));
 
          geometry->addVertexAttribute(0, &vert);
+
+         x += metric.myAdvance >> 6;
       }  
       
       myNode->addDrawable(myGeometry);

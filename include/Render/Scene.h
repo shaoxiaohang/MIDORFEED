@@ -108,6 +108,7 @@ namespace vrv
 		Node* myRoot;
 		Node* myLightNode;
       Node* myGuiNode;
+      Node* myFontNode;
 		Map* myMap;
 		MainWindow* myMainWindow;
 		PostProcessorManager* myPostProcessorManager;

@@ -36,6 +36,7 @@ namespace vrv
 		Scene* myScene;
       MainWindow* myMainWindow;
       GuiManager* myGuiManager;
+      FontManager* myFontManager;
       bool myQuit;
       double mySecondsPerCycle;
 	};

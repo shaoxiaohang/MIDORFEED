@@ -3,6 +3,7 @@
 #include <Render/Camera.h>
 #include <Render/MainWindow.h>
 #include <GUI/GuiManager.h>
+#include <GUI/FontManager.h>
 #include <time.h>
 
 namespace vrv
@@ -15,6 +16,7 @@ namespace vrv
       , myQuit(false)
       , mySecondsPerCycle(0)
       , myGuiManager(0)
+      , myFontManager(0)
 	{
       LARGE_INTEGER cycles;
       QueryPerformanceFrequency(&cycles);
@@ -57,6 +59,7 @@ namespace vrv
       myMainWindow->initiailze();
       myScene = new Scene(myMainWindow);
       myGuiManager = new GuiManager(myScene);
+      myFontManager = new FontManager();
 	}
 
 	void Viewer::onUpdateTick(double dt)
