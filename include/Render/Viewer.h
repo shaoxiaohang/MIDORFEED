@@ -12,6 +12,7 @@ namespace vrv
    class MainWindow;
    class WindowEvent;
    class GuiManager;
+   class FontManager;
 	class Viewer
 	{	
 	public:

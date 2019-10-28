@@ -54,8 +54,6 @@ namespace vrv
 
 		void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType = Array::UNSIGNED_INT);
 
-		virtual void buildGeometryIfNeeded();
-
 		void setVertexArrayObject(VertexArrayObject* vao);
 
 		void setMaterial(Material*);

@@ -152,6 +152,7 @@ namespace vrv
          {
             Program* pro = draw->material()->program();
             scene->updateProgram(pro);
+            draw->updateProgram();
          }
       }
    }
@@ -256,7 +257,6 @@ namespace vrv
 				for (int i = 0; i < model->numberOfMeshes(); ++i)
 				{
 					Geometry* mesh = model->getMesh(i);
-					mesh->buildGeometryIfNeeded();
 					if (isTransParent)
 					{
 						myRenderQueue.addToTransparentList(RenderInfo(mesh, node->getModelMatrix(),
@@ -271,7 +271,6 @@ namespace vrv
 			}
 			else
 			{
-				drawable->buildGeometryIfNeeded();
 				if (isTransParent)
 				{
 					myRenderQueue.addToTransparentList(RenderInfo(drawable, node->getModelMatrix()

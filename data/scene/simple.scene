@@ -12,6 +12,7 @@
 					</diffuse>
 					<normal>
 						<filename>brickwall_normal.jpg</filename>
+						<filtermode>linear</filtermode>
 					</normal>
 				</TexturePlatte>
 			</material>

@@ -117,13 +117,13 @@ namespace vrv
 			{
 				XMLElement* diffuse = textureNode->FirstChildElement("diffuse");
 				Texture2D* diffuseTexture = parseTexture(diffuse);
-				material->setTexture2D(Material::Diffuse, diffuseTexture);
+				material->setBuiltInDiffuseTex(diffuseTexture);
 
 				XMLElement* normal = textureNode->FirstChildElement("normal");
 				if (normal)
 				{
 					Texture2D* normalTexture = parseTexture(normal);
-					material->setTexture2D(Material::Normal, normalTexture);
+					material->setBuiltInNormalTex(normalTexture);
 				}
 			}
 			XMLElement* discardAlphaNode = materialNode->FirstChildElement("discardAlpha");

@@ -80,7 +80,7 @@ namespace vrv
       }
 
       PFNWGLCREATECONTEXTATTRIBSARBPROC  wglCreateContextAttribsARB =
-         (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+         (PFNWGLCREATECONTEXTATTRIBSARBPROC)getAnyGLFuncAddress("wglCreateContextAttribsARB");
       if (wglCreateContextAttribsARB == 0)
       {
          std::cout << "Failed to find wglCreateContextAttribsARB proc address" << std::endl;
@@ -116,7 +116,7 @@ namespace vrv
    {
       if (makeSampleContextCurrent())
       {
-         WGLChoosePixelFormatARB wglChoosePixelFormatARB = (WGLChoosePixelFormatARB)wglGetProcAddress("wglChoosePixelFormatARB");
+         WGLChoosePixelFormatARB wglChoosePixelFormatARB = (WGLChoosePixelFormatARB)getAnyGLFuncAddress("wglChoosePixelFormatARB");
          if (wglChoosePixelFormatARB == 0)
          {
             std::cout << "wglChoosePixelFormatARB proc not found" << std::endl;
@@ -313,207 +313,233 @@ namespace vrv
       return src != 0;
    }
 
+   void* OpenGLContext::getAnyGLFuncAddress(const char *name)
+   {
+      void *p = (void *)wglGetProcAddress(name);
+      if (p == 0 ||
+         (p == (void*)0x1) || (p == (void*)0x2) || (p == (void*)0x3) ||
+         (p == (void*)-1))
+      {
+         HMODULE module = LoadLibraryA("opengl32.dll");
+         p = (void *)GetProcAddress(module, name);
+      }
+
+      return p;
+   }
+
    void OpenGLContext::retrieveOpenGLFunctions()
    {
-      if (!convertPointer(glGenBuffers, (void*)wglGetProcAddress("glGenBuffers")))
+      if (!convertPointer(glGenBuffers, (void*)getAnyGLFuncAddress("glGenBuffers")))
       {
          std::cout << "Failed to get pointer for glGenBuffers " << std::endl;
       }
-      if (!convertPointer(glBindBuffer, (void*)wglGetProcAddress("glBindBuffer")))
+      if (!convertPointer(glBindBuffer, (void*)getAnyGLFuncAddress("glBindBuffer")))
       {
          std::cout << "Failed to get pointer for glBindBuffer " << std::endl;
       }
-      if (!convertPointer(glBufferData, (void*)wglGetProcAddress("glBufferData")))
+      if (!convertPointer(glBufferData, (void*)getAnyGLFuncAddress("glBufferData")))
       {
          std::cout << "Failed to get pointer for glBufferData " << std::endl;
       }
-      if (!convertPointer(glDeleteBuffers, (void*)wglGetProcAddress("glDeleteBuffers")))
+      if (!convertPointer(glDeleteBuffers, (void*)getAnyGLFuncAddress("glDeleteBuffers")))
       {
          std::cout << "Failed to get pointer for glDeleteBuffers " << std::endl;
       }
-      if (!convertPointer(glBufferSubData, (void*)wglGetProcAddress("glBufferSubData")))
+      if (!convertPointer(glBufferSubData, (void*)getAnyGLFuncAddress("glBufferSubData")))
       {
          std::cout << "Failed to get pointer for glBufferSubData " << std::endl;
       }
-      if (!convertPointer(glDrawArraysInstanced, (void*)wglGetProcAddress("glDrawArraysInstanced")))
+      if (!convertPointer(glDrawArraysInstanced, (void*)getAnyGLFuncAddress("glDrawArraysInstanced")))
       {
          std::cout << "Failed to get pointer for glDrawArraysInstanced " << std::endl;
       }
-      if (!convertPointer(glDrawElementsInstanced, (void*)wglGetProcAddress("glDrawElementsInstanced")))
+      if (!convertPointer(glDrawElementsInstanced, (void*)getAnyGLFuncAddress("glDrawElementsInstanced")))
       {
          std::cout << "Failed to get pointer for glDrawElementsInstanced " << std::endl;
       }
-      if (!convertPointer(glFramebufferTexture2D, (void*)wglGetProcAddress("glFramebufferTexture2D")))
+      if (!convertPointer(glFramebufferTexture2D, (void*)getAnyGLFuncAddress("glFramebufferTexture2D")))
       {
          std::cout << "Failed to get pointer for glFramebufferTexture2D " << std::endl;
       }
-      if (!convertPointer(glFramebufferRenderbuffer, (void*)wglGetProcAddress("glFramebufferRenderbuffer")))
+      if (!convertPointer(glFramebufferRenderbuffer, (void*)getAnyGLFuncAddress("glFramebufferRenderbuffer")))
       {
          std::cout << "Failed to get pointer for glFramebufferRenderbuffer " << std::endl;
       }
-      if (!convertPointer(glBindRenderbuffer, (void*)wglGetProcAddress("glBindRenderbuffer")))
+      if (!convertPointer(glBindRenderbuffer, (void*)getAnyGLFuncAddress("glBindRenderbuffer")))
       {
          std::cout << "Failed to get pointer for glBindRenderbuffer " << std::endl;
       }
-      if (!convertPointer(glGenRenderbuffers, (void*)wglGetProcAddress("glGenRenderbuffers")))
+      if (!convertPointer(glGenRenderbuffers, (void*)getAnyGLFuncAddress("glGenRenderbuffers")))
       {
          std::cout << "Failed to get pointer for glGenRenderbuffers " << std::endl;
       }
-      if (!convertPointer(glRenderbufferStorage, (void*)wglGetProcAddress("glRenderbufferStorage")))
+      if (!convertPointer(glRenderbufferStorage, (void*)getAnyGLFuncAddress("glRenderbufferStorage")))
       {
          std::cout << "Failed to get pointer for glRenderbufferStorage " << std::endl;
       }
-      if (!convertPointer(glGenFramebuffers, (void*)wglGetProcAddress("glGenFramebuffers")))
+      if (!convertPointer(glGenFramebuffers, (void*)getAnyGLFuncAddress("glGenFramebuffers")))
       {
          std::cout << "Failed to get pointer for glGenFramebuffers " << std::endl;
       }
-      if (!convertPointer(glBindFramebuffer, (void*)wglGetProcAddress("glBindFramebuffer")))
+      if (!convertPointer(glBindFramebuffer, (void*)getAnyGLFuncAddress("glBindFramebuffer")))
       {
          std::cout << "Failed to get pointer for glBindFramebuffer " << std::endl;
       }
-      if (!convertPointer(glDeleteFramebuffers, (void*)wglGetProcAddress("glDeleteFramebuffers")))
+      if (!convertPointer(glDeleteFramebuffers, (void*)getAnyGLFuncAddress("glDeleteFramebuffers")))
       {
          std::cout << "Failed to get pointer for glDeleteFramebuffers " << std::endl;
       }
-      if (!convertPointer(glDrawBuffers, (void*)wglGetProcAddress("glDrawBuffers")))
+      if (!convertPointer(glDrawBuffers, (void*)getAnyGLFuncAddress("glDrawBuffers")))
       {
          std::cout << "Failed to get pointer for glDrawBuffers " << std::endl;
       }
-      if (!convertPointer(glCheckFramebufferStatus, (void*)wglGetProcAddress("glCheckFramebufferStatus")))
+      if (!convertPointer(glCheckFramebufferStatus, (void*)getAnyGLFuncAddress("glCheckFramebufferStatus")))
       {
          std::cout << "Failed to get pointer for glCheckFramebufferStatus " << std::endl;
       }
-      if (!convertPointer(glActiveTexture, (void*)wglGetProcAddress("glActiveTexture")))
+      if (!convertPointer(glActiveTexture, (void*)getAnyGLFuncAddress("glActiveTexture")))
       {
          std::cout << "Failed to get pointer for glActiveTexture " << std::endl;
       }
-      if (!convertPointer(glDeleteProgram, (void*)wglGetProcAddress("glDeleteProgram")))
+      if (!convertPointer(glDeleteProgram, (void*)getAnyGLFuncAddress("glDeleteProgram")))
       {
          std::cout << "Failed to get pointer for glDeleteProgram " << std::endl;
       }
-      if (!convertPointer(glGetProgramiv, (void*)wglGetProcAddress("glGetProgramiv")))
+      if (!convertPointer(glGetProgramiv, (void*)getAnyGLFuncAddress("glGetProgramiv")))
       {
          std::cout << "Failed to get pointer for glGetProgramiv " << std::endl;
       }
-      if (!convertPointer(glGetProgramInfoLog, (void*)wglGetProcAddress("glGetProgramInfoLog")))
+      if (!convertPointer(glGetProgramInfoLog, (void*)getAnyGLFuncAddress("glGetProgramInfoLog")))
       {
          std::cout << "Failed to get pointer for glGetProgramInfoLog " << std::endl;
       }
-      if (!convertPointer(glUseProgram, (void*)wglGetProcAddress("glUseProgram")))
+      if (!convertPointer(glUseProgram, (void*)getAnyGLFuncAddress("glUseProgram")))
       {
          std::cout << "Failed to get pointer for glUseProgram " << std::endl;
       }
-      if (!convertPointer(glGetUniformBlockIndex, (void*)wglGetProcAddress("glGetUniformBlockIndex")))
+      if (!convertPointer(glGetUniformBlockIndex, (void*)getAnyGLFuncAddress("glGetUniformBlockIndex")))
       {
          std::cout << "Failed to get pointer for glGetUniformBlockIndex " << std::endl;
       }
-      if (!convertPointer(glUniformBlockBinding, (void*)wglGetProcAddress("glUniformBlockBinding")))
+      if (!convertPointer(glUniformBlockBinding, (void*)getAnyGLFuncAddress("glUniformBlockBinding")))
       {
          std::cout << "Failed to get pointer for glUniformBlockBinding " << std::endl;
       }
-      if (!convertPointer(glUniformBlockBinding, (void*)wglGetProcAddress("glUniformBlockBinding")))
+      if (!convertPointer(glUniformBlockBinding, (void*)getAnyGLFuncAddress("glUniformBlockBinding")))
       {
          std::cout << "Failed to get pointer for glUniformBlockBinding " << std::endl;
       }
-      if (!convertPointer(glCreateProgram, (void*)wglGetProcAddress("glCreateProgram")))
+      if (!convertPointer(glCreateProgram, (void*)getAnyGLFuncAddress("glCreateProgram")))
       {
          std::cout << "Failed to get pointer for glCreateProgram " << std::endl;
       }
-      if (!convertPointer(glAttachShader, (void*)wglGetProcAddress("glAttachShader")))
+      if (!convertPointer(glAttachShader, (void*)getAnyGLFuncAddress("glAttachShader")))
       {
          std::cout << "Failed to get pointer for glAttachShader " << std::endl;
       }
-      if (!convertPointer(glLinkProgram, (void*)wglGetProcAddress("glLinkProgram")))
+      if (!convertPointer(glLinkProgram, (void*)getAnyGLFuncAddress("glLinkProgram")))
       {
          std::cout << "Failed to get pointer for glLinkProgram " << std::endl;
       }
-      if (!convertPointer(glGetActiveUniform, (void*)wglGetProcAddress("glGetActiveUniform")))
+      if (!convertPointer(glGetActiveUniform, (void*)getAnyGLFuncAddress("glGetActiveUniform")))
       {
          std::cout << "Failed to get pointer for glGetActiveUniform " << std::endl;
       }
-      if (!convertPointer(glGetUniformLocation, (void*)wglGetProcAddress("glGetUniformLocation")))
+      if (!convertPointer(glGetUniformLocation, (void*)getAnyGLFuncAddress("glGetUniformLocation")))
       {
          std::cout << "Failed to get pointer for glGetUniformLocation " << std::endl;
       }
-      if (!convertPointer(glCreateShader, (void*)wglGetProcAddress("glCreateShader")))
+      if (!convertPointer(glCreateShader, (void*)getAnyGLFuncAddress("glCreateShader")))
       {
          std::cout << "Failed to get pointer for glCreateShader " << std::endl;
       }
-      if (!convertPointer(glShaderSource, (void*)wglGetProcAddress("glShaderSource")))
+      if (!convertPointer(glShaderSource, (void*)getAnyGLFuncAddress("glShaderSource")))
       {
          std::cout << "Failed to get pointer for glShaderSource " << std::endl;
       }
-      if (!convertPointer(glCompileShader, (void*)wglGetProcAddress("glCompileShader")))
+      if (!convertPointer(glCompileShader, (void*)getAnyGLFuncAddress("glCompileShader")))
       {
          std::cout << "Failed to get pointer for glCompileShader " << std::endl;
       }
-      if (!convertPointer(glGetShaderiv, (void*)wglGetProcAddress("glGetShaderiv")))
+      if (!convertPointer(glGetShaderiv, (void*)getAnyGLFuncAddress("glGetShaderiv")))
       {
          std::cout << "Failed to get pointer for glGetShaderiv " << std::endl;
       }
-      if (!convertPointer(glGetShaderInfoLog, (void*)wglGetProcAddress("glGetShaderInfoLog")))
+      if (!convertPointer(glGetShaderInfoLog, (void*)getAnyGLFuncAddress("glGetShaderInfoLog")))
       {
          std::cout << "Failed to get pointer for glGetShaderInfoLog " << std::endl;
       }
-      if (!convertPointer(glActiveTexture, (void*)wglGetProcAddress("glActiveTexture")))
+      if (!convertPointer(glActiveTexture, (void*)getAnyGLFuncAddress("glActiveTexture")))
       {
          std::cout << "Failed to get pointer for glActiveTexture " << std::endl;
       }
-      if (!convertPointer(glGenerateMipmap, (void*)wglGetProcAddress("glGenerateMipmap")))
+      if (!convertPointer(glGenerateMipmap, (void*)getAnyGLFuncAddress("glGenerateMipmap")))
       {
          std::cout << "Failed to get pointer for glGenerateMipmap " << std::endl;
       }
-      if (!convertPointer(glUniform1i, (void*)wglGetProcAddress("glUniform1i")))
+      if (!convertPointer(glUniform1i, (void*)getAnyGLFuncAddress("glUniform1i")))
       {
          std::cout << "Failed to get pointer for glUniform1i " << std::endl;
       }
-      if (!convertPointer(glUniform1f, (void*)wglGetProcAddress("glUniform1f")))
+      if (!convertPointer(glUniform1f, (void*)getAnyGLFuncAddress("glUniform1f")))
       {
          std::cout << "Failed to get pointer for glUniform1f " << std::endl;
       }
-      if (!convertPointer(glUniform2f, (void*)wglGetProcAddress("glUniform2f")))
+      if (!convertPointer(glUniform2f, (void*)getAnyGLFuncAddress("glUniform2f")))
       {
          std::cout << "Failed to get pointer for glUniform2f " << std::endl;
       }
-      if (!convertPointer(glUniform3f, (void*)wglGetProcAddress("glUniform3f")))
+      if (!convertPointer(glUniform3f, (void*)getAnyGLFuncAddress("glUniform3f")))
       {
          std::cout << "Failed to get pointer for glUniform3f " << std::endl;
       }
-      if (!convertPointer(glUniform4f, (void*)wglGetProcAddress("glUniform4f")))
+      if (!convertPointer(glUniform4f, (void*)getAnyGLFuncAddress("glUniform4f")))
       {
          std::cout << "Failed to get pointer for glUniform4f " << std::endl;
       }
-      if (!convertPointer(glUniformMatrix3fv, (void*)wglGetProcAddress("glUniformMatrix3fv")))
+      if (!convertPointer(glUniformMatrix3fv, (void*)getAnyGLFuncAddress("glUniformMatrix3fv")))
       {
          std::cout << "Failed to get pointer for glUniformMatrix3fv " << std::endl;
       }
-      if (!convertPointer(glUniformMatrix4fv, (void*)wglGetProcAddress("glUniformMatrix4fv")))
+      if (!convertPointer(glUniformMatrix4fv, (void*)getAnyGLFuncAddress("glUniformMatrix4fv")))
       {
          std::cout << "Failed to get pointer for glUniformMatrix4fv " << std::endl;
       }
-      if (!convertPointer(glBindBufferBase, (void*)wglGetProcAddress("glBindBufferBase")))
+      if (!convertPointer(glBindBufferBase, (void*)getAnyGLFuncAddress("glBindBufferBase")))
       {
          std::cout << "Failed to get pointer for glBindBufferBase " << std::endl;
       }
-      if (!convertPointer(glGenVertexArrays, (void*)wglGetProcAddress("glGenVertexArrays")))
+      if (!convertPointer(glGenVertexArrays, (void*)getAnyGLFuncAddress("glGenVertexArrays")))
       {
          std::cout << "Failed to get pointer for glGenVertexArrays " << std::endl;
       }
-      if (!convertPointer(glBindVertexArray, (void*)wglGetProcAddress("glBindVertexArray")))
+      if (!convertPointer(glBindVertexArray, (void*)getAnyGLFuncAddress("glBindVertexArray")))
       {
          std::cout << "Failed to get pointer for glBindVertexArray " << std::endl;
       }
-      if (!convertPointer(glVertexAttribPointer, (void*)wglGetProcAddress("glVertexAttribPointer")))
+      if (!convertPointer(glVertexAttribPointer, (void*)getAnyGLFuncAddress("glVertexAttribPointer")))
       {
          std::cout << "Failed to get pointer for glVertexAttribPointer " << std::endl;
       }
-      if (!convertPointer(glEnableVertexAttribArray, (void*)wglGetProcAddress("glEnableVertexAttribArray")))
+      if (!convertPointer(glEnableVertexAttribArray, (void*)getAnyGLFuncAddress("glEnableVertexAttribArray")))
       {
          std::cout << "Failed to get pointer for glEnableVertexAttribArray " << std::endl;
       }
-      if (!convertPointer(glDisableVertexAttribArray, (void*)wglGetProcAddress("glDisableVertexAttribArray")))
+      if (!convertPointer(glDisableVertexAttribArray, (void*)getAnyGLFuncAddress("glDisableVertexAttribArray")))
       {
          std::cout << "Failed to get pointer for glDisableVertexAttribArray " << std::endl;
+      }
+      if (!convertPointer(glTexImage2D, (void*)getAnyGLFuncAddress("glTexImage2D")))
+      {
+         std::cout << "Failed to get pointer for glTexImage2D " << std::endl;
+      }
+      if (!convertPointer(glTexParameteri, (void*)getAnyGLFuncAddress("glTexParameteri")))
+      {
+         std::cout << "Failed to get pointer for glTexParameteri " << std::endl;
+      }
+      if (!convertPointer(glBindTexture, (void*)getAnyGLFuncAddress("glBindTexture")))
+      {
+         std::cout << "Failed to get pointer for glBindTexture " << std::endl;
       }
    }
 }

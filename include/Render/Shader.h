@@ -18,7 +18,6 @@ namespace vrv
 		Shader(ShaderType type,const std::string& fileName);
 		void initialize();
 		void compile();
-		virtual void addVertexAttribute(VertexAttribute* attribute);
 		static bool checkCompileStatus(unsigned int id,std::string& error);
 		const std::string name();
 		unsigned int ID();

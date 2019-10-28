@@ -7,21 +7,20 @@
 
 namespace vrv
 {
-   void Label::initialize()
-   {
-
-   }
-
    void Label::setText(const std::string& text)
    {
       myText = text;
    }
 
+   Label::Label(Widget* parent)
+      : Widget(parent)
+   {
+
+   }
+
    void Label::initializeGeometry()
    {
       myMaterial->stateSet()->setProgram(new Program("../data/shader/label.vert", "../data/shader/label.frag"));
-
-      myGeometry = new Geometry();
 
       FontManager& fontManager = FontManager::instance();
 
@@ -31,6 +30,7 @@ namespace vrv
       {
          Node* node = new Node();
          Geometry* geometry = new Geometry();
+         geometry->setMaterial(myMaterial);
          FontManager::CharacterMetric& metric = fontManager.metric(c);
 
          float xPos = x + metric.myBearing.x();
@@ -49,8 +49,12 @@ namespace vrv
          geometry->addVertexAttribute(0, &vert);
 
          x += metric.myAdvance >> 6;
+
+         node->addDrawable(geometry);
+
+         myNode->addChild(node);
       }  
       
-      myNode->addDrawable(myGeometry);
+      
    }
 }

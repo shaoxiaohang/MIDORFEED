@@ -65,8 +65,8 @@ namespace vrv
 			indexes->add(6);
 			indexes->add(4);
 
-			cube->setVertex(pos);
-			cube->setIndex(indexes);
+			cube->addVertexAttribute(0, pos);
+			cube->addVertexIndex(indexes);
 
 			return cube;
 		}

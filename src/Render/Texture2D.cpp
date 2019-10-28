@@ -49,6 +49,7 @@ namespace vrv
 
    void Texture2D::initialize()
    {
+      OpenGLContext& context = OpenGLContext::instance();
       glGenTextures(1, &myID);
       myTextureWrapMode = REPEAT;
       myTextureWrapModeGL = GL_REPEAT;
@@ -60,10 +61,10 @@ namespace vrv
          myInternelFormat = myImage->internalFormatGL();
          myWidth = myImage->width();
          myHeight = myImage->height();
-         myFormat = myImage->pixelFormat();
+         myFormat = myImage->pixelFormatGL();
          myDataType = myImage->dataTypeGL();
 
-         glTexImage2D(GL_TEXTURE_2D, 0, myInternelFormat, myWidth,
+         context.glTexImage2D(GL_TEXTURE_2D, 0, myInternelFormat, myWidth,
             myHeight, 0, myFormat, myDataType, myImage->dataPointer());
       }
       else
@@ -110,18 +111,18 @@ namespace vrv
          }
 
 
-         glTexImage2D(GL_TEXTURE_2D, 0, myInternelFormat, myWidth,
+         context.glTexImage2D(GL_TEXTURE_2D, 0, myInternelFormat, myWidth,
             myHeight, 0, myFormat, myDataType, 0);
       }
 
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, myTextureWrapModeGL);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, myTextureWrapModeGL);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, myTextureFilterModeGL);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, myTextureFilterModeGL);
+      context.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, myTextureWrapModeGL);
+      context.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, myTextureWrapModeGL);
+      context.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, myTextureFilterModeGL);
+      context.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, myTextureFilterModeGL);
 
       if (myGenerateMipmap)
       {
-         OpenGLContext::instance().glGenerateMipmap(GL_TEXTURE_2D);
+         context.glGenerateMipmap(GL_TEXTURE_2D);
       }
       
       unbind();
@@ -129,16 +130,18 @@ namespace vrv
 
    void Texture2D::update()
    {
+      OpenGLContext& context = OpenGLContext::instance();
+
       bind();
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, myTextureWrapModeGL);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, myTextureWrapModeGL);
+      context.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, myTextureWrapModeGL);
+      context.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, myTextureWrapModeGL);
       if (myTextureWrapMode == CLAMP_TO_BORDER)
       {
          float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
          glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
       }
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, myTextureFilterModeGL);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, myTextureFilterModeGL);
+      context.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, myTextureFilterModeGL);
+      context.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, myTextureFilterModeGL);
       unbind();
    }
 }

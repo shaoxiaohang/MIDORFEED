@@ -60,7 +60,7 @@ struct vrv_light_struct
 	float 	cutoff;
 };
 
-#define VRV_MAX_NUM_LIGHTS 4
+#define VRV_MAX_NUM_LIGHTS 1
 uniform vrv_light_struct vrv_lights[VRV_MAX_NUM_LIGHTS];
 
 //Lighting functions
@@ -159,6 +159,7 @@ void main()
 			float alpha = vrv_isTransparent ? diffuse.a : 1;
 
 			FragColor = vec4(calculateLightColor(diffuse,specular,vrv_material.shininess, N),alpha);
+			
 		}
 	}
 	

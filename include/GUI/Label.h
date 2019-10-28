@@ -8,7 +8,8 @@ namespace vrv
    {
    public:
 
-      void initialize();
+      Label(Widget* parent);
+
       void setText(const std::string& text);
 
    protected:

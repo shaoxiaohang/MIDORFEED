@@ -9,9 +9,11 @@ namespace vrv
    public: 
       Button(Widget* parent);
 
-      virtual void initialize();
    protected:
     
       virtual void initializeGeometry();
+
+   protected:
+      Geometry* myGeometry;
    };
 }

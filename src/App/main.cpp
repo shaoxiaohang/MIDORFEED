@@ -19,6 +19,7 @@
 #include <Render/Map.h>
 #include <Render/Ellipsoid.h>
 #include <GUI/Button.h>
+#include <GUI/Label.h>
 
 using namespace vrv;
 int main(int argc, char** argv)
@@ -27,9 +28,10 @@ int main(int argc, char** argv)
 	viewer->initialize(800, 600, "main window");
 
 	Scenario* test = new Scenario("simple.scene");
-   Button* button = new Button(0);
+   //Label* label = new Label(0);
+   //label->setText("ss");
 	viewer->setSceneData(test);
-   viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
+   //viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
 	viewer->run();
 	
 	return 0;

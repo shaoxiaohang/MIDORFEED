@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <Core/Vector4f.h>
+#include <Render/OpenGLDefines.h>
+
 namespace vrv
 {
 	class Image;

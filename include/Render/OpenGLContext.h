@@ -71,8 +71,13 @@ namespace vrv
       void (APIENTRY* glVertexAttribPointer) (unsigned int, GLint, GLenum, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
       void (APIENTRY* glEnableVertexAttribArray)(GLuint index);
       void (APIENTRY* glDisableVertexAttribArray)(GLuint index);
+      void (APIENTRY* glTexImage2D) (GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border,
+         GLenum format, GLenum type, const GLvoid * data);
+      void (APIENTRY* glTexParameteri) (GLenum target, GLenum pname, GLint param);
+      void (APIENTRY* glBindTexture)( GLenum target, GLuint texture);
 
    protected:
+
       bool createContext();
 
       bool setPixelFormat();
@@ -84,6 +89,8 @@ namespace vrv
       void destorySampleContext();
 
       void retrieveOpenGLFunctions();
+
+      void* getAnyGLFuncAddress(const char *name);
 
    protected:
 

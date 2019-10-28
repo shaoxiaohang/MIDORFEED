@@ -8,7 +8,6 @@ typedef __int64 GLsizeiptr;
 typedef char GLchar;
 typedef unsigned int GLuint;
 typedef unsigned int GLenum;
-typedef char GLubyte;
 typedef void GLvoid;
 
 #define GL_ARRAY_BUFFER               0x8892

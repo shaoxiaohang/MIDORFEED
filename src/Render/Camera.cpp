@@ -103,7 +103,7 @@ namespace vrv
    {
       if (myFOV >= 1.0f && myFOV <= 45.0f)
       {
-         myFOV += e.wheelDelta()*myZoomSpeed;
+         myFOV -= e.wheelDelta()*myZoomSpeed;
       }
       if (myFOV <= 1.0f)
          myFOV = 1.0f;

@@ -2,6 +2,7 @@
 #include <Render/Geometry.h>
 #include <Render/Material.h>
 #include <Render/Program.h>
+#include <Render/Texture2D.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -92,21 +93,21 @@ namespace vrv
 			for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_DIFFUSE); ++i)
 			{
 				material->GetTexture(aiTextureType_DIFFUSE, i, &str);
-				vrvMaterial->setTexture2D(Material::Diffuse, myBaseDirectory + str.C_Str());
+				vrvMaterial->setBuiltInDiffuseTex(new Texture2D(myBaseDirectory + str.C_Str()));
 				VRV_INFO(str.C_Str())
 			}
 
 			for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_SPECULAR); ++i)
 			{
 				material->GetTexture(aiTextureType_SPECULAR, i, &str);
-				vrvMaterial->setTexture2D(Material::Specular, myBaseDirectory + str.C_Str());
+				vrvMaterial->setBuiltInSpecularTex(new Texture2D(myBaseDirectory + str.C_Str()));
 				VRV_INFO(str.C_Str())
 			}
 
 			for (unsigned int i = 0; i < material->GetTextureCount(aiTextureType_HEIGHT); ++i)
 			{
 				material->GetTexture(aiTextureType_HEIGHT, i, &str);
-				vrvMaterial->setTexture2D(Material::Normal, myBaseDirectory + str.C_Str());
+				vrvMaterial->setBuiltInNormalTex(new Texture2D(myBaseDirectory + str.C_Str()));
 				VRV_INFO(str.C_Str())
 			}
 		}

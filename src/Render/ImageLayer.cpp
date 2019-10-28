@@ -24,6 +24,6 @@ namespace vrv
 	void ImageLayer::connectToMap(Map* map)
 	{
 		Texture2D* texture = new Texture2D(mySource);
-		map->earth()->geometry()->getOrCreateMaterial()->setTexture2D(Material::Diffuse, texture);
+		map->earth()->geometry()->getOrCreateMaterial()->setBuiltInDiffuseTex(texture);
 	}
 }

@@ -11,7 +11,6 @@ namespace vrv
 {
    Widget::Widget(Widget* parent)
       : myParent(parent)
-      , myGeometry(0)
       , myNode(0)
       , myMaterial(0)
       , myInitialized(false)

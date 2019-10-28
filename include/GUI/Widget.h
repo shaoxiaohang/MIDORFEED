@@ -28,7 +28,6 @@ namespace vrv
       float myWidth;
       float myHeight;
       Node* myNode;
-      Geometry* myGeometry;
       Matrix3f myTransform;
       bool myInitialized;
       Material* myMaterial;
