@@ -92,6 +92,8 @@ namespace vrv
 		void setMap(Map* map);
 		Map* map();
       void acceptNodeVisitor(NodeVisitor* v);
+      void setCurrentProjectionMatrix(Matrix4f m);
+      Matrix4f currentProjectionMatrix();
 
 	protected:
 		void cullTraverse();
@@ -106,6 +108,9 @@ namespace vrv
 	protected:
 		Camera* myMasterCamera;
 		Node* myRoot;
+      Camera* mySceneCamera;
+      Camera* myHudCamera;
+      Node* mySceneRoot;
 		Node* myLightNode;
       Node* myGuiNode;
       Node* myFontNode;
@@ -125,5 +130,6 @@ namespace vrv
       StateSet* myPhoneLightingStateSet;
 		ShadowSystem* myShadowSystem;
 		TextureQuadRender* myTextureQuadRender;
+      Matrix4f myCurrentProjectionMatrix;
 	};
 }

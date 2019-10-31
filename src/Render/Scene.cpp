@@ -169,6 +169,7 @@ namespace vrv
 		, mySkybox(0)
 		, myPostProcessorManager(0)
 		, myMap(0)
+      , mySceneRoot(0)
 	{
 		myMasterCamera = new Camera();
 		initializeStateSet();
@@ -176,6 +177,10 @@ namespace vrv
 		myShadowSystem = new ShadowSystem();
 		myShadowSystem->initializeFrameBuffer(window->width(), window->height());
 		myTextureQuadRender = new TextureQuadRender();
+      myRoot = new Node("Root");
+      mySceneCamera = new Camera();
+      myHudCamera = new Camera();
+      myHudCamera->setProjectionMatroxAsOrtho2D(0, myMainWindow->width(), 0, myMainWindow->height());
 		myLightNode = new Node("light");
       myGuiNode = new Node("gui");
       myFontNode = new Node("Font");
@@ -183,10 +188,13 @@ namespace vrv
 
 	void Scene::setSceneData(Node* root)
 	{
-		myRoot = root;
-		myRoot->addChild(myLightNode);
-      myRoot->addChild(myGuiNode);
-      myRoot->addChild(myFontNode);
+		mySceneRoot = root;
+      myRoot->addChild(mySceneCamera);
+      myRoot->addChild(myHudCamera);
+      mySceneCamera->addChild(mySceneRoot);
+      mySceneCamera->addChild(myLightNode);
+      myHudCamera->addChild(myGuiNode);
+      myHudCamera->addChild(myFontNode);
 	}
 
 	void Scene::cullTraverse()
@@ -503,5 +511,15 @@ namespace vrv
    {
       if (v && myRoot)
          v->run(myRoot);
+   }
+
+   void Scene::setCurrentProjectionMatrix(Matrix4f m)
+   {
+      myCurrentProjectionMatrix = m;
+   }
+
+   Matrix4f Scene::currentProjectionMatrix()
+   {
+      return myCurrentProjectionMatrix;
    }
 }

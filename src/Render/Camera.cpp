@@ -25,7 +25,6 @@ namespace vrv
       , myLastMouseX(0)
       , myLastMouseY(0)
       , myFOV(45)
-      , myIsProjectionDirty(true)
       , myNearPlane(0.1f)
       , myFarPlane(100.0f)
       , myInitialPosition(Vector3f(0, 0, 10))
@@ -33,6 +32,7 @@ namespace vrv
       , myCameraMode(FreeMove)
       , myLastFrame(0)
    {
+      myProjectionMatrix = Matrix4f::makeProjection(myFOV, myWDivideH, myNearPlane, myFarPlane);
    }
 
    void Camera::setProjectionMatrixAsPerspective(float verticalFieldOfView, float ratioWDivedeH, float n, float f)
@@ -72,7 +72,6 @@ namespace vrv
       myFirstMouse = true;
       myLastMouseX = 0;
       myLastMouseY = 0;
-      myIsProjectionDirty = false;
    }
 
    void Camera::updateVectors()
@@ -91,11 +90,6 @@ namespace vrv
 
    Matrix4f Camera::projectionMatrix()
    {
-      if (myIsProjectionDirty)
-      {
-         myProjectionMatrix = Matrix4f::makeProjection(myFOV, myWDivideH, myNearPlane, myFarPlane);
-         myIsProjectionDirty = false;
-      }
       return myProjectionMatrix;
    }
 
@@ -109,7 +103,7 @@ namespace vrv
          myFOV = 1.0f;
       if (myFOV >= 45.0f)
          myFOV = 45.0f;
-      myIsProjectionDirty = true;
+      myProjectionMatrix = Matrix4f::makeProjection(myFOV, myWDivideH, myNearPlane, myFarPlane);
    }
 
    Vector3f Camera::position()
@@ -132,7 +126,7 @@ namespace vrv
 
       myPosition = Vector3f(0, 0, 1) * distance + position;
       setInitialPosition(myPosition);
-      myIsProjectionDirty = true;
+      myProjectionMatrix = Matrix4f::makeProjection(myFOV, myWDivideH, myNearPlane, myFarPlane);
    }
 
    void Camera::focousOnTarget(Node* node)

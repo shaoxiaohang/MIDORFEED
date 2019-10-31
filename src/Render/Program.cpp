@@ -302,6 +302,8 @@ namespace vrv
 		{
 			std::stringstream ss;
 			ss << "shader program"<< " comiling failed" << std::endl;
+         ss << "vertex shader" << myVertShader->name() << std::endl;
+         ss << "fragment shader" << myFragShader->name() << std::endl;
 			ss << info << std::endl;
 			VRV_ERROR(ss.str());
 		}

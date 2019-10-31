@@ -1,5 +1,6 @@
 #include <Render/Node.h>
 #include <Render/Drawable.h>
+#include <Render/Camera.h>
 
 namespace vrv
 {
@@ -20,8 +21,12 @@ namespace vrv
 
 	void Node::addDrawable(Drawable* drawable)
 	{
-		myDrawables.push_back(drawable);
-      calculateBound();
+      if (drawable)
+      {
+         drawable->setParent(this);
+         myDrawables.push_back(drawable);
+         calculateBound();
+      }
 	}
 
 	void Node::addChild(Node* child)
@@ -157,5 +162,10 @@ namespace vrv
             }
          }
       }
+   }
+
+   bool Node::isCameraNode()
+   {
+      return static_cast<const Camera*>(this);
    }
 }

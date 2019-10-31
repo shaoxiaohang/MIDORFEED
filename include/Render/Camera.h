@@ -1,13 +1,15 @@
 #pragma once
+
 #include<Core/Matrix4f.h>
 #include<Core/Vector3f.h>
+#include<Render/Node.h>
 
 namespace vrv
 {
    class WindowEvent;
    class Node;
 
-	class Camera
+	class Camera : public Node
 	{
 	public:
 
@@ -68,7 +70,6 @@ namespace vrv
 		int myLastMouseY;
 		float myFOV;
 		float myWDivideH;
-		bool myIsProjectionDirty;
 		float myNearPlane;
 		float myFarPlane;
       CameraMode myCameraMode;

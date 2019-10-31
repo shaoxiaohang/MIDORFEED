@@ -497,7 +497,7 @@ namespace vrv
 		Scene* scene = Scene::instancePtr();
 		if (scene && scene->masterCamera())
 		{
-			myUniform->set(scene->masterCamera()->projectionMatrix());
+			myUniform->set(scene->currentProjectionMatrix());
 		}
 	}
 

@@ -7,6 +7,7 @@
 namespace vrv
 {
 	class Drawable;
+   class Camera;
 	class Node
 	{
 	public:
@@ -57,6 +58,8 @@ namespace vrv
 		bool isEllipsoid();
 
       Bound bound();
+
+      bool isCameraNode();
    protected:
 
       void calculateBound();

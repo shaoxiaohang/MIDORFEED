@@ -72,6 +72,7 @@ namespace vrv
 		, myIsInstanced(false)
 		, myInstancedCount(0)
 		, myVertexArrayObject(0)
+      , myParent(0)
 	{
       myMaterial = new Material();
       myVertexArrayObject = new VertexArrayObject();
@@ -208,4 +209,21 @@ namespace vrv
       return myBound;
    }
 
+   void Drawable::setParent(Node* parent)
+   {
+      myParent = parent;
+   }
+
+   Node* Drawable::parent()
+   {
+      return myParent;
+   }
+
+   void Drawable::bindCorrectProjectionMatrix()
+   {
+      while (my)
+      {
+
+      }
+   }
 }

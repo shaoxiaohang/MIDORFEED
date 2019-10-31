@@ -10,6 +10,7 @@ namespace vrv
 	class Array;
 	class RenderState;
 	class Material;
+   class Node;
 
 	class Drawable
 	{
@@ -70,6 +71,11 @@ namespace vrv
 
       Bound bound();
 
+      void setParent(Node* parent);
+      Node* parent();
+
+      void bindCorrectProjectionMatrix();
+
 	protected:
 		VertexArrayObject* myVertexArrayObject;
 		std::vector<PrimitiveSet> myPrimitiveSets;
@@ -77,5 +83,6 @@ namespace vrv
 		bool myIsInstanced;
 		int myInstancedCount;
       Bound myBound;
+      Node* myParent;
 	};
 }

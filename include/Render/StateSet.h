@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Core/Matrix4f.h>
+
 namespace vrv
 {
 	class RenderState;
@@ -28,6 +30,7 @@ namespace vrv
 	protected:
 		RenderState* myRenderState;
 		Program* myProgram;
+      Matrix4f myProjectionMatrix;
 	};
 
 }

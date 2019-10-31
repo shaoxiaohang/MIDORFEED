@@ -9,6 +9,7 @@ namespace vrv
 		: myRenderState(0)
 		, myProgram(0)
 	{
+      myRenderState = new RenderState();
 	}
 
    StateSet::StateSet(Program* shader)

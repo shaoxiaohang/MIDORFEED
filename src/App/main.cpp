@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 	viewer->initialize(800, 600, "main window");
 
 	Scenario* test = new Scenario("simple.scene");
-   //Label* label = new Label(0);
+   Button* label = new Button(0);
    //label->setText("ss");
 	viewer->setSceneData(test);
    //viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
