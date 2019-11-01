@@ -42,12 +42,12 @@ namespace vrv
          float height = metric.mySize.y();
 
          ArrayVec4 vert;
-         vert.add(Vector4f(xPos, yPos, 0, 0));
-         vert.add(Vector4f(xPos + width, yPos, 1, 0));
-         vert.add(Vector4f(xPos, yPos + height, 0, 1));
-         vert.add(Vector4f(xPos, yPos + height, 0, 1));
-         vert.add(Vector4f(xPos + width, yPos, 1, 0));
-         vert.add(Vector4f(xPos + width, yPos + height, 1, 1));
+         vert.add(Vector4f(xPos, yPos + height, 0, 0));
+         vert.add(Vector4f(xPos, yPos, 0, 1));
+         vert.add(Vector4f(xPos + width, yPos, 1, 1));
+         vert.add(Vector4f(xPos, yPos + height, 0, 0));
+         vert.add(Vector4f(xPos + width, yPos, 1, 1));
+         vert.add(Vector4f(xPos + width, yPos + height, 1, 0));
 
          geometry->addVertexAttribute(0, &vert);
          geometry->addPrimitiveSet(Drawable::TRIANGLES, 0, 6);

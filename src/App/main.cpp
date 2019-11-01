@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
 	//Scenario* test = new Scenario("simple.scene");
    Label* label = new Label(0);
-   label->setText("ss");
+   label->setText("H");
 	//viewer->setSceneData(0);
    //viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
 	viewer->run();

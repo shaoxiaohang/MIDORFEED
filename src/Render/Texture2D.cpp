@@ -118,7 +118,7 @@ namespace vrv
 
       if (myGenerateMipmap)
       {
-         context.glGenerateMipmap(GL_TEXTURE_2D);
+         //context.glGenerateMipmap(GL_TEXTURE_2D);
       }
       
       unbind();

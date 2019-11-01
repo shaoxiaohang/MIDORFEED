@@ -9,6 +9,6 @@ out vec4 color;
 
 void main()
 {
-	color = vec4(1,1,1, texture2D(fontTex, st).r) * vec4(1,0,0,1);
-	color = texture2D(fontTex, st);
+	color = vec4(1,1,1, texture(fontTex, st).r) * vec4(1,0,0,1);
+	//color = texture2D(fontTex, st);
 }

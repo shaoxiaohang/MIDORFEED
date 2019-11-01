@@ -48,7 +48,7 @@ namespace vrv
 
       FT_Set_Pixel_Sizes(face, 0, 48);
 
-      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+      //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
       for (GLubyte c = 0; c < 128; ++c)
       {
