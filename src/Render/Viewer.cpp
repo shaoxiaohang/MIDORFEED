@@ -60,13 +60,14 @@ namespace vrv
       myScene = new Scene(myMainWindow);
       myGuiManager = new GuiManager(myScene);
       myFontManager = new FontManager();
+      myFontManager->initialize();
 	}
 
 	void Viewer::onUpdateTick(double dt)
 	{
       myGuiManager->update(dt);
 	}
-
+    
 	void Viewer::onRenderTick(double dt)
 	{
 		if (myScene)

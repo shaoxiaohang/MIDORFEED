@@ -13,6 +13,7 @@ namespace vrv
    FontManager::FontManager()
       : myFontRoot(0)
    {
+      initialize();
    }
 
    FontManager::CharacterMetric FontManager::metric(char c)
@@ -47,6 +48,8 @@ namespace vrv
 
       FT_Set_Pixel_Sizes(face, 0, 48);
 
+      glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
       for (GLubyte c = 0; c < 128; ++c)
       {
          if (FT_Load_Char(face, c, FT_LOAD_RENDER))
@@ -63,12 +66,10 @@ namespace vrv
         face->glyph->advance.x};
 
          myCharacterMetricsMap[c] = metric;
-
-         FT_Done_Face(face);
-         FT_Done_FreeType(ft);
       }
 
-      
+      FT_Done_Face(face);
+      FT_Done_FreeType(ft);
 
    }
 }

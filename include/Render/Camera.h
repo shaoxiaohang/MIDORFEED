@@ -7,7 +7,6 @@
 namespace vrv
 {
    class WindowEvent;
-   class Node;
 
 	class Camera : public Node
 	{
@@ -20,6 +19,8 @@ namespace vrv
       };
 
 		Camera();
+
+      
 
 		void setProjectionMatrixAsPerspective(float verticalFieldOfView, float ratioWDivedeH, float n, float f);
 

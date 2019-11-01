@@ -3,6 +3,7 @@
 #include <Render/Material.h>
 #include <Render/StateSet.h>
 #include <Render/Geometry.h>
+#include <Render/RenderState.h>
 #include <GUI/FontManager.h>
 
 namespace vrv
@@ -20,18 +21,20 @@ namespace vrv
 
    void Label::initializeGeometry()
    {
-      myMaterial->stateSet()->setProgram(new Program("../data/shader/label.vert", "../data/shader/label.frag"));
-
       FontManager& fontManager = FontManager::instance();
 
-      float x = 0;
-      float y = 0;
+      float x = 50;
+      float y = 50;
       for (const char& c : myText)
       {
          Node* node = new Node();
          Geometry* geometry = new Geometry();
-         geometry->setMaterial(myMaterial);
+         Material* material = new Material();
+         material->stateSet()->setProgram(new Program("../data/shader/text.vert", "../data/shader/text.frag"));
+         material->stateSet()->renderState()->depthTest().setEnabled(false);
+         geometry->setMaterial(material);
          FontManager::CharacterMetric& metric = fontManager.metric(c);
+         material->setTexture(metric.myTexture, "fontTex");
 
          float xPos = x + metric.myBearing.x();
          float yPos = y - (metric.mySize.y() - metric.myBearing.y());
@@ -47,6 +50,7 @@ namespace vrv
          vert.add(Vector4f(xPos + width, yPos + height, 1, 1));
 
          geometry->addVertexAttribute(0, &vert);
+         geometry->addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
 
          x += metric.myAdvance >> 6;
 

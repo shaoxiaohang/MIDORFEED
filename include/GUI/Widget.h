@@ -30,6 +30,5 @@ namespace vrv
       Node* myNode;
       Matrix3f myTransform;
       bool myInitialized;
-      Material* myMaterial;
    };
 }

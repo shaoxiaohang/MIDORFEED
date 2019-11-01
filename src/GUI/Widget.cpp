@@ -12,15 +12,9 @@ namespace vrv
    Widget::Widget(Widget* parent)
       : myParent(parent)
       , myNode(0)
-      , myMaterial(0)
       , myInitialized(false)
    {
       myNode = new Node();
-     
-      myMaterial = new Material();
-      StateSet* ss = new StateSet();
-      ss->renderState()->depthTest().setEnabled(false);
-      myMaterial->setStateSet(ss);   
       GuiManager::instance().registerWidget(this);
    }
 

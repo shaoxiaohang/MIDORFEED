@@ -38,12 +38,8 @@ namespace vrv
    void Texture2D::fillData(GLvoid* data)
    {
       bind();
-      
-      GLenum interFormat;
-      GLenum format;
       glTexImage2D(GL_TEXTURE_2D, 0, myInternelFormat, myWidth,
          myHeight, 0, myFormat, myDataType, data);
-
       unbind();
    }
 

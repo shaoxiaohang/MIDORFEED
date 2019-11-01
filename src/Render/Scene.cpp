@@ -184,17 +184,18 @@ namespace vrv
 		myLightNode = new Node("light");
       myGuiNode = new Node("gui");
       myFontNode = new Node("Font");
+
+      myRoot->addChild(mySceneCamera);
+      myRoot->addChild(myHudCamera);    
+      mySceneCamera->addChild(myLightNode);
+      myHudCamera->addChild(myGuiNode);
+      myHudCamera->addChild(myFontNode);
 	}
 
 	void Scene::setSceneData(Node* root)
 	{
 		mySceneRoot = root;
-      myRoot->addChild(mySceneCamera);
-      myRoot->addChild(myHudCamera);
       mySceneCamera->addChild(mySceneRoot);
-      mySceneCamera->addChild(myLightNode);
-      myHudCamera->addChild(myGuiNode);
-      myHudCamera->addChild(myFontNode);
 	}
 
 	void Scene::cullTraverse()

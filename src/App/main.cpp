@@ -27,10 +27,10 @@ int main(int argc, char** argv)
 	Viewer* viewer = new Viewer(argc,argv);
 	viewer->initialize(800, 600, "main window");
 
-	Scenario* test = new Scenario("simple.scene");
-   Button* label = new Button(0);
-   //label->setText("ss");
-	viewer->setSceneData(test);
+	//Scenario* test = new Scenario("simple.scene");
+   Label* label = new Label(0);
+   label->setText("ss");
+	//viewer->setSceneData(0);
    //viewer->masterCamera()->focousOnTarget(viewer->scene()->root());
 	viewer->run();
 	

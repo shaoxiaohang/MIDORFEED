@@ -19,6 +19,11 @@ namespace vrv
 		, myIsEllipsoid(false)
 	{}
 
+   Node::~Node()
+   {
+
+   }
+
 	void Node::addDrawable(Drawable* drawable)
 	{
       if (drawable)
@@ -166,6 +171,6 @@ namespace vrv
 
    bool Node::isCameraNode()
    {
-      return static_cast<const Camera*>(this);
+      return dynamic_cast<Camera*>(this);
    }
 }

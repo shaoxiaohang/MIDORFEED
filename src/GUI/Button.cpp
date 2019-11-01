@@ -5,6 +5,7 @@
 #include <Render/Program.h>
 #include <Render/Material.h>
 #include <Render/StateSet.h>
+#include <Render/RenderState.h>
 
 namespace vrv
 {
@@ -18,7 +19,9 @@ namespace vrv
 
    void Button::initializeGeometry()
    {
-      myMaterial->stateSet()->setProgram(new Program("../data/shader/button.vert", "../data/shader/button.frag"));
+      Material* material = new Material();
+      material->stateSet()->renderState()->depthTest().setEnabled(false);
+      material->stateSet()->setProgram(new Program("../data/shader/button.vert", "../data/shader/button.frag"));
 
       myGeometry = new Geometry();
 
@@ -35,7 +38,7 @@ namespace vrv
       myGeometry->addVertexAttribute(0, &pos);
       myGeometry->addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
 
-      myGeometry->setMaterial(myMaterial);
+      myGeometry->setMaterial(material);
 
       myNode->addDrawable(myGeometry);
    }

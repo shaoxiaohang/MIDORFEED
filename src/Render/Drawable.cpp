@@ -5,6 +5,8 @@
 #include <Render/Material.h>
 #include <Render/RenderState.h>
 #include <Render/OpenGLContext.h>
+#include <Render/Scene.h>
+#include <Render/Camera.h>
 
 namespace vrv
 {
@@ -86,6 +88,7 @@ namespace vrv
          if (stateSet)
          {
             stateSet->bind();
+            bindCorrectProjectionMatrix();
             stateSet->program()->updateUniforms();
             stateSet->renderState()->apply();
             myVertexArrayObject->bind();
@@ -221,9 +224,15 @@ namespace vrv
 
    void Drawable::bindCorrectProjectionMatrix()
    {
-      while (my)
+      Node* parent = myParent;
+      while (parent && !parent->isCameraNode())
       {
-
+         parent = parent->parent();
+      }
+      if (parent)
+      {
+         Camera* camera = dynamic_cast<Camera*>(parent);
+         Scene::instance().setCurrentProjectionMatrix(camera->projectionMatrix());
       }
    }
 }
