@@ -217,6 +217,9 @@ namespace vrv
 
 	Matrix4f Matrix4f::makeOrthoMatrix(float l, float r, float b, float t, float n, float f)
 	{
-		return Matrix4f::makeWindowingTransformation(l, b, -n, r, t, -f, -1, -1, -1, 1, 1, 1);
+      return Matrix4f(2.0 / (r - l), 0, 0, -(r + l) / (r - l), 
+         0, 2.0 / (t - b), 0, -(t + b) / (t - b),
+         0, 0, 2.0 / (n - f), -(n + f) / (n - f),
+         0, 0, 0, 1);
 	}
 }

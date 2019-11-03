@@ -15,16 +15,35 @@ namespace vrv
 
    Label::Label(Widget* parent)
       : Widget(parent)
+      , myFontSize(30)
    {
 
    }
+
+   void Label::setFontSize(int size)
+   {
+      myFontSize = size;
+   }
+
+   int Label::fontSize()
+   {
+      return myFontSize;
+   }
+
+   void Label::setPosition(float x, float y)
+   {
+      myPositionX = x;
+      myPositionY = y;
+   }
+
 
    void Label::initializeGeometry()
    {
       FontManager& fontManager = FontManager::instance();
 
-      float x = 50;
-      float y = 50;
+      float x = myPositionX;
+      float y = myPositionY;
+      float scale = myFontSize / 100.0;
       for (const char& c : myText)
       {
          Node* node = new Node();
@@ -36,10 +55,10 @@ namespace vrv
          FontManager::CharacterMetric& metric = fontManager.metric(c);
          material->setTexture(metric.myTexture, "fontTex");
 
-         float xPos = x + metric.myBearing.x();
-         float yPos = y - (metric.mySize.y() - metric.myBearing.y());
-         float width = metric.mySize.x();
-         float height = metric.mySize.y();
+         float xPos = x + metric.myBearing.x() * scale;
+         float yPos = y - ( (metric.mySize.y() - metric.myBearing.y()) * scale);
+         float width = metric.mySize.x() * scale;
+         float height = metric.mySize.y() * scale;
 
          ArrayVec4 vert;
          vert.add(Vector4f(xPos, yPos + height, 0, 0));
@@ -49,10 +68,12 @@ namespace vrv
          vert.add(Vector4f(xPos + width, yPos, 1, 1));
          vert.add(Vector4f(xPos + width, yPos + height, 1, 0));
 
+
+
          geometry->addVertexAttribute(0, &vert);
          geometry->addPrimitiveSet(Drawable::TRIANGLES, 0, 6);
 
-         x += metric.myAdvance >> 6;
+         x +=  ( metric.myAdvance   >> 6 ) * scale;
 
          node->addDrawable(geometry);
 

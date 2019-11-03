@@ -1,7 +1,7 @@
 #include <Render/Viewer.h>
 #include <Render/Scene.h>
 #include <Render/Camera.h>
-#include <Render/MainWindow.h>
+#include <Render/Window.h>
 #include <GUI/GuiManager.h>
 #include <GUI/FontManager.h>
 #include <time.h>
@@ -12,7 +12,7 @@ namespace vrv
 
 	Viewer::Viewer(int &argc, char **argv)
 		: myScene(0)
-      , myMainWindow(0)
+      , myWindow(0)
       , myQuit(false)
       , mySecondsPerCycle(0)
       , myGuiManager(0)
@@ -50,14 +50,14 @@ namespace vrv
 
    void Viewer::handleMessage()
    {
-      myMainWindow->pickMessage();
+      myWindow->pickMessage();
    }
 
 	void Viewer::initialize(int _width, int _height, const std::string& _title)
 	{
-      myMainWindow = new MainWindow(this);
-      myMainWindow->initiailze();
-      myScene = new Scene(myMainWindow);
+      myWindow = new Window(this);
+      myWindow->initiailze();
+      myScene = new Scene(myWindow);
       myGuiManager = new GuiManager(myScene);
       myFontManager = new FontManager();
       myFontManager->initialize();
@@ -102,7 +102,7 @@ namespace vrv
 
    void Viewer::swapBuffer()
    {
-      if (myMainWindow)
-         myMainWindow->swapBuffer();
+      if (myWindow)
+         myWindow->swapBuffer();
    }
 }

@@ -51,7 +51,7 @@ namespace vrv
 
    void Camera::setProjectionMatrixAsOrtho(float l, float r, float b, float t, float n, float f)
    {
-      myProjectionMatrix = Matrix4f::makeWindowingTransformation(l, b, -n, r, t, -f, -1, -1, -1, 1, 1, 1);
+      myProjectionMatrix = Matrix4f::makeWindowingTransformation(l, b, n, r, t, f, -1, -1, -1, 1, 1, 1);
    }
 
    void Camera::setProjectionMatroxAsOrtho2D(float l, float r, float b, float t)

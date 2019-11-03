@@ -12,10 +12,18 @@ namespace vrv
 
       void setText(const std::string& text);
 
+      void setFontSize(int size);
+      int fontSize();
+
+      void setPosition(float x, float y);
+
    protected:
       void initializeGeometry();
 
    protected:
       std::string myText;
+      int myFontSize;
+      float myPositionX;
+      float myPositionY;
    };
 }

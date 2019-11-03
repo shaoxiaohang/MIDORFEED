@@ -9,7 +9,7 @@ namespace vrv
 	class Node;
 	class Scene;
 	class Camera;
-   class MainWindow;
+   class Window;
    class WindowEvent;
    class GuiManager;
    class FontManager;
@@ -35,7 +35,7 @@ namespace vrv
 	    static boost::signals2::signal<void()> signal_update;
 	protected:
 		Scene* myScene;
-      MainWindow* myMainWindow;
+      Window* myWindow;
       GuiManager* myGuiManager;
       FontManager* myFontManager;
       bool myQuit;

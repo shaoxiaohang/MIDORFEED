@@ -14,7 +14,7 @@ namespace vrv
 	class Material;
 	class Program;
 	class RenderState;
-	class MainWindow;
+	class Window;
 	class PostProcessorManager;
 	class Skybox;
 	class Scene;
@@ -71,7 +71,7 @@ namespace vrv
 		typedef std::vector<Light*> LightList;
 
 	public:
-		Scene(MainWindow* window);
+		Scene(Window* window);
 		void setSceneData(Node* root);
 		virtual void renderScene();
 		Camera* masterCamera();
@@ -115,7 +115,7 @@ namespace vrv
       Node* myGuiNode;
       Node* myFontNode;
 		Map* myMap;
-		MainWindow* myMainWindow;
+		Window* myWindow;
 		PostProcessorManager* myPostProcessorManager;
 		RenderQueue myRenderQueue;
 		LightList myLights;

@@ -11,8 +11,8 @@ namespace vrv
    {
       data[0] = x;
       data[1] = y;
-      data[2] = y;
-      data[3] = z;
+      data[2] = z;
+      data[3] = w;
    }
 
    Vector4f::Vector4f(const Vector3f& vec3)

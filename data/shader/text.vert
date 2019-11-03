@@ -14,6 +14,6 @@ out vec2 st;
 
 void main()
 {
-	gl_Position = vrv_proj_matrix * vrv_model_matrix * vec4(vertex.xy,0,1) ;
+	gl_Position = vrv_proj_matrix  * vec4(vertex.xy,0,1) ;
 	st = vertex.zw;
 }

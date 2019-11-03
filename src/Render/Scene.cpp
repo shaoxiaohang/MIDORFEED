@@ -20,7 +20,7 @@
 #include <Render/ShadowSystem.h>
 #include <Render/TextureQuadRender.h>
 #include <Render/Map.h>
-#include <Render/MainWindow.h>
+#include <Render/Window.h>
 #include <Render/OpenGLContext.h>
 #include <algorithm>
 #include <sstream>
@@ -152,19 +152,18 @@ namespace vrv
          {
             Program* pro = draw->material()->program();
             scene->updateProgram(pro);
-            draw->updateProgram();
          }
       }
    }
 
-	Scene::Scene(MainWindow* window)
+	Scene::Scene(Window* window)
 		: myRoot(0)
 		, myVisualizeDepthBuffer(false)
 		, myOptimizeVisualizeDepthBuffer(true)
 		, myOutlineObjects(false)
 		, myOutlineWidth(1.2)
 		, myEnableDepthTest(true)
-		, myMainWindow(window)
+		, myWindow(window)
 		, myPostEffectType(0)
 		, mySkybox(0)
 		, myPostProcessorManager(0)
@@ -173,14 +172,14 @@ namespace vrv
 	{
 		myMasterCamera = new Camera();
 		initializeStateSet();
-		myPostProcessorManager = new PostProcessorManager(myMainWindow->width(), myMainWindow->height());
+		myPostProcessorManager = new PostProcessorManager(myWindow->width(), myWindow->height());
 		myShadowSystem = new ShadowSystem();
 		myShadowSystem->initializeFrameBuffer(window->width(), window->height());
 		myTextureQuadRender = new TextureQuadRender();
       myRoot = new Node("Root");
       mySceneCamera = new Camera();
       myHudCamera = new Camera();
-      myHudCamera->setProjectionMatroxAsOrtho2D(0, myMainWindow->width(), 0, myMainWindow->height());
+      myHudCamera->setProjectionMatroxAsOrtho2D(0, myWindow->width(), 0, myWindow->height());
 		myLightNode = new Node("light");
       myGuiNode = new Node("gui");
       myFontNode = new Node("Font");
