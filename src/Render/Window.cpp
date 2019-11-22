@@ -226,7 +226,7 @@ namespace vrv
       wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
       wc.hCursor = LoadCursor(NULL, IDC_ARROW);
       wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-      wc.lpszMenuName = MAKEINTRESOURCE(IDR_MAIN_MENU);
+      wc.lpszMenuName = NULL;
       wc.lpszClassName = myWindowClassName.c_str();
       wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
@@ -241,7 +241,10 @@ namespace vrv
    {
       HINSTANCE hinst = GetModuleHandle(NULL);
 
-      HMENU menu = LoadMenu(hinst, MAKEINTRESOURCE(IDR_MAIN_MENU));
+      HMENU menu = LoadMenu(hinst, MAKEINTRESOURCE(IDR_MENU1));
+
+    
+
 
       myWindowHandle = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
          myWindowClassName.c_str(),
@@ -253,6 +256,10 @@ namespace vrv
          std::cout << "Failed to create window" << std::endl;
          return false;
       }
+
+
+      HWND button = CreateWindow("BUTTON", "OK", WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
+         10, 10, 100, 100, myWindowHandle, NULL, hinst, NULL);
 
 
       Win32WindowingSystem::instance()->registerWindow(myWindowHandle, this);

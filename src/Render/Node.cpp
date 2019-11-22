@@ -36,9 +36,12 @@ namespace vrv
 
 	void Node::addChild(Node* child)
 	{
-		child->setParent(this);
-		myChildren.push_back(child);
-      calculateBound();
+      if (child)
+      {
+         child->setParent(this);
+         myChildren.push_back(child);
+         calculateBound();
+      }
 	}
 
 	void Node::removeChild(Node* child)

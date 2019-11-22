@@ -416,7 +416,7 @@ namespace vrv
 		: myDepthTest(true)
 		, myStencilTest(false)
 		, myBlending(true)
-		, myCullFace(true)
+		, myCullFace(false)
 	{}
 
 	void RenderState::setDepthTest(DepthTest depthTest)

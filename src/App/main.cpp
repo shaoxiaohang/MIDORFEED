@@ -1,90 +1,37 @@
-#include <Windows.h>	
-#include "resource.h"	// We want to use our resource that we created, so we need to include the resouces header file. 
+#include <Render/Viewer.h>
+#include <Render/Node.h>
+#include <Render/Array.h>
+#include <Render/Primitives.h>
+#include <Render/Texture.h>
+#include <Core/Matrix4f.h>
+#include <Core/Matrix3f.h>
+#include <Core/Vector3f.h>
+#include <Core/Vector4f.h>
+#include <Render/Camera.h>
+#include <Render/Light.h>
+#include <Render/Scene.h>
+#include <Render/Material.h>
+#include <Render/Model.h>
+#include <Render/Scenario.h>
+#include <Render/Geometry.h>
+#include <Render/RenderState.h>
+#include <Render/Scene.h>
+#include <Render/Map.h>
+#include <Render/Ellipsoid.h>
+#include <GUI/Button.h>
+#include <GUI/Label.h>
 
-/// Global variables
-const char *clsName = "WinAPI";
-char *title = "Windows API";
-bool running = true;
-HWND hWnd = NULL;
-
-LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
+using namespace vrv;
 int main(int argc, char** argv)
 {
-   WNDCLASSEX	WndEx;
-   MSG			msg;
+   Viewer* viewer = new Viewer(argc, argv);
+   viewer->initialize(800, 600, "main window");
 
-   HINSTANCE hInstance = GetModuleHandle(NULL);
+   Scenario* test = new Scenario("simple.scene");
+   Label* label = new Label(0);
+   label->setText("HSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+   viewer->setSceneData(test);
+   viewer->run();
 
-   // Set up the windows class structure
-   WndEx.cbSize = sizeof(WNDCLASSEX);
-   WndEx.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-   WndEx.lpfnWndProc = (WNDPROC)WndProc;
-   WndEx.cbClsExtra = 0;
-   WndEx.cbWndExtra = 0;
-   WndEx.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-   WndEx.hCursor = LoadCursor(NULL, IDC_ARROW);
-   WndEx.hbrBackground = NULL;
-   WndEx.lpszMenuName = MAKEINTRESOURCE(IDR_MAIN_MENU);	// Create our menu from the resource we made 						
-   WndEx.lpszClassName = clsName;
-   WndEx.hInstance = hInstance;
-   WndEx.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-
-   // Register the windows class
-   if (!RegisterClassEx(&WndEx))
-   {
-      MessageBox(NULL, "Failed to register class", "ERROR", MB_OK);
-      return 0;
-   }
-
-   // Create the window
-   if (!(hWnd = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
-      clsName,
-      title,
-      WS_OVERLAPPEDWINDOW |
-      WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
-      CW_USEDEFAULT, CW_USEDEFAULT,
-      460, 340,
-      NULL,
-      NULL,
-      hInstance,
-      NULL)))
-   {
-      MessageBox(NULL, "Failed to create the window", "ERROR", MB_OK );
-      return 0;
-   }
-
-   // The window is initially hidden, we need to show it
-   ShowWindow(hWnd, SW_SHOW);
-
-   // The main message loop of our program 
-   while (running)
-   {
-      if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-      {
-         TranslateMessage(&msg);
-         DispatchMessage(&msg);
-      }
-   }
-
-   return msg.wParam;
-}
-
-
-LRESULT WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-   switch (uMsg)
-   {
-   case WM_CLOSE:
-      DestroyWindow(hWnd);
-      return 0;
-
-   case WM_DESTROY:
-      PostQuitMessage(0);
-      running = false;
-      return 0;
-
-   default:
-      return DefWindowProc(hWnd, uMsg, wParam, lParam);
-   }
+   return 0;
 }

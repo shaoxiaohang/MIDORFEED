@@ -419,7 +419,7 @@ namespace vrv
 			lightNode->setPosition(light->position());
 			cube->setMaterial(material);
 			lightNode->setScale(Vector3f(0.3f, 0.3f, 0.3f));
-			lightNode->addDrawable(cube);
+			//lightNode->addDrawable(cube);
 			myLightNode->addChild(lightNode);
 		}
 	}

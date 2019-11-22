@@ -16,6 +16,8 @@ namespace vrv
    Label::Label(Widget* parent)
       : Widget(parent)
       , myFontSize(30)
+      , myPositionX(0)
+      , myPositionY(0)
    {
 
    }
