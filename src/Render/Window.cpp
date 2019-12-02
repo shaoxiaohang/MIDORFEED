@@ -2,7 +2,6 @@
 #include <Render/OpenGLContext.h>
 #include <Render/Viewer.h>
 #include <Core/WindowEvent.h>
-#include <resource.h>
 #include <iostream>
 #include <map>
 
@@ -243,14 +242,12 @@ namespace vrv
 
       HMENU menu = LoadMenu(hinst, MAKEINTRESOURCE(IDR_MENU1));
 
-    
-
-
       myWindowHandle = CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
          myWindowClassName.c_str(),
          myWindowName.c_str(),
          WS_OVERLAPPEDWINDOW,
-         CW_USEDEFAULT, CW_USEDEFAULT, myWidth, myHeight, NULL, menu, GetModuleHandle(NULL), NULL);
+         CW_USEDEFAULT, CW_USEDEFAULT, myWidth, myHeight, NULL, menu, hinst, NULL);
+
       if (!myWindowHandle)
       {
          std::cout << "Failed to create window" << std::endl;
