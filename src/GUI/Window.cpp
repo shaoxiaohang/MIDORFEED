@@ -1,5 +1,6 @@
 #include <GUI/Window.h>
 #include <GUI/WindowProcedure.h>
+#include <GUI/WindowResource.h>
 #include <iostream>
 
 namespace vrv
@@ -36,9 +37,12 @@ namespace vrv
       myHeight = h;
    }
 
-   void Window::setMenuName(LPCTSTR name)
+   void Window::setMenu(WindowResource* menu)
    {
-      
+      if (menu)
+      {
+         myMenuHandler = LoadMenu(myInstance, menu->name());
+      }
    }
 
    void Window::create()
@@ -46,6 +50,11 @@ namespace vrv
       myHandler = CreateWindowEx(myWinStyleEx,
          myClassName.c_str(), myTitleName.c_str(), myWinStyle, myX, myY, myWidth, myHeight,
          myParentHandler, myMenuHandler, myInstance, (LPVOID)myController);
+   }
+
+   HWND Window::handler()
+   {
+      return myHandler;
    }
 
    void Window::registerClasses()
@@ -61,7 +70,7 @@ namespace vrv
       wc.hCursor = LoadCursor(NULL, IDC_ARROW);
       wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
       wc.lpszMenuName = NULL;
-      wc.lpszClassName = myName.c_str();
+      wc.lpszClassName = myClassName.c_str();
       wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
       if (!RegisterClassEx(&wc))

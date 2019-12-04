@@ -8,4 +8,14 @@ namespace vrv
    {
       myResourceName = MAKEINTRESOURCE(id);
    }
+
+   int WindowResource::id() const
+   {
+      return myID;
+   }
+
+   LPCSTR WindowResource::name() const
+   {
+      return myResourceName;
+   }
 }

@@ -6,6 +6,7 @@
 namespace vrv
 {
    class Controller;
+   class WindowResource;
 
    class Window
    {
@@ -19,9 +20,11 @@ namespace vrv
 
       void setHeight(int h);
 
-      void setMenuName(LPCTSTR name);
+      void setMenu(WindowResource* menu);
 
       void create();
+
+      HWND handler();
 
    protected:
 

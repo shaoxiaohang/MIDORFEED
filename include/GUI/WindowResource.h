@@ -15,7 +15,9 @@ namespace vrv
 
       WindowResource(int id, ResourceType type);
 
+      int id() const;
 
+      LPCSTR name() const;
 
    protected:
       ResourceType myResourceType;
