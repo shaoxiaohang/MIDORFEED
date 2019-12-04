@@ -27,10 +27,10 @@ int main(int argc, char** argv)
    Viewer* viewer = new Viewer(argc, argv);
    viewer->initialize(800, 600, "main window");
 
-   Scenario* test = new Scenario("simple.scene");
-   Label* label = new Label(0);
-   label->setText("HSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-   viewer->setSceneData(test);
+   //Scenario* test = new Scenario("simple.scene");
+   //Label* label = new Label(0);
+   //label->setText("HSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+   //viewer->setSceneData(test);
    viewer->run();
 
    return 0;

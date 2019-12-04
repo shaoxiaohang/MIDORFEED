@@ -4,9 +4,11 @@
 
 namespace vrv
 {
-   WindowManager::WindowManager()
+   WindowManager::WindowManager(int mainWindowWidth, int mainWindowHeight)
       : myMainWindow(0)
       , myRenderWindow(0)
+      , myMainWindowWidth(mainWindowWidth)
+      , myMainWindowHeight(mainWindowHeight)
    {
       initialize();
    }
@@ -14,11 +16,6 @@ namespace vrv
 
    void WindowManager::initialize()
    {
-      HINSTANCE hinst = GetModuleHandle(NULL);
-
-      ControllerMain mainCtrl;
-      myMainWindow = new Window(hinst, "MainWindow", 0, &mainCtrl);
-
-      myRenderWindow = new Window(hinst, "RenderWindow", myMainWindow->handler(), )
+      myMainWindow = new ()
    }
 }

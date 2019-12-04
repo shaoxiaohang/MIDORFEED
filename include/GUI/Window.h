@@ -5,14 +5,14 @@
 
 namespace vrv
 {
-   class Controller;
+   class WindowEventHandler;
    class WindowResource;
 
    class Window
    {
    public:
 
-      Window(HINSTANCE hInst, const std::string& name, HWND parent, Controller* controller);
+      Window(HINSTANCE hInst, const std::string& name, HWND parent, WindowEventHandler* handler = 0);
 
       ~Window();
 
@@ -44,6 +44,6 @@ namespace vrv
       HMENU myMenuHandler;
       HWND myParentHandler;
       HINSTANCE myInstance;
-      Controller* myController;
+      WindowEventHandler* myEventHandler;
    };
 }

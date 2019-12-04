@@ -5,12 +5,12 @@
 
 namespace vrv
 {
-   Window::Window(HINSTANCE hInst, const std::string& name, HWND parent, Controller* controller)
+   Window::Window(HINSTANCE hInst, const std::string& name, HWND parent, WindowEventHandler* handler)
       : myInstance(hInst)
       , myTitleName(name)
       , myClassName(name)
       , myParentHandler(parent)
-      , myController(controller)
+      , myEventHandler(handler)
       , myWinStyle(WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN)
       , myWinStyleEx(WS_EX_CLIENTEDGE)
       , myX(CW_USEDEFAULT)
@@ -49,7 +49,7 @@ namespace vrv
    {
       myHandler = CreateWindowEx(myWinStyleEx,
          myClassName.c_str(), myTitleName.c_str(), myWinStyle, myX, myY, myWidth, myHeight,
-         myParentHandler, myMenuHandler, myInstance, (LPVOID)myController);
+         myParentHandler, myMenuHandler, myInstance, (LPVOID)myEventHandler);
    }
 
    HWND Window::handler()

@@ -1,4 +1,4 @@
-#include <Render/Viewer.h>
+#include <Render/DisplayEngine.h>
 #include <Render/Scene.h>
 #include <Render/Camera.h>
 #include <Render/Window.h>
@@ -8,11 +8,11 @@
 
 namespace vrv
 {
-	boost::signals2::signal<void()> Viewer::signal_update;
+   boost::signals2::signal<void()> DisplayEngine::signal_update;
 
-	Viewer::Viewer(int &argc, char **argv)
+   DisplayEngine::DisplayEngine()
 		: myScene(0)
-      , myWindow(0)
+      , myWindowManager(0)
       , myQuit(false)
       , mySecondsPerCycle(0)
       , myGuiManager(0)
@@ -23,7 +23,7 @@ namespace vrv
       mySecondsPerCycle = 1.0 / cycles.QuadPart;
 	}
 
-	void Viewer::run()
+   void DisplayEngine::run()
 	{
       LARGE_INTEGER previous;
       QueryPerformanceCounter(&previous);
@@ -48,12 +48,12 @@ namespace vrv
       
 	}
 
-   void Viewer::handleMessage()
+   void DisplayEngine::handleMessage()
    {
       myWindow->pickMessage();
    }
 
-	void Viewer::initialize(int _width, int _height, const std::string& _title)
+   void DisplayEngine::initialize(int _width, int _height, const std::string& _title)
 	{
       myWindow = new Window(this);
       myWindow->initiailze();
@@ -63,12 +63,12 @@ namespace vrv
       myFontManager->initialize();
 	}
 
-	void Viewer::onUpdateTick(double dt)
+   void DisplayEngine::onUpdateTick(double dt)
 	{
       myGuiManager->update(dt);
 	}
     
-	void Viewer::onRenderTick(double dt)
+   void DisplayEngine::onRenderTick(double dt)
 	{
 		if (myScene)
 		{
@@ -76,22 +76,22 @@ namespace vrv
 		}
 	}
 
-	void Viewer::setSceneData(Node* root)
+   void DisplayEngine::setSceneData(Node* root)
 	{
 		myScene->setSceneData(root);
 	}
 
-	Camera* Viewer::masterCamera()
+   Camera* DisplayEngine::masterCamera()
 	{
 		return myScene->masterCamera();
 	}
 
-	Scene* Viewer::scene()
+   Scene* DisplayEngine::scene()
 	{
 		return myScene;
 	}
 
-   void Viewer::handleWindowEvent(const WindowEvent& e)
+   void DisplayEngine::handleWindowEvent(const WindowEvent& e)
    {
       Camera* camera = masterCamera();
       if (camera)
@@ -100,7 +100,7 @@ namespace vrv
       }
    }
 
-   void Viewer::swapBuffer()
+   void DisplayEngine::swapBuffer()
    {
       if (myWindow)
          myWindow->swapBuffer();

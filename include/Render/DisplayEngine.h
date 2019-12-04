@@ -9,33 +9,44 @@ namespace vrv
 	class Node;
 	class Scene;
 	class Camera;
-   class Window;
+   class WindowManager;
    class WindowEvent;
    class GuiManager;
    class FontManager;
-	class Viewer
+
+	class DisplayEngine
 	{	
 	public:
-		Viewer(int &argc, char **argv);
+
+      DisplayEngine();
+
 		void run();
+
 		void initialize(int width, int height, const std::string& title);
+
 		void setSceneData(Node* node);
+
 		void onUpdateTick(double dt);
+
 		void onRenderTick(double dt);
+
 		Camera* masterCamera();
+
       Scene* scene();
+
       void handleWindowEvent(const WindowEvent& e);
 
    protected:
 
       void handleMessage();
+
       void swapBuffer();
 
 	public:
 	    static boost::signals2::signal<void()> signal_update;
 	protected:
 		Scene* myScene;
-      Window* myWindow;
+      WindowManager* myWindowManager;
       GuiManager* myGuiManager;
       FontManager* myFontManager;
       bool myQuit;
