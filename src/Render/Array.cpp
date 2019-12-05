@@ -1,4 +1,5 @@
 #include <Render/Array.h>
+
 namespace vrv
 {
 	Array::Array(DataType type)

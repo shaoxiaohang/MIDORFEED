@@ -156,14 +156,13 @@ namespace vrv
       }
    }
 
-	Scene::Scene(Window* window)
+	Scene::Scene(int width, int height)
 		: myRoot(0)
 		, myVisualizeDepthBuffer(false)
 		, myOptimizeVisualizeDepthBuffer(true)
 		, myOutlineObjects(false)
 		, myOutlineWidth(1.2)
 		, myEnableDepthTest(true)
-		, myWindow(window)
 		, myPostEffectType(0)
 		, mySkybox(0)
 		, myPostProcessorManager(0)
@@ -172,14 +171,14 @@ namespace vrv
 	{
 		myMasterCamera = new Camera();
 		initializeStateSet();
-		myPostProcessorManager = new PostProcessorManager(myWindow->width(), myWindow->height());
+		myPostProcessorManager = new PostProcessorManager(width, height);
 		myShadowSystem = new ShadowSystem();
-		myShadowSystem->initializeFrameBuffer(window->width(), window->height());
+		myShadowSystem->initializeFrameBuffer(width, height);
 		myTextureQuadRender = new TextureQuadRender();
       myRoot = new Node("Root");
       mySceneCamera = new Camera();
       myHudCamera = new Camera();
-      myHudCamera->setProjectionMatroxAsOrtho2D(0, myWindow->width(), 0, myWindow->height());
+      myHudCamera->setProjectionMatroxAsOrtho2D(0, width, 0, height);
 		myLightNode = new Node("light");
       myGuiNode = new Node("gui");
       myFontNode = new Node("Font");

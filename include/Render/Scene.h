@@ -71,38 +71,68 @@ namespace vrv
 		typedef std::vector<Light*> LightList;
 
 	public:
-		Scene(Window* window);
+
+		Scene(int width, int height);
+
 		void setSceneData(Node* root);
+
 		virtual void renderScene();
+
 		Camera* masterCamera();
+
 		void addLight(Light* light);
+
 		Node* root();
+
       Node* guiRoot();
+
 		void setVisualizeDepthBuffer(bool optimize);
+
 		void setOptimizeVisualizeDepthBuffer(bool);
+
 		void setOutlineObjects(bool);
+
 		void setOutlineWidth(double);
+
 		void enableDepthTest(bool);
+
 		void setPostEffectType(int);
+
 		int postEffectType();
+
 		void setSkybox(Skybox*);
+
 		Skybox* skybox();
+
 		void visualizeNormal(bool);
+
 		void updateProgram(Program* program);
+
 		void setMap(Map* map);
+
 		Map* map();
+
       void acceptNodeVisitor(NodeVisitor* v);
+
       void setCurrentProjectionMatrix(Matrix4f m);
+
       Matrix4f currentProjectionMatrix();
 
 	protected:
 		void cullTraverse();
+
 		void DFS(std::stack<Node*>& stack, Node* node);
+
 		void addDrawableToRender(Node* node);
+
 		void updateSkybox(Program* program);
+
 		void updateLights(Program* program);
+
 		void updateShadow(Program* program);
+
 		void updateGlobe(Program* program);
+
 		void initializeStateSet();
 
 	protected:
@@ -115,7 +145,6 @@ namespace vrv
       Node* myGuiNode;
       Node* myFontNode;
 		Map* myMap;
-		Window* myWindow;
 		PostProcessorManager* myPostProcessorManager;
 		RenderQueue myRenderQueue;
 		LightList myLights;

@@ -8,6 +8,5 @@ namespace vrv
 
       MainWindow(const std::string& name, int width, int height);
 
-
    };
 }

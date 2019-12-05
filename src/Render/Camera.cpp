@@ -1,5 +1,4 @@
 #include <Render/Camera.h>
-#include <Render/Viewer.h>
 #include <Render/NodeVisitor.h>
 #include <Core/WindowEvent.h>
 #include <boost/bind.hpp>

@@ -10,17 +10,22 @@ namespace vrv
    class WindowManager
    {
    public:
-      WindowManager();
+      typedef std::map<std::string, Window*> DialogWindowMap;
 
-   protected:
+      WindowManager(const std::string& name, int mainWindowWidth, int mainWindowHeight);
 
       void initialize();
 
-   protected:
+      void pickMessage();
 
+      void swapBuffers();
+
+   protected:
+      std::string myMainWindowName;
+      int myMainWindowWidth;
+      int myMainWindowHeight;
       Window* myMainWindow;
       Window* myRenderWindow;
-      std::map<std::string, Window*> myDialogWindows;
-
+      DialogWindowMap myDialogWindows;
    };
 }

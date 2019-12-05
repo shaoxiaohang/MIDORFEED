@@ -1,4 +1,4 @@
-#include <Render/Viewer.h>
+#include <Render/DisplayEngine.h>
 #include <Render/Node.h>
 #include <Render/Array.h>
 #include <Render/Primitives.h>
@@ -24,14 +24,14 @@
 using namespace vrv;
 int main(int argc, char** argv)
 {
-   Viewer* viewer = new Viewer(argc, argv);
-   viewer->initialize(800, 600, "main window");
+   DisplayEngine* de = new DisplayEngine();
+   de->initialize(800, 600, "main window");
 
    //Scenario* test = new Scenario("simple.scene");
    //Label* label = new Label(0);
    //label->setText("HSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
    //viewer->setSceneData(test);
-   viewer->run();
+   de->run();
 
    return 0;
 }

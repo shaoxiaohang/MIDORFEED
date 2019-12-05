@@ -4,7 +4,9 @@
 #include <Render/Window.h>
 #include <GUI/GuiManager.h>
 #include <GUI/FontManager.h>
-#include <time.h>
+#include <GUI/WindowManager.h>
+#include <windows.h>
+#include <winnt.h>
 
 namespace vrv
 {
@@ -50,14 +52,15 @@ namespace vrv
 
    void DisplayEngine::handleMessage()
    {
-      myWindow->pickMessage();
+      myWindowManager->pickMessage();
    }
 
-   void DisplayEngine::initialize(int _width, int _height, const std::string& _title)
+   void DisplayEngine::initialize(int width, int height, const std::string& title)
 	{
-      myWindow = new Window(this);
-      myWindow->initiailze();
-      myScene = new Scene(myWindow);
+      myWindowManager = new WindowManager(title, width, height);
+      myWindowManager->initialize();
+
+      myScene = new Scene(width, height);
       myGuiManager = new GuiManager(myScene);
       myFontManager = new FontManager();
       myFontManager->initialize();
@@ -102,7 +105,7 @@ namespace vrv
 
    void DisplayEngine::swapBuffer()
    {
-      if (myWindow)
-         myWindow->swapBuffer();
+      if (myWindowManager)
+         myWindowManager->swapBuffers();
    }
 }

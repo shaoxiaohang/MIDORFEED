@@ -50,11 +50,18 @@ namespace vrv
       myHandler = CreateWindowEx(myWinStyleEx,
          myClassName.c_str(), myTitleName.c_str(), myWinStyle, myX, myY, myWidth, myHeight,
          myParentHandler, myMenuHandler, myInstance, (LPVOID)myEventHandler);
+
+      myDeviceContext = GetDC(myHandler);
    }
 
    HWND Window::handler()
    {
       return myHandler;
+   }
+
+   void Window::swapBuffer()
+   {
+      SwapBuffers(myDeviceContext);
    }
 
    void Window::registerClasses()

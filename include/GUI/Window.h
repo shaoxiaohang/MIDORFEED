@@ -26,6 +26,8 @@ namespace vrv
 
       HWND handler();
 
+      void swapBuffer();
+
    protected:
 
       void registerClasses();
@@ -44,6 +46,7 @@ namespace vrv
       HMENU myMenuHandler;
       HWND myParentHandler;
       HINSTANCE myInstance;
+      HDC myDeviceContext;
       WindowEventHandler* myEventHandler;
    };
 }
