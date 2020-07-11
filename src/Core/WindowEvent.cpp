@@ -67,4 +67,20 @@ namespace vrv
    {
       return myWheelDelta;
    }
+
+   int WindowEvent::GetResizeX() {
+     return resize_X_;
+   }
+
+   int WindowEvent::GetResizeY() {
+     return resize_Y_;
+   }
+
+   void WindowEvent::SetResizeX(int x) {
+     resize_X_ = x;
+   }
+
+   void WindowEvent::SetResizeY(int y) {
+     resize_Y_ = y;
+   }
 }

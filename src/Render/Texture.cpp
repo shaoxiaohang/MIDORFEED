@@ -20,7 +20,7 @@ namespace vrv
 		, myTextureType(GL_INVALID_ENUM)
 		, myImage()
 		, myTextureFormat(format)
-      , myGenerateMipmap(true)
+    , myGenerateMipmap(true)
 	{
 
 	}

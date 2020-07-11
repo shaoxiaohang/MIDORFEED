@@ -1,164 +1,159 @@
 #pragma once
+
 #include <vector>
 #include <stack>
 #include <Core/Singleton.h>
 #include <Core/Matrix4f.h>
 #include <map>
-namespace vrv
-{
-	class Camera;
-	class Node;
-	class Drawable;
-	class StateSet;
-	class Light;
-	class Material;
-	class Program;
-	class RenderState;
-	class Window;
-	class PostProcessorManager;
-	class Skybox;
-	class Scene;
-	class ShadowSystem;
-	class TextureQuadRender;
-	class Map;
-   class NodeVisitor;
 
-	struct RenderInfo
-	{
-		RenderInfo(Drawable* drawable, Matrix4f modelMatrix, bool isLightPoint, bool isEllipsoid);
-		Drawable* myDrawable;
-		Matrix4f myModelMatrix;
-		bool myIsLightPoint;
-		bool myIsEllipsoid;
-	};
+namespace vrv {
+  class Camera;
+  class Node;
+  class Drawable;
+  class StateSet;
+  class Light;
+  class Material;
+  class Program;
+  class RenderState;
+  class Window;
+  class PostProcessorManager;
+  class Skybox;
+  class Scene;
+  class ShadowSystem;
+  class TextureQuadRender;
+  class Map;
+  class NodeVisitor;
 
-
-	struct RenderQueue
-	{
-		RenderQueue();
-		typedef std::vector<RenderInfo> RenderList;
-
-		void sortTransparentList(Camera* camera);
-
-		RenderList myOpaqueList;
-		RenderList myTransparentList;
-
-		void draw(Scene* scene, Camera* camera);
-
-		void addToOpaqueList(const RenderInfo&);
-		void addToTransparentList(const RenderInfo&);
-		void clear();
-		void draw(RenderInfo& renderInfo);
-		void updateModelMatrix(RenderInfo& renderInfo);
-		void updateMaterial(RenderInfo& renderInfo);
-      void updateScene(Scene* scene, RenderInfo& renderInfo);
-	};
+  struct RenderInfo
+  {
+    RenderInfo(Drawable* drawable, Matrix4f modelMatrix, bool isLightPoint, bool isEllipsoid);
+    Drawable* myDrawable;
+    Matrix4f myModelMatrix;
+    bool myIsLightPoint;
+    bool myIsEllipsoid;
+  };
 
 
-	class Scene : public Singleton<Scene>
-	{
-	public:
+  struct RenderQueue
+  {
+    RenderQueue();
+    typedef std::vector<RenderInfo> RenderList;
 
-		enum PostEffectType
-		{
-			Inversion,
-			GrayScale,
-			KernelEffect,
-			Blur,
-			EdgeDetection
-		};
+    void sortTransparentList(Camera* camera);
 
-		typedef std::vector<Light*> LightList;
+    RenderList myOpaqueList;
+    RenderList myTransparentList;
 
-	public:
+    void draw(Scene* scene, Camera* camera);
 
-		Scene(int width, int height);
+    void addToOpaqueList(const RenderInfo&);
+    void addToTransparentList(const RenderInfo&);
+    void clear();
+    void draw(RenderInfo& renderInfo);
+    void updateModelMatrix(RenderInfo& renderInfo);
+    void updateMaterial(RenderInfo& renderInfo);
+    void updateScene(Scene* scene, RenderInfo& renderInfo);
+  };
 
-		void setSceneData(Node* root);
 
-		virtual void renderScene();
+  class Scene : public Singleton<Scene>
+  {
+  public:
 
-		Camera* masterCamera();
+    enum PostEffectType
+    {
+      Inversion,
+      GrayScale,
+      KernelEffect,
+      Blur,
+      EdgeDetection
+    };
 
-		void addLight(Light* light);
+    typedef std::vector<Light*> LightList;
 
-		Node* root();
+  public:
 
-      Node* guiRoot();
+    Scene(Camera* camera, int width, int height);
 
-		void setVisualizeDepthBuffer(bool optimize);
+    void setSceneData(Node* root);
 
-		void setOptimizeVisualizeDepthBuffer(bool);
+    virtual void renderScene();
 
-		void setOutlineObjects(bool);
+    Camera* masterCamera();
 
-		void setOutlineWidth(double);
+    void addLight(Light* light);
 
-		void enableDepthTest(bool);
+    Node* root();
 
-		void setPostEffectType(int);
+    void setVisualizeDepthBuffer(bool optimize);
 
-		int postEffectType();
+    void setOptimizeVisualizeDepthBuffer(bool);
 
-		void setSkybox(Skybox*);
+    void setOutlineObjects(bool);
 
-		Skybox* skybox();
+    void setOutlineWidth(double);
 
-		void visualizeNormal(bool);
+    void enableDepthTest(bool);
 
-		void updateProgram(Program* program);
+    void setPostEffectType(int);
 
-		void setMap(Map* map);
+    int postEffectType();
 
-		Map* map();
+    void setSkybox(Skybox*);
 
-      void acceptNodeVisitor(NodeVisitor* v);
+    Skybox* skybox();
 
-      void setCurrentProjectionMatrix(Matrix4f m);
+    void visualizeNormal(bool);
 
-      Matrix4f currentProjectionMatrix();
+    void updateProgram(Program* program);
 
-	protected:
-		void cullTraverse();
+    void setMap(Map* map);
 
-		void DFS(std::stack<Node*>& stack, Node* node);
+    Map* map();
 
-		void addDrawableToRender(Node* node);
+    void acceptNodeVisitor(NodeVisitor* v);
 
-		void updateSkybox(Program* program);
+    void setCurrentProjectionMatrix(Matrix4f m);
 
-		void updateLights(Program* program);
+    Matrix4f currentProjectionMatrix();
 
-		void updateShadow(Program* program);
+  protected:
+    void cullTraverse();
 
-		void updateGlobe(Program* program);
+    void DFS(std::stack<Node*>& stack, Node* node);
 
-		void initializeStateSet();
+    void addDrawableToRender(Node* node);
 
-	protected:
-		Camera* myMasterCamera;
-		Node* myRoot;
-      Camera* mySceneCamera;
-      Camera* myHudCamera;
-      Node* mySceneRoot;
-		Node* myLightNode;
-      Node* myGuiNode;
-      Node* myFontNode;
-		Map* myMap;
-		PostProcessorManager* myPostProcessorManager;
-		RenderQueue myRenderQueue;
-		LightList myLights;
-		bool myEnableDepthTest;
-		bool myVisualizeDepthBuffer;
-		bool myOptimizeVisualizeDepthBuffer;
-		bool myOutlineObjects;
-		double myOutlineWidth;
-		int myPostEffectType;
-		Skybox* mySkybox;
-		bool myVisualizeNormal;
-      StateSet* myPhoneLightingStateSet;
-		ShadowSystem* myShadowSystem;
-		TextureQuadRender* myTextureQuadRender;
-      Matrix4f myCurrentProjectionMatrix;
-	};
+    void updateSkybox(Program* program);
+
+    void updateLights(Program* program);
+
+    void updateShadow(Program* program);
+
+    void updateGlobe(Program* program);
+
+    void initializeStateSet();
+
+  protected:
+    Camera* master_camera_;
+    Node* myRoot;
+    Node* mySceneRoot;
+    Node* myLightNode;
+    Map* myMap;
+    PostProcessorManager* myPostProcessorManager;
+    RenderQueue myRenderQueue;
+    LightList myLights;
+    bool myEnableDepthTest;
+    bool myVisualizeDepthBuffer;
+    bool myOptimizeVisualizeDepthBuffer;
+    bool myOutlineObjects;
+    double myOutlineWidth;
+    int myPostEffectType;
+    Skybox* mySkybox;
+    bool myVisualizeNormal;
+    StateSet* myPhoneLightingStateSet;
+    ShadowSystem* myShadowSystem;
+    TextureQuadRender* myTextureQuadRender;
+    Matrix4f myCurrentProjectionMatrix;
+  };
 }

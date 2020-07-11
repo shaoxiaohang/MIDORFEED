@@ -4,176 +4,176 @@
 
 namespace vrv
 {
-	Node::Node()
-		: myParent(0)
-		, myScale(1.0f)
-		, myIsLightPoint(false)
-		, myIsEllipsoid(false)
-	{}
+  Node::Node()
+    : myParent(0)
+    , myScale(1.0f)
+    , myIsLightPoint(false)
+    , myIsEllipsoid(false)
+  {}
 
-	Node::Node(const std::string& name)
-		: myName(name)
-		, myParent(0)
-		, myScale(1.0f)
-		, myIsLightPoint(false)
-		, myIsEllipsoid(false)
-	{}
+  Node::Node(const std::string& name)
+    : myName(name)
+    , myParent(0)
+    , myScale(1.0f)
+    , myIsLightPoint(false)
+    , myIsEllipsoid(false)
+  {}
 
-   Node::~Node()
-   {
+  Node::~Node()
+  {
 
-   }
+  }
 
-	void Node::addDrawable(Drawable* drawable)
-	{
-      if (drawable)
-      {
-         drawable->setParent(this);
-         myDrawables.push_back(drawable);
-         calculateBound();
-      }
-	}
-
-	void Node::addChild(Node* child)
-	{
-      if (child)
-      {
-         child->setParent(this);
-         myChildren.push_back(child);
-         calculateBound();
-      }
-	}
-
-	void Node::removeChild(Node* child)
-	{
-		ChildrenList::iterator itor = std::find(myChildren.begin(), myChildren.end(), child);
-		if (itor != myChildren.end())
-		{
-			myChildren.erase(itor);
-		}
+  void Node::addDrawable(Drawable* drawable)
+  {
+    if (drawable)
+    {
+      drawable->setParent(this);
+      myDrawables.push_back(drawable);
       calculateBound();
-	}
+    }
+  }
 
-	int Node::numberOfChildren()
-	{
-		return myChildren.size();
-	}
+  void Node::addChild(Node* child)
+  {
+    if (child)
+    {
+      child->setParent(this);
+      myChildren.push_back(child);
+      calculateBound();
+    }
+  }
 
-	Node* Node::getChild(int i)
-	{
-		return myChildren[i];
-	}
+  void Node::removeChild(Node* child)
+  {
+    ChildrenList::iterator itor = std::find(myChildren.begin(), myChildren.end(), child);
+    if (itor != myChildren.end())
+    {
+      myChildren.erase(itor);
+    }
+    calculateBound();
+  }
 
-	int Node::numberOfDrawable()
-	{
-		return myDrawables.size();
-	}
+  int Node::numberOfChildren()
+  {
+    return myChildren.size();
+  }
 
-	Drawable* Node::getDrawable(int i)
-	{
-		return myDrawables[i];
-	}
+  Node* Node::getChild(int i)
+  {
+    return myChildren[i];
+  }
 
-	void Node::setPosition(Vector3f pos)
-	{
-		myPosition = pos;
-	}
+  int Node::numberOfDrawable()
+  {
+    return myDrawables.size();
+  }
 
-	Vector3f Node::position()
-	{
-		return myPosition;
-	}
+  Drawable* Node::getDrawable(int i)
+  {
+    return myDrawables[i];
+  }
 
-	Node* Node::parent()
-	{
-		return myParent;
-	}
+  void Node::setPosition(Vector3f pos)
+  {
+    myPosition = pos;
+  }
 
-	void Node::setParent(Node* parent)
-	{
-		if (myParent)
-		{
-			myParent->removeChild(this);
-		}
-		myParent = parent;
-	}
+  Vector3f Node::position()
+  {
+    return myPosition;
+  }
 
-	void Node::setScale(Vector3f scale)
-	{
-		myScale = scale;
-	}
+  Node* Node::parent()
+  {
+    return myParent;
+  }
 
-	Vector3f Node::scale()
-	{
-		return myScale;
-	}
+  void Node::setParent(Node* parent)
+  {
+    if (myParent)
+    {
+      myParent->removeChild(this);
+    }
+    myParent = parent;
+  }
 
-	void Node::setRotation(Matrix4f rotation)
-	{
-		myRotation = rotation;
-	}
+  void Node::setScale(Vector3f scale)
+  {
+    myScale = scale;
+  }
 
-	Matrix4f Node::rotation()
-	{
-		return myRotation;
-	}
+  Vector3f Node::scale()
+  {
+    return myScale;
+  }
 
-	Matrix4f Node::getModelMatrix()
-	{
-		return Matrix4f::makeTranslate(myPosition) * myRotation * Matrix4f::makeScale(myScale.x(), myScale.y(), myScale.z());
-	}
+  void Node::setRotation(Matrix4f rotation)
+  {
+    myRotation = rotation;
+  }
 
-	void Node::setIsLightPoint(bool val)
-	{
-		myIsLightPoint = val;
-	}
+  Matrix4f Node::rotation()
+  {
+    return myRotation;
+  }
 
-	bool Node::isLightPoint()
-	{
-		return myIsLightPoint;
-	}
+  Matrix4f Node::getModelMatrix()
+  {
+    return Matrix4f::makeTranslate(myPosition) * myRotation * Matrix4f::makeScale(myScale.x(), myScale.y(), myScale.z());
+  }
 
-	void Node::setIsEllipsoid(bool val)
-	{
-		myIsEllipsoid = val;
-	}
+  void Node::setIsLightPoint(bool val)
+  {
+    myIsLightPoint = val;
+  }
 
-	bool Node::isEllipsoid()
-	{
-		return myIsEllipsoid;
-	}
+  bool Node::isLightPoint()
+  {
+    return myIsLightPoint;
+  }
 
-   Bound Node::bound()
-   {
-      return myBound.scale(myScale);
-   }
+  void Node::setIsEllipsoid(bool val)
+  {
+    myIsEllipsoid = val;
+  }
 
-   void Node::calculateBound()
-   {
-      if (myChildren.size() == 0)
+  bool Node::isEllipsoid()
+  {
+    return myIsEllipsoid;
+  }
+
+  Bound Node::bound()
+  {
+    return myBound.scale(myScale);
+  }
+
+  void Node::calculateBound()
+  {
+    if (myChildren.size() == 0)
+    {
+      for (Drawable* draw : myDrawables)
       {
-         for (Drawable* draw : myDrawables)
-         {
-            if (draw)
-            {
-               myBound.expand(draw->bound());
-            }
-         }
+        if (draw)
+        {
+          myBound.expand(draw->bound());
+        }
       }
-      else
+    }
+    else
+    {
+      for (Node* node : myChildren)
       {
-         for (Node* node : myChildren)
-         {
-            if (node)
-            {
-               myBound.expand(node->bound());
-            }
-         }
+        if (node)
+        {
+          myBound.expand(node->bound());
+        }
       }
-   }
+    }
+  }
 
-   bool Node::isCameraNode()
-   {
-      return dynamic_cast<Camera*>(this);
-   }
+  bool Node::isCameraNode()
+  {
+    return dynamic_cast<Camera*>(this);
+  }
 }

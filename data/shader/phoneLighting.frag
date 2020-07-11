@@ -176,7 +176,6 @@ vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess, vec3 N)
 			finalColor += phoneLighting(vrv_lights[i],diffuse.xyz,specular.xyz,shininess ,N);
 			hasLight = true;
 		}
-			
 	}
 	
 	if(!hasLight)

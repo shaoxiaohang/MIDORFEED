@@ -1,13 +1,12 @@
 #include <GUI/WindowManager.h>
-#include <GUI/ControllerMain.h>
 #include <GUI/Window.h>
 #include <GUI/MainWindow.h>
 
 namespace vrv
 {
-   WindowManager::WindowManager(const std::string& name, int mainWindowWidth, int mainWindowHeight)
+   WindowManager::WindowManager(DisplayEngine& de, const std::string& name, int mainWindowWidth, int mainWindowHeight)
       : myMainWindow(0)
-      , myRenderWindow(0)
+      , de_(de)
       , myMainWindowName(name)
       , myMainWindowWidth(mainWindowWidth)
       , myMainWindowHeight(mainWindowHeight)
@@ -17,8 +16,9 @@ namespace vrv
 
    void WindowManager::initialize()
    {
-      myMainWindow = new MainWindow(myMainWindowName, myMainWindowWidth, myMainWindowHeight);
+      myMainWindow = new MainWindow(de_, myMainWindowName, myMainWindowWidth, myMainWindowHeight);
       myMainWindow->create();
+      myMainWindow->Initialize();
    }
 
    void WindowManager::pickMessage()
@@ -33,13 +33,5 @@ namespace vrv
    {
       if (myMainWindow)
          myMainWindow->swapBuffer();
-      if(myRenderWindow)
-         myRenderWindow->swapBuffer();
-      DialogWindowMap::iterator iter = myDialogWindows.begin();
-      DialogWindowMap::iterator end = myDialogWindows.end();
-      for (; iter != end; ++iter)
-      {
-         iter->second->swapBuffer();
-      }
    }
 }

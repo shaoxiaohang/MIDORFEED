@@ -3,86 +3,87 @@
 #include <Render/Array.h>
 #include <Render/Node.h>
 #include <Core/Bound.h>
-namespace vrv
-{
-	class VertexArrayObject;
-	class Program;
-	class Array;
-	class RenderState;
-	class Material;
-   class Node;
 
-	class Drawable
-	{
-	public:
-		Drawable();
-		enum Primitive
-		{
-			POINTS,
-			LINES,
-			TRIANGLES,
-			QUADS
-		};
-		struct PrimitiveSet
-		{
-			enum RenderApproach
-			{
-				DRAW_ARRAYS,
-				DRAW_ELEMENTS
-			};
-			enum IndexType
-			{
-				UNSIGNED_BYTE,
-				UNSIGNED_SHORT,
-				UNSIGNED_INT
-			};
-			PrimitiveSet(Primitive pri, unsigned int start, unsigned int count);
-			PrimitiveSet(Primitive pri, unsigned int count, IndexType type = UNSIGNED_INT);
-			Primitive myPrimitive;
-			unsigned int myStart;
-			unsigned int myCount;
-			unsigned int myGLPrimitiveType;
-			IndexType myIndexType;
-			unsigned int myGLIndexType;
-			RenderApproach myRenderApproach;
-			void mapToGLPrimitiveType();
-			void mapToGLIndexType();
-		};
-	public:
-		virtual void drawImplementation();
+namespace vrv {
 
-		void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
+  class VertexArrayObject;
+  class Program;
+  class Array;
+  class RenderState;
+  class Material;
+  class Node;
 
-		void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType = Array::UNSIGNED_INT);
+  class Drawable
+  {
+  public:
+    Drawable();
+    enum Primitive
+    {
+      POINTS,
+      LINES,
+      TRIANGLES,
+      QUADS
+    };
+    struct PrimitiveSet
+    {
+      enum RenderApproach
+      {
+        DRAW_ARRAYS,
+        DRAW_ELEMENTS
+      };
+      enum IndexType
+      {
+        UNSIGNED_BYTE,
+        UNSIGNED_SHORT,
+        UNSIGNED_INT
+      };
+      PrimitiveSet(Primitive pri, unsigned int start, unsigned int count);
+      PrimitiveSet(Primitive pri, unsigned int count, IndexType type = UNSIGNED_INT);
+      Primitive myPrimitive;
+      unsigned int myStart;
+      unsigned int myCount;
+      unsigned int myGLPrimitiveType;
+      IndexType myIndexType;
+      unsigned int myGLIndexType;
+      RenderApproach myRenderApproach;
+      void mapToGLPrimitiveType();
+      void mapToGLIndexType();
+    };
+  public:
+    virtual void drawImplementation();
 
-		void setVertexArrayObject(VertexArrayObject* vao);
+    void addPrimitiveSet(Primitive pri, unsigned int start, unsigned int cout);
 
-		void setMaterial(Material*);
+    void addPrimitiveSet(Primitive pri, unsigned int cout, Array::DataType indexType = Array::UNSIGNED_INT);
 
-		Material* material();
+    void setVertexArrayObject(VertexArrayObject* vao);
 
-		void setInstancedCount(int);
+    void setMaterial(Material*);
 
-		bool instanced();
+    Material* material();
 
-		void updateProgram();
+    void setInstancedCount(int);
 
-		Material* getOrCreateMaterial();
+    bool instanced();
 
-      Bound bound();
+    void updateProgram();
 
-      void setParent(Node* parent);
-      Node* parent();
+    Material* getOrCreateMaterial();
 
-      void bindCorrectProjectionMatrix();
+    Bound bound();
 
-	protected:
-		VertexArrayObject* myVertexArrayObject;
-		std::vector<PrimitiveSet> myPrimitiveSets;
-		Material* myMaterial;
-		bool myIsInstanced;
-		int myInstancedCount;
-      Bound myBound;
-      Node* myParent;
-	};
+    void setParent(Node* parent);
+    Node* parent();
+
+    void bindCorrectProjectionMatrix();
+
+  protected:
+    VertexArrayObject* myVertexArrayObject;
+    std::vector<PrimitiveSet> myPrimitiveSets;
+    Material* myMaterial;
+    bool myIsInstanced;
+    int myInstancedCount;
+    Bound myBound;
+    Node* myParent;
+  };
 }

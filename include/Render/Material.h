@@ -1,88 +1,88 @@
 #pragma once
+
 #include <Core/Vector4f.h>
 #include <map>
 #include <string>
 #include <vector>
-namespace vrv
-{
-	class Texture2D;
-	class Program;
-   class StateSet;
-   class Shader;
 
-   class BuiltTexNameGenerator 
-   {
-   public:
+namespace vrv {
 
-      BuiltTexNameGenerator();
+  class Texture2D;
+  class Program;
+  class StateSet;
+  class Shader;
 
-      std::string diffuseTexName();
-      std::string specularTexName();
-      std::string normalTexName();
-   };
+  class BuiltTexNameGenerator {
+  public:
 
-	class Material
-	{
-	public:
+    BuiltTexNameGenerator();
 
-		typedef std::map<unsigned int, std::pair<std::string, Texture2D*>> TextureMap;
-	public:
-		Material();
+    std::string diffuseTexName();
+    std::string specularTexName();
+    std::string normalTexName();
+  };
 
-		void setAmbient(Vector4f);
-		void setDiffuse(Vector4f);
-		void setSpecular(Vector4f);
-		void setShininess(float);
-		void setDiscardAlpha(bool);
-		void setDiscardAlphaThreshold(float);
-		void setTransparent(bool);
-      void setStateSet(StateSet* state);
-      StateSet* stateSet();
+  class Material {
+  public:
 
-		Vector4f ambient();
-		Vector4f diffuse();
-		Vector4f specular();
-		float shininess();
-		bool discardAlpha();
-		float discardAlphaThreshold();
+    typedef std::map<unsigned int, std::pair<std::string, Texture2D*>> TextureMap;
+  public:
+    Material();
 
-      Program* program();
+    void setAmbient(Vector4f);
+    void setDiffuse(Vector4f);
+    void setSpecular(Vector4f);
+    void setShininess(float);
+    void setDiscardAlpha(bool);
+    void setDiscardAlphaThreshold(float);
+    void setTransparent(bool);
+    void setStateSet(StateSet* state);
+    StateSet* stateSet();
 
-		void updateProgram();
+    Vector4f ambient();
+    Vector4f diffuse();
+    Vector4f specular();
+    float shininess();
+    bool discardAlpha();
+    float discardAlphaThreshold();
 
-      void setTexture(Texture2D* tex, const std::string& texName);
+    Program* program();
 
-      void setBuiltInDiffuseTex(Texture2D* tex);
-      void setBuiltInSpecularTex(Texture2D* tex);
-      void setBuiltInNormalTex(Texture2D* tex);
+    void updateProgram();
 
-      bool findNextAvailableSlot(int& slot);
+    void setTexture(Texture2D* tex, const std::string& texName);
 
-      void setUseDiffuseTex(bool);
-      void setUseSpecularTex(bool);
-      void setUseNormalTex(bool);
+    void setBuiltInDiffuseTex(Texture2D* tex);
+    void setBuiltInSpecularTex(Texture2D* tex);
+    void setBuiltInNormalTex(Texture2D* tex);
 
-      bool useDiffuseTex();
-      bool useSpecularTex();
-      bool useNormalTex();
+    bool findNextAvailableSlot(int& slot);
 
-	protected:
-		Vector4f		myAmbient;
-		Vector4f		myDiffuse;
-		Vector4f		mySpecular;
-		float			myShininess;
-		TextureMap  myTextureMap;
-		bool			myDiscardAlpha;
-		float		   myDiscardAlphaThreshold;
-		bool myIsTransparent;
-		Shader* myShader;
-      StateSet* myStateSet;
-      std::vector<bool> myTextureSlotsMap;
-      int myMaximumTextureUnit;
-      bool myUseDiffuseTex;
-      bool myUseSpecularTex;
-      bool myUseNormalTex;
-      BuiltTexNameGenerator myBuiltTexNameGenerator;
-      bool myIsDirty;
-	};
+    void setUseDiffuseTex(bool);
+    void setUseSpecularTex(bool);
+    void setUseNormalTex(bool);
+
+    bool useDiffuseTex();
+    bool useSpecularTex();
+    bool useNormalTex();
+
+  protected:
+    Vector4f		myAmbient;
+    Vector4f		myDiffuse;
+    Vector4f		mySpecular;
+    float			myShininess;
+    TextureMap  myTextureMap;
+    bool			myDiscardAlpha;
+    float		   myDiscardAlphaThreshold;
+    bool myIsTransparent;
+    Shader* myShader;
+    StateSet* myStateSet;
+    std::vector<bool> myTextureSlotsMap;
+    int myMaximumTextureUnit;
+    bool myUseDiffuseTex;
+    bool myUseSpecularTex;
+    bool myUseNormalTex;
+    BuiltTexNameGenerator myBuiltTexNameGenerator;
+    bool myIsDirty;
+  };
 }

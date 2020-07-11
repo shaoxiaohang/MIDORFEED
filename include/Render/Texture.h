@@ -3,73 +3,73 @@
 #include <Core/Vector4f.h>
 #include <Render/OpenGLDefines.h>
 
-namespace vrv
-{
-	class Image;
-	class Texture
-	{
-	public:
-		enum TextureWrapMode
-		{
-			REPEAT,
-			CLAMP_TO_EDGE,
-			CLAMP_TO_BORDER
-		};
-		enum TextureFilterMode
-		{
-			NEAREST,
-			LINEAR
-		};
-		enum TextureFormat
-		{
-         RED,
-			RGB,
-			RGBA,
-			FLOAT16,
-			FLOAT32
-		};
-		Texture();
-		Texture(TextureFormat format);
+namespace vrv {
 
-		void bindToPoint(unsigned int bindingPoint);
-		unsigned int textureUnit();
-		void bind();
-		void unbind();
-		unsigned int id();
-		
-		void setTextureWrapMode(TextureWrapMode wrapMode);
-		void setTextureFilterMode(TextureFilterMode filterMode);
+  class Image;
 
-		TextureWrapMode textureWrapMode();
-		TextureFilterMode textureFilterMode();
+  class Texture {
+  public:
+    enum TextureWrapMode
+    {
+      REPEAT,
+      CLAMP_TO_EDGE,
+      CLAMP_TO_BORDER
+    };
+    enum TextureFilterMode
+    {
+      NEAREST,
+      LINEAR
+    };
+    enum TextureFormat
+    {
+      RED,
+      RGB,
+      RGBA,
+      FLOAT16,
+      FLOAT32
+    };
+    Texture();
+    Texture(TextureFormat format);
 
-		void setBorderColor(Vector4f);
+    void bindToPoint(unsigned int bindingPoint);
+    unsigned int textureUnit();
+    void bind();
+    void unbind();
+    unsigned int id();
 
-		virtual bool hasAlphaChannel() = 0;
+    void setTextureWrapMode(TextureWrapMode wrapMode);
+    void setTextureFilterMode(TextureFilterMode filterMode);
 
-      unsigned int width();
-      unsigned int height();
+    TextureWrapMode textureWrapMode();
+    TextureFilterMode textureFilterMode();
 
-	protected:
-		virtual void initialize() = 0;
-		virtual void update() = 0;
+    void setBorderColor(Vector4f);
 
-	protected:
-		Image* myImage;
-		unsigned int myBindingPoint;
-		unsigned int myID;
-		unsigned int myTextureType;
-		TextureWrapMode myTextureWrapMode;
-		TextureFilterMode myTextureFilterMode;
-		unsigned int myTextureWrapModeGL;
-		unsigned int myTextureFilterModeGL;
-		bool myGenerateMipmap;
-		unsigned int myWidth;
-		unsigned int myHeight;
-		Vector4f myBorderColor;
-		TextureFormat myTextureFormat;
-      GLenum myInternelFormat;
-      GLenum myFormat;
-      GLenum myDataType;
-	};
+    virtual bool hasAlphaChannel() = 0;
+
+    unsigned int width();
+    unsigned int height();
+
+  protected:
+    virtual void initialize() = 0;
+    virtual void update() = 0;
+
+  protected:
+    Image* myImage;
+    unsigned int myBindingPoint;
+    unsigned int myID;
+    unsigned int myTextureType;
+    TextureWrapMode myTextureWrapMode;
+    TextureFilterMode myTextureFilterMode;
+    unsigned int myTextureWrapModeGL;
+    unsigned int myTextureFilterModeGL;
+    bool myGenerateMipmap;
+    unsigned int myWidth;
+    unsigned int myHeight;
+    Vector4f myBorderColor;
+    TextureFormat myTextureFormat;
+    GLenum myInternelFormat;
+    GLenum myFormat;
+    GLenum myDataType;
+  };
 }

@@ -1,9 +1,8 @@
 #pragma once
 
-namespace vrv
-{
-	class GLState
-	{
+namespace vrv{
+
+	class GLState{
 	public:
 		GLState(bool enabled);
 
@@ -21,8 +20,8 @@ namespace vrv
 		bool myIsDirty;
 	};
 
-	class DepthTest : public GLState
-	{
+	class DepthTest : public GLState{
+
 	public:
 		enum DepthTestFunction
 		{
@@ -50,8 +49,8 @@ namespace vrv
 		unsigned int myDepthTestFunction_GL;
 	};
 
-	class StencilTest : public GLState
-	{
+	class StencilTest : public GLState{
+
 	public:
 		enum StencilFunction
 		{
@@ -94,8 +93,7 @@ namespace vrv
 		unsigned int myStencilOperation_sdpass_GL;
 	};
 
-	class Blending : public GLState
-	{
+	class Blending : public GLState{
 	public:
 		Blending(bool enable);
 
@@ -105,8 +103,7 @@ namespace vrv
 		virtual bool operator==(const GLState&);
 	};
 
-	class CullFace : public GLState
-	{
+	class CullFace : public GLState{
 	public:
 		enum CullFaceType
 		{

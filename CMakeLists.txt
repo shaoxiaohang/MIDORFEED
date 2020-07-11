@@ -1,112 +1,53 @@
-cmake_minimum_required (VERSION 2.6)
-set(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "add a postfix for Debug mode, usually d on windows")
+cmake_minimum_required (VERSION 3.10)
+
+# specify the C++ standard
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 project (DVA)
 file(GLOB CoreSources "include/Core/*.h" "src/Core/*.cpp")
 file(GLOB RenderSources "include/Render/*.h" "src/Render/*.cpp")
 file(GLOB DVASources "src/App/*.cpp")
 file(GLOB GUISources "include/GUI/*.h" "src/GUI/*.cpp")
 
-#find include directory by looking for certain header file
-find_path(TINYXMY_INCLUDE_DIR tinyxml2.h
-PATHS
-$ENV{TINYXML_ROOT}/include
-)
+set(TINYXML_INCLUDE_DIR $ENV{TINYXML_ROOT}/include)
+set(TINYXML_LIB_DIR $ENV{TINYXML_ROOT}/lib)
 
-#find include directory by looking for certain header file
-find_path(TINYXMY_LIB_DIR tinyxml2d.lib
-PATHS
-$ENV{TINYXML_ROOT}/lib
-)
+set(ASSIMP_INCLUDE_DIR $ENV{ASSIMP_ROOT}/include)
+set(ASSIMP_LIB_DIR $ENV{ASSIMP_ROOT}/lib)
 
-#find library directory by looking for certain library file
-find_path(ASSIMP_INCLUDE_DIR assimp/ai_assert.h
-PATHS
-$ENV{ASSIMP_ROOT}/include
-)
-
-#find library directory by looking for certain library file
-find_path(ASSIMP_LIB_DIR assimp-vc120-mt.lib
-PATHS
-$ENV{ASSIMP_ROOT}/lib
-)
-
-#find include directory by looking for certain header file
-find_path(FREEIMAGE_INCLUDE_DIR FreeImage.h
-PATHS
-$ENV{FREEIMAGE_ROOT}/x64
-)
-
-#find library directory by looking for certain library file
-find_path(FREEIMAGE_LIB_DIR FreeImaged.lib
-PATHS
-$ENV{FREEIMAGE_ROOT}/x64
-)
-
-#find include directory by looking for certain header file
-find_path(BOOST_INCLUDE_DIR boost/signals2.hpp
-PATHS
-$ENV{BOOST_ROOT}/include
-)
-
-#find library directory by looking for certain library file
-find_path(BOOST_LIB_DIR boost_graph-vc120-mt-1_63.lib
-PATHS
-$ENV{BOOST_ROOT}/lib/
-)
-
-#find library directory by looking for certain library file
-find_path(FREETYPE_INCLUDE_DIR ft2build.h
-PATHS
-$ENV{FREETYPE_ROOT}/include/freetype2
-)
-
-#find library directory by looking for certain library file
-find_path(FREETYPE_LIB_DIR freetyped.lib
-PATHS
-$ENV{FREETYPE_ROOT}/lib
-)
 
 #apply them to following projects
-include_directories(${TINYXMY_INCLUDE_DIR})
-link_directories(${TINYXMY_LIB_DIR})
+include_directories(${TINYXML_INCLUDE_DIR})
+link_directories(${TINYXML_LIB_DIR})
 include_directories(${ASSIMP_INCLUDE_DIR})
 link_directories(${ASSIMP_LIB_DIR})
-include_directories(${FREEIMAGE_INCLUDE_DIR})
-link_directories(${FREEIMAGE_LIB_DIR})
-include_directories(${BOOST_INCLUDE_DIR})
-link_directories(${BOOST_LIB_DIR})
-include_directories(${FREETYPE_INCLUDE_DIR})
-link_directories(${FREETYPE_LIB_DIR})
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(include)
 
 add_executable(DVA ${DVASources})
 
-set_target_properties(DVA PROPERTIES DEBUG_POSTFIX "${CMAKE_DEBUG_POSTFIX}")
-
 add_library(Core STATIC ${CoreSources})
 add_library(Render STATIC ${RenderSources})
 add_library(GUI STATIC ${GUISources})
+
+target_include_directories(Core PUBLIC include/Core)
+target_include_directories(Render PUBLIC include/Render)
+target_include_directories(GUI PUBLIC include/GUI)
 
 target_link_libraries(DVA Core Render GUI)
 target_link_libraries(Render
 Core
 opengl32.lib
-FreeImaged.lib
-boost_signals-vc120-mt-1_63.lib
-assimp-vc120-mt.lib
+assimp-vc141-mtd.lib
 tinyxml2d.lib
+IrrXMLd.lib
+zlibstaticd.lib
 )
 target_link_libraries(GUI
 Core
 Render
-freetyped.lib
 )
 
-add_custom_command(TARGET DVA POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${PROJECT_SOURCE_DIR}/bin64"
-        $<TARGET_FILE_DIR:DVA>)
 

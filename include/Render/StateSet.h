@@ -2,35 +2,34 @@
 
 #include <Core/Matrix4f.h>
 
-namespace vrv
-{
-	class RenderState;
-	class Program;
+namespace vrv {
 
-	class StateSet
-	{
-	public:
-      StateSet();
-      StateSet(Program* shader);
-      StateSet(RenderState* state, Program* shader);
+  class RenderState;
+  class Program;
 
-		void setRenderState(RenderState*);
-		RenderState* renderState();
-		RenderState* renderState() const;
+  class StateSet {
+  public:
+    StateSet();
+    StateSet(Program* shader);
+    StateSet(RenderState* state, Program* shader);
 
-		void setProgram(Program*);
-		Program* program();
-		Program* program() const;
+    void setRenderState(RenderState*);
+    RenderState* renderState();
+    RenderState* renderState() const;
 
-		bool operator < (StateSet& state) const;
+    void setProgram(Program*);
+    Program* program();
+    Program* program() const;
 
-		void bind();
-		void unbind();
+    bool operator < (StateSet& state) const;
 
-	protected:
-		RenderState* myRenderState;
-		Program* myProgram;
-      Matrix4f myProjectionMatrix;
-	};
+    void bind();
+    void unbind();
+
+  protected:
+    RenderState* myRenderState;
+    Program* myProgram;
+    Matrix4f myProjectionMatrix;
+  };
 
 }

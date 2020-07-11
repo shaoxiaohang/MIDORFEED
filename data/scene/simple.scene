@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scene>		
 	<objects>
-		<cube>
-			<name>cube</name>
+		<floor>
+			<name>floor</name>
 			<position x="0" y="0" z="0"/>
 			<material>
 				<TexturePlatte>
@@ -12,8 +12,30 @@
 					</diffuse>
 					<normal>
 						<filename>brickwall_normal.jpg</filename>
-						<filtermode>linear</filtermode>
 					</normal>
+				</TexturePlatte>
+			</material>
+		</floor>
+		<cube>
+			<name>cube1</name>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>marble.jpg</filename>
+						<filtermode>linear</filtermode>
+					</diffuse>
+				</TexturePlatte>
+			</material>
+		</cube>
+		<cube>
+			<name>cube2</name>
+			<position x="2" y="0" z="0"/>
+			<material>
+				<TexturePlatte>
+					<diffuse>
+						<filename>marble.jpg</filename>
+						<filtermode>linear</filtermode>
+					</diffuse>
 				</TexturePlatte>
 			</material>
 		</cube>
@@ -22,9 +44,9 @@
 		<light1>
 			<type>direction</type>
 			<position x="-2" y="4" z= "3"/>
-		    <direction x="0" y="-1" z= "0"/>
+		    <direction x="0" y="0" z= "-1"/>
 			<ambient r="0.7" g="0.7" b="0.7"/>
-			<diffuse r="0.8" g="0.8" b="0.8"/>
+			<diffuse r="0.8" g="0.0" b="0.0"/>
 			<specular r="0.3" g="0.3" b="0.3"/>
 			<cast_shadow>false</cast_shadow>
 		</light1>

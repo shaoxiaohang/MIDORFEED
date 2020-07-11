@@ -13,6 +13,7 @@ namespace vrv
          KeyBoardUp,
          KeyBoardDown,
          Wheel,
+         WindowResize,
          NoneEvent
       };
 
@@ -74,6 +75,12 @@ namespace vrv
       void setWheelDelta(int);
       int wheelDelta() const;
 
+      int GetResizeX();
+      int GetResizeY();
+
+      void SetResizeX(int x);
+      void SetResizeY(int y);
+
    protected:
       EventType myEventType;
       int myMousePositionX;
@@ -81,5 +88,7 @@ namespace vrv
       MouseButton myMouseButton;
       KeyButton myKeyButton;
       int myWheelDelta;
+      int resize_X_;
+      int resize_Y_;
    };
 };

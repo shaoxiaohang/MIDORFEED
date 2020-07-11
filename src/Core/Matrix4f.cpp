@@ -169,9 +169,9 @@ namespace vrv
 	Matrix4f Matrix4f::makeProjection(float l, float r, float b, float t, float n, float f)
 	{
 		return Matrix4f(2.0f*n / (r - l), 0, (r + l) / (r - l), 0,
-						0, 2.0f*n / (t - b), (t + b) / (t - b), 0,
-						0, 0, -(f + n) / (f - n), -2.0f*f*n / (f - n),
-						0, 0, -1, 0);
+						        0, 2.0f*n / (t - b), (t + b) / (t - b), 0,
+						        0, 0, -(f + n) / (f - n), -2.0f*f*n / (f - n),
+						        0, 0, -1, 0);
 
 	}
 

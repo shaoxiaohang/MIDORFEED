@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 
-struct FIBITMAP;
 namespace vrv
 {
 	class Image
@@ -52,8 +51,8 @@ namespace vrv
 		void initialize();
 
 	protected:
-		unsigned int myWidth;
-		unsigned int myHeight;
+		int myWidth;
+		int myHeight;
 		std::string myFileName;
 		ImageInternalFormat myInternalFormat;
 		ImagePixelFormat myPixelFormat;
@@ -61,6 +60,6 @@ namespace vrv
 		unsigned int myInternalFormatGL;
 		unsigned int myPixelFormatGL;
 		unsigned int myDataTypeGL;
-		FIBITMAP* myFIImage;
+    unsigned char* image_data_;
 	};
 }

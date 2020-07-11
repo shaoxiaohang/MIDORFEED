@@ -24,14 +24,12 @@
 using namespace vrv;
 int main(int argc, char** argv)
 {
-   DisplayEngine* de = new DisplayEngine();
-   de->initialize(800, 600, "main window");
+  DisplayEngine* de = new DisplayEngine();
+  de->initialize(800, 600, "main window");
 
-   //Scenario* test = new Scenario("simple.scene");
-   //Label* label = new Label(0);
-   //label->setText("HSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-   //viewer->setSceneData(test);
-   de->run();
+  Scenario* test = new Scenario("simple.scene");
+  de->setSceneData(test);
+  de->run();
 
-   return 0;
+  return 0;
 }

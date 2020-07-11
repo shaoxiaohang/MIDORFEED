@@ -5,14 +5,14 @@
 
 namespace vrv
 {
-   class Window;
+   class MainWindow;
+   class DisplayEngine;
 
    class WindowManager
    {
    public:
-      typedef std::map<std::string, Window*> DialogWindowMap;
 
-      WindowManager(const std::string& name, int mainWindowWidth, int mainWindowHeight);
+      WindowManager(DisplayEngine& de, const std::string& name, int mainWindowWidth, int mainWindowHeight);
 
       void initialize();
 
@@ -24,8 +24,7 @@ namespace vrv
       std::string myMainWindowName;
       int myMainWindowWidth;
       int myMainWindowHeight;
-      Window* myMainWindow;
-      Window* myRenderWindow;
-      DialogWindowMap myDialogWindows;
+      MainWindow* myMainWindow;
+      DisplayEngine& de_;
    };
 }

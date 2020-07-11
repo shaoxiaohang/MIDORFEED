@@ -1,6 +1,8 @@
 #pragma once
+
 #include <Core/Vector3f.h>
 #include <Render/Ellipsoid.h>
+
 namespace vrv
 {
 	class ArrayVec3;

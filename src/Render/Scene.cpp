@@ -29,496 +29,482 @@
 #define VRV_MAX_NUM_LIGHTS 4
 namespace vrv
 {
-	Scene* Scene::myInstance = 0;
+  Scene* Scene::myInstance = 0;
 
-	struct SortbyCamera
-	{
-		SortbyCamera(Vector3f camera)
-		{
-			myCameraPosition = camera;
-		}
-		bool operator()(RenderInfo const & a, RenderInfo const & b) const
-		{
-			Vector3f positionA = a.myModelMatrix.getTranslation();
-			Vector3f positionB = b.myModelMatrix.getTranslation();
-			float distanceA = positionA.distanceSquare(myCameraPosition);
-			float distanceB = positionB.distanceSquare(myCameraPosition);
-			return distanceA > distanceB;
-		}
+  struct SortbyCamera
+  {
+    SortbyCamera(Vector3f camera)
+    {
+      myCameraPosition = camera;
+    }
+    bool operator()(RenderInfo const & a, RenderInfo const & b) const
+    {
+      Vector3f positionA = a.myModelMatrix.getTranslation();
+      Vector3f positionB = b.myModelMatrix.getTranslation();
+      float distanceA = positionA.distanceSquare(myCameraPosition);
+      float distanceB = positionB.distanceSquare(myCameraPosition);
+      return distanceA > distanceB;
+    }
 
-		Vector3f myCameraPosition;
-	};
+    Vector3f myCameraPosition;
+  };
 
 
-	RenderInfo::RenderInfo(Drawable* _drawable, Matrix4f _modelMatrix, bool isLightPoint, bool isEllipsoid)
-		: myDrawable(_drawable)
-		, myModelMatrix(_modelMatrix)
-		, myIsLightPoint(isLightPoint)
-		, myIsEllipsoid(isEllipsoid)
-	{}
+  RenderInfo::RenderInfo(Drawable* _drawable, Matrix4f _modelMatrix, bool isLightPoint, bool isEllipsoid)
+    : myDrawable(_drawable)
+    , myModelMatrix(_modelMatrix)
+    , myIsLightPoint(isLightPoint)
+    , myIsEllipsoid(isEllipsoid)
+  {}
 
-	RenderQueue::RenderQueue()
-	{}
+  RenderQueue::RenderQueue()
+  {}
 
-	void RenderQueue::draw(Scene* scene, Camera* camera)
-	{
-		//draw opaque list first 
-		RenderList::iterator itor = myOpaqueList.begin();
-		RenderList::iterator end = myOpaqueList.end();
-		for (; itor != end; ++itor)
-		{
-			updateModelMatrix(*itor);
-			updateMaterial(*itor);
-         updateScene(scene, *itor);
-			draw(*itor);
-		}
+  void RenderQueue::draw(Scene* scene, Camera* camera)
+  {
+    //draw opaque list first 
+    RenderList::iterator itor = myOpaqueList.begin();
+    RenderList::iterator end = myOpaqueList.end();
+    for (; itor != end; ++itor)
+    {
+      updateModelMatrix(*itor);
+      updateMaterial(*itor);
+      updateScene(scene, *itor);
+      draw(*itor);
+    }
 
-		//sort the transparent list from back to front
-		sortTransparentList(camera);
-		itor = myTransparentList.begin();
-		end = myTransparentList.end();
-		for (; itor != end; ++itor)
-		{
-			updateModelMatrix(*itor);
-			updateMaterial(*itor);
-         updateScene(scene, *itor);
-			draw(*itor);
-		}
-	}
+    //sort the transparent list from back to front
+    sortTransparentList(camera);
+    itor = myTransparentList.begin();
+    end = myTransparentList.end();
+    for (; itor != end; ++itor)
+    {
+      updateModelMatrix(*itor);
+      updateMaterial(*itor);
+      updateScene(scene, *itor);
+      draw(*itor);
+    }
+  }
 
-	void RenderQueue::sortTransparentList(Camera* camera)
-	{
-		Vector3f cameraPosition = camera->position();
-		SortbyCamera sort(cameraPosition);
-		std::sort(myTransparentList.begin(), myTransparentList.end(), sort);
-	}
+  void RenderQueue::sortTransparentList(Camera* camera)
+  {
+    Vector3f cameraPosition = camera->position();
+    SortbyCamera sort(cameraPosition);
+    std::sort(myTransparentList.begin(), myTransparentList.end(), sort);
+  }
 
-	void RenderQueue::addToOpaqueList(const RenderInfo& info)
-	{
-		myOpaqueList.push_back(info);
-	}
+  void RenderQueue::addToOpaqueList(const RenderInfo& info)
+  {
+    myOpaqueList.push_back(info);
+  }
 
-	void RenderQueue::addToTransparentList(const RenderInfo& info)
-	{
-		myTransparentList.push_back(info);
-	}
+  void RenderQueue::addToTransparentList(const RenderInfo& info)
+  {
+    myTransparentList.push_back(info);
+  }
 
-	void RenderQueue::clear()
-	{
-		myOpaqueList.clear();
-		myTransparentList.clear();
-	}
+  void RenderQueue::clear()
+  {
+    myOpaqueList.clear();
+    myTransparentList.clear();
+  }
 
-	void RenderQueue::draw(RenderInfo& renderInfo)
-	{
-		renderInfo.myDrawable->drawImplementation();
-	}
+  void RenderQueue::draw(RenderInfo& renderInfo)
+  {
+    renderInfo.myDrawable->drawImplementation();
+  }
 
-	void RenderQueue::updateModelMatrix(RenderInfo& renderInfo)
-	{
+  void RenderQueue::updateModelMatrix(RenderInfo& renderInfo)
+  {
+    Drawable* draw = renderInfo.myDrawable;
+    if (draw)
+    {
+      Material* material = draw->material();
+      if (material)
+      {
+        StateSet* state = material->stateSet();
+        if (state)
+        {
+          Program* program = state->program();
+          if (program)
+          {
+            program->set("vrv_model_matrix", renderInfo.myModelMatrix);
+            program->set("isLightPoint", renderInfo.myIsLightPoint);
+            program->set("isEllipsoid", renderInfo.myIsEllipsoid);
+          }
+        }
+      }
+    }
+
+  }
+
+  void RenderQueue::updateMaterial(RenderInfo& renderInfo)
+  {
+    renderInfo.myDrawable->updateProgram();
+  }
+
+  void RenderQueue::updateScene(Scene* scene, RenderInfo& renderInfo)
+  {
+    if (scene)
+    {
       Drawable* draw = renderInfo.myDrawable;
       if (draw)
       {
-         Material* material = draw->material();
-         if (material)
-         {
-            StateSet* state = material->stateSet();
-            if (state)
-            {
-               Program* program = state->program();
-               if (program)
-               {
-                  program->set("vrv_model_matrix", renderInfo.myModelMatrix);
-                  program->set("isLightPoint", renderInfo.myIsLightPoint);
-                  program->set("isEllipsoid", renderInfo.myIsEllipsoid);
-               }
-            }
-         }
+        Program* pro = draw->material()->program();
+        scene->updateProgram(pro);
       }
+    }
+  }
 
-	}
+  Scene::Scene(Camera* camera, int width, int height)
+    : myRoot(0)
+    , myVisualizeDepthBuffer(false)
+    , myOptimizeVisualizeDepthBuffer(true)
+    , myOutlineObjects(false)
+    , myOutlineWidth(1.2)
+    , myEnableDepthTest(true)
+    , myPostEffectType(0)
+    , mySkybox(0)
+    , myPostProcessorManager(0)
+    , myMap(0)
+    , mySceneRoot(0)
+    , master_camera_(camera)
+  {
+    myPostProcessorManager = new PostProcessorManager(width, height);
+    myShadowSystem = new ShadowSystem();
+    myShadowSystem->initializeFrameBuffer(width, height);
+    myTextureQuadRender = new TextureQuadRender();
+    myRoot = new Node("Root");
+    myLightNode = new Node("light");
 
-	void RenderQueue::updateMaterial(RenderInfo& renderInfo)
-	{
-		renderInfo.myDrawable->updateProgram();
-	}
+    myRoot->addChild(master_camera_);
+    master_camera_->addChild(myLightNode);
+  }
 
-   void RenderQueue::updateScene(Scene* scene, RenderInfo& renderInfo)
-   {
-      if (scene)
+  void Scene::setSceneData(Node* root)
+  {
+    mySceneRoot = root;
+    master_camera_->addChild(mySceneRoot);
+  }
+
+  void Scene::cullTraverse()
+  {
+    myRenderQueue.clear();
+    std::stack<Node*> DFSStack;
+    DFSStack.push(myRoot);
+    DFS(DFSStack, myRoot);
+  }
+
+  void Scene::DFS(std::stack<Node*>& stack, Node* node)
+  {
+    addDrawableToRender(node);
+    stack.pop();
+    for (int i = 0; i < node->numberOfChildren(); ++i)
+    {
+      Node* child = node->getChild(i);
+      stack.push(child);
+      DFS(stack, child);
+    }
+  }
+
+  void Scene::renderScene()
+  {
+    if (myRoot)
+    {
+      glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      cullTraverse();
+
+      //myShadowSystem->run(&myRenderQueue);
+
+      //myPostProcessorManager->bind();
+
+      //glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+      //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      myRenderQueue.draw(this, master_camera_);
+
+      if (mySkybox)
       {
-         Drawable* draw = renderInfo.myDrawable;
-         if (draw)
-         {
-            Program* pro = draw->material()->program();
-            scene->updateProgram(pro);
-         }
+        mySkybox->draw();
       }
-   }
 
-	Scene::Scene(int width, int height)
-		: myRoot(0)
-		, myVisualizeDepthBuffer(false)
-		, myOptimizeVisualizeDepthBuffer(true)
-		, myOutlineObjects(false)
-		, myOutlineWidth(1.2)
-		, myEnableDepthTest(true)
-		, myPostEffectType(0)
-		, mySkybox(0)
-		, myPostProcessorManager(0)
-		, myMap(0)
-      , mySceneRoot(0)
-	{
-		myMasterCamera = new Camera();
-		initializeStateSet();
-		myPostProcessorManager = new PostProcessorManager(width, height);
-		myShadowSystem = new ShadowSystem();
-		myShadowSystem->initializeFrameBuffer(width, height);
-		myTextureQuadRender = new TextureQuadRender();
-      myRoot = new Node("Root");
-      mySceneCamera = new Camera();
-      myHudCamera = new Camera();
-      myHudCamera->setProjectionMatroxAsOrtho2D(0, width, 0, height);
-		myLightNode = new Node("light");
-      myGuiNode = new Node("gui");
-      myFontNode = new Node("Font");
+      //myPostProcessorManager->run();
+    }
+  }
 
-      myRoot->addChild(mySceneCamera);
-      myRoot->addChild(myHudCamera);    
-      mySceneCamera->addChild(myLightNode);
-      myHudCamera->addChild(myGuiNode);
-      myHudCamera->addChild(myFontNode);
-	}
-
-	void Scene::setSceneData(Node* root)
-	{
-		mySceneRoot = root;
-      mySceneCamera->addChild(mySceneRoot);
-	}
-
-	void Scene::cullTraverse()
-	{
-		myRenderQueue.clear();
-		std::stack<Node*> DFSStack;
-		DFSStack.push(myRoot);
-		DFS(DFSStack, myRoot);
-	}
-
-	void Scene::DFS(std::stack<Node*>& stack, Node* node)
-	{
-		addDrawableToRender(node);
-		stack.pop();
-		for (int i = 0; i < node->numberOfChildren(); ++i)
-		{
-			Node* child = node->getChild(i);
-			stack.push(child);
-			DFS(stack, child);
-		}
-	}
-
-	void Scene::renderScene()
-	{
-		if (myRoot)
-		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			cullTraverse();
-
-			//myShadowSystem->run(&myRenderQueue);
-
-			//myPostProcessorManager->bind();
-
-			//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			myRenderQueue.draw(this, myMasterCamera);
-
-			if (mySkybox)
-			{
-				mySkybox->draw();
-			}
-
-			//myPostProcessorManager->run();
-		}
-	}
-
-	Camera* Scene::masterCamera()
-	{
-		return myMasterCamera;
-	}
+  Camera* Scene::masterCamera()
+  {
+    return master_camera_;
+  }
 
 
-	void Scene::addDrawableToRender(Node* node)
-	{
-		unsigned int numOfDrawables = node->numberOfDrawable();
-		for (unsigned int i = 0; i < numOfDrawables; ++i)
-		{
-			Drawable* drawable = node->getDrawable(i);
-			Material* material = drawable->material();
-			Model* model = dynamic_cast<Model*>(drawable);
-			bool isTransParent = false;
+  void Scene::addDrawableToRender(Node* node)
+  {
+    unsigned int numOfDrawables = node->numberOfDrawable();
+    for (unsigned int i = 0; i < numOfDrawables; ++i)
+    {
+      Drawable* drawable = node->getDrawable(i);
+      Material* material = drawable->material();
+      Model* model = dynamic_cast<Model*>(drawable);
+      bool isTransParent = false;
 
-			if (model)
-			{
-				for (int i = 0; i < model->numberOfMeshes(); ++i)
-				{
-					Geometry* mesh = model->getMesh(i);
-					if (isTransParent)
-					{
-						myRenderQueue.addToTransparentList(RenderInfo(mesh, node->getModelMatrix(),
-							node->isLightPoint(), node->isEllipsoid()));
-					}
-					else
-					{
-						myRenderQueue.addToOpaqueList(RenderInfo(mesh, node->getModelMatrix(), 
-							node->isLightPoint(), node->isEllipsoid()));
-					}
-				}
-			}
-			else
-			{
-				if (isTransParent)
-				{
-					myRenderQueue.addToTransparentList(RenderInfo(drawable, node->getModelMatrix()
-						, node->isLightPoint(), node->isEllipsoid()));
-				}
-				else
-				{
-					myRenderQueue.addToOpaqueList(RenderInfo(node->getDrawable(i), node->getModelMatrix(), 
-						node->isLightPoint(), node->isEllipsoid()));
-				}
-			}
-
-		}
-	}
-
-	void Scene::updateSkybox(Program* program)
-	{
-		if (mySkybox)
-		{
-			mySkybox->cubeMap()->bindToPoint(6);
-			program->set("skybox", 6);
-		}
-	}
-
-	void Scene::updateLights(Program* program)
-	{
-		if (myLights.size() > 0)
-		{
-			int numOfLights = myLights.size();
-			for (int i = 0; i < numOfLights; ++i)
-			{
-				std::stringstream ss;
-				ss << "vrv_lights[" << i << "].";
-				std::string lightName = ss.str();
-				Light* light = myLights[i];
-
-				program->set(lightName + "used", true);
-				program->set(lightName + "castShadow", light->castShadow());
-				program->set(lightName + "type", light->type());
-				program->set(lightName + "ambient", light->ambient());
-				program->set(lightName + "diffuse", light->diffuse());
-				program->set(lightName + "specular", light->specular());
-
-				switch (light->type())
-				{
-				case Light::DirectionalLight:
-					program->set(lightName + "direction", light->direction());
-					break;
-				case Light::PointLight:
-					program->set(lightName + "position", light->position());
-					program->set(lightName + "constant", light->constantTerm());
-					program->set(lightName + "linear", light->linearTerm());
-					program->set(lightName + "quadratic", light->quadraticTerm());
-					break;
-				case Light::SpotLight:
-					program->set(lightName + "position", light->position());
-					program->set(lightName + "constant", light->constantTerm());
-					program->set(lightName + "linear", light->linearTerm());
-					program->set(lightName + "quadratic", light->quadraticTerm());
-					program->set(lightName + "fade", Utility::cos(light->fadeAngle()));
-					program->set(lightName + "cutoff", Utility::cos(light->cutoffAngle()));
-					break;
-				default:
-					break;
-				}
-
-			}
-		}
-
-	}
-
-	void Scene::updateShadow(Program* program)
-	{
-		if (myShadowSystem->shadowCaster())
-		{
-			program->set("shadow_matrix", myShadowSystem->shadowCaster()->shadowMatrix());
-			myShadowSystem->shadowTexture()->bindToPoint(7);
-			program->set("shadowMap", 7);
-		}
-	}
-
-	void Scene::updateGlobe(Program* program)
-	{
-      if (myMap)
+      if (model)
       {
-         static std::vector<int> grids = { 0, 1000000, 2000000, 20000000 };
-         static std::vector<double> res = { 0.005, 0.01, 0.05, 0.1 };
-
-         double height = myMap->height(myMasterCamera->position());
-
-         int interval = 0;
-
-         for (int i = 0; i < 3; ++i)
-         {
-            if (height < grids[i + 1])
-            {
-               interval = i;
-               break;
-            }
-            else
-            {
-               if (i == 2)
-               {
-                  interval = 3;
-               }
-            }
-         }
-
-         Vector2f resolution = Vector2f(res[interval], res[interval]);
-
-         program->set("grid_width", Vector2f(1, 1));
-         program->set("grid_resolution", resolution);
+        for (int i = 0; i < model->numberOfMeshes(); ++i)
+        {
+          Geometry* mesh = model->getMesh(i);
+          if (isTransParent)
+          {
+            myRenderQueue.addToTransparentList(RenderInfo(mesh, node->getModelMatrix(),
+              node->isLightPoint(), node->isEllipsoid()));
+          }
+          else
+          {
+            myRenderQueue.addToOpaqueList(RenderInfo(mesh, node->getModelMatrix(),
+              node->isLightPoint(), node->isEllipsoid()));
+          }
+        }
       }
-	}
+      else
+      {
+        if (isTransParent)
+        {
+          myRenderQueue.addToTransparentList(RenderInfo(drawable, node->getModelMatrix()
+            , node->isLightPoint(), node->isEllipsoid()));
+        }
+        else
+        {
+          myRenderQueue.addToOpaqueList(RenderInfo(node->getDrawable(i), node->getModelMatrix(),
+            node->isLightPoint(), node->isEllipsoid()));
+        }
+      }
 
-	void Scene::initializeStateSet()
-	{
+    }
+  }
 
-	}
+  void Scene::updateSkybox(Program* program)
+  {
+    if (mySkybox)
+    {
+      mySkybox->cubeMap()->bindToPoint(6);
+      program->set("skybox", 6);
+    }
+  }
 
-	void Scene::addLight(Light* light)
-	{
-		if (light != NULL)
-		{
-			myLights.push_back(light);
-			if (light->castShadow())
-			{
-				myShadowSystem->setShadowCaster(light);
-			}
-			Node* lightNode = new Node();
-         
-			lightNode->setIsLightPoint(true);
-			Cube* cube = new Cube();
-			Material* material = new Material();
-			material->setAmbient(Vector4f(light->ambient(), 1.0f));
-			material->setDiffuse(Vector4f(light->diffuse(), 1.0f)); 
-			material->setSpecular(Vector4f(light->specular(), 10.f));
-			lightNode->setPosition(light->position());
-			cube->setMaterial(material);
-			lightNode->setScale(Vector3f(0.3f, 0.3f, 0.3f));
-			//lightNode->addDrawable(cube);
-			myLightNode->addChild(lightNode);
-		}
-	}
+  void Scene::updateLights(Program* program)
+  {
+    if (myLights.size() > 0)
+    {
+      int numOfLights = myLights.size();
+      for (int i = 0; i < numOfLights; ++i)
+      {
+        std::stringstream ss;
+        ss << "vrv_lights[" << i << "].";
+        std::string lightName = ss.str();
+        Light* light = myLights[i];
 
-	Node* Scene::root()
-	{
-		return myRoot;
-	}
+        program->set(lightName + "used", true);
+        program->set(lightName + "castShadow", light->castShadow());
+        program->set(lightName + "type", light->type());
+        program->set(lightName + "ambient", light->ambient());
+        program->set(lightName + "diffuse", light->diffuse());
+        program->set(lightName + "specular", light->specular());
 
-   Node* Scene::guiRoot()
-   {
-      return myGuiNode;
-   }
+        switch (light->type())
+        {
+        case Light::DirectionalLight:
+          program->set(lightName + "direction", light->direction());
+          break;
+        case Light::PointLight:
+          program->set(lightName + "position", light->position());
+          program->set(lightName + "constant", light->constantTerm());
+          program->set(lightName + "linear", light->linearTerm());
+          program->set(lightName + "quadratic", light->quadraticTerm());
+          break;
+        case Light::SpotLight:
+          program->set(lightName + "position", light->position());
+          program->set(lightName + "constant", light->constantTerm());
+          program->set(lightName + "linear", light->linearTerm());
+          program->set(lightName + "quadratic", light->quadraticTerm());
+          program->set(lightName + "fade", Utility::cos(light->fadeAngle()));
+          program->set(lightName + "cutoff", Utility::cos(light->cutoffAngle()));
+          break;
+        default:
+          break;
+        }
 
-	void Scene::setVisualizeDepthBuffer(bool visualize)
-	{
-		if (myVisualizeDepthBuffer != visualize)
-		{
-			myVisualizeDepthBuffer = visualize;
-		}
-	}
+      }
+    }
 
-	void Scene::setOptimizeVisualizeDepthBuffer(bool optimize)
-	{
-	}
+  }
 
-	void Scene::setOutlineObjects(bool value)
-	{
-		myOutlineObjects = value;
-	}
+  void Scene::updateShadow(Program* program)
+  {
+    if (myShadowSystem->shadowCaster())
+    {
+      program->set("shadow_matrix", myShadowSystem->shadowCaster()->shadowMatrix());
+      myShadowSystem->shadowTexture()->bindToPoint(7);
+      program->set("shadowMap", 7);
+    }
+  }
 
-	void Scene::setOutlineWidth(double value)
-	{
-		myOutlineWidth = value;
-	}
+  void Scene::updateGlobe(Program* program)
+  {
+    if (myMap)
+    {
+      static std::vector<int> grids = { 0, 1000000, 2000000, 20000000 };
+      static std::vector<double> res = { 0.005, 0.01, 0.05, 0.1 };
 
-	void Scene::enableDepthTest(bool value)
-	{
-		if (myEnableDepthTest != value)
-		{
-			myEnableDepthTest = value;
-		}
-	}
+      double height = myMap->height(master_camera_->position());
 
-	void Scene::setPostEffectType(int type)
-	{
-		myPostEffectType = type;
-	}
+      int interval = 0;
 
-	int Scene::postEffectType()
-	{
-		return myPostEffectType;
-	}
+      for (int i = 0; i < 3; ++i)
+      {
+        if (height < grids[i + 1])
+        {
+          interval = i;
+          break;
+        }
+        else
+        {
+          if (i == 2)
+          {
+            interval = 3;
+          }
+        }
+      }
 
-	void Scene::setSkybox(Skybox* skybox)
-	{
-		mySkybox = skybox;
-	}
+      Vector2f resolution = Vector2f(res[interval], res[interval]);
 
-	Skybox* Scene::skybox()
-	{
-		return mySkybox;
-	}
+      program->set("grid_width", Vector2f(1, 1));
+      program->set("grid_resolution", resolution);
+    }
+  }
 
-	void Scene::visualizeNormal(bool b)
-	{
-		myVisualizeNormal = b;
-	}
+  void Scene::initializeStateSet()
+  {
 
-	void Scene::updateProgram(Program* program)
-	{
-		updateSkybox(program);
-		updateLights(program);
-		updateShadow(program);
-		updateGlobe(program);
-	}
+  }
 
-	void Scene::setMap(Map* map)
-	{
-		myMap = map;
-	}
+  void Scene::addLight(Light* light)
+  {
+    if (light != NULL)
+    {
+      myLights.push_back(light);
+      if (light->castShadow())
+      {
+        myShadowSystem->setShadowCaster(light);
+      }
+      Node* lightNode = new Node();
 
-	Map* Scene::map()
-	{
-		return myMap;
-	}
+      lightNode->setIsLightPoint(true);
+      Cube* cube = new Cube();
+      Material* material = new Material();
+      material->setAmbient(Vector4f(light->ambient(), 1.0f));
+      material->setDiffuse(Vector4f(light->diffuse(), 1.0f));
+      material->setSpecular(Vector4f(light->specular(), 10.f));
+      lightNode->setPosition(light->position());
+      cube->setMaterial(material);
+      lightNode->setScale(Vector3f(0.3f, 0.3f, 0.3f));
+      lightNode->addDrawable(cube);
+      myLightNode->addChild(lightNode);
+    }
+  }
 
-   void Scene::acceptNodeVisitor(NodeVisitor* v)
-   {
-      if (v && myRoot)
-         v->run(myRoot);
-   }
+  Node* Scene::root()
+  {
+    return myRoot;
+  }
 
-   void Scene::setCurrentProjectionMatrix(Matrix4f m)
-   {
-      myCurrentProjectionMatrix = m;
-   }
+  void Scene::setVisualizeDepthBuffer(bool visualize)
+  {
+    if (myVisualizeDepthBuffer != visualize)
+    {
+      myVisualizeDepthBuffer = visualize;
+    }
+  }
 
-   Matrix4f Scene::currentProjectionMatrix()
-   {
-      return myCurrentProjectionMatrix;
-   }
+  void Scene::setOptimizeVisualizeDepthBuffer(bool optimize)
+  {
+  }
+
+  void Scene::setOutlineObjects(bool value)
+  {
+    myOutlineObjects = value;
+  }
+
+  void Scene::setOutlineWidth(double value)
+  {
+    myOutlineWidth = value;
+  }
+
+  void Scene::enableDepthTest(bool value)
+  {
+    if (myEnableDepthTest != value)
+    {
+      myEnableDepthTest = value;
+    }
+  }
+
+  void Scene::setPostEffectType(int type)
+  {
+    myPostEffectType = type;
+  }
+
+  int Scene::postEffectType()
+  {
+    return myPostEffectType;
+  }
+
+  void Scene::setSkybox(Skybox* skybox)
+  {
+    mySkybox = skybox;
+  }
+
+  Skybox* Scene::skybox()
+  {
+    return mySkybox;
+  }
+
+  void Scene::visualizeNormal(bool b)
+  {
+    myVisualizeNormal = b;
+  }
+
+  void Scene::updateProgram(Program* program)
+  {
+    updateSkybox(program);
+    updateLights(program);
+    updateShadow(program);
+    updateGlobe(program);
+  }
+
+  void Scene::setMap(Map* map)
+  {
+    myMap = map;
+  }
+
+  Map* Scene::map()
+  {
+    return myMap;
+  }
+
+  void Scene::acceptNodeVisitor(NodeVisitor* v)
+  {
+    if (v && myRoot)
+      v->run(myRoot);
+  }
+
+  void Scene::setCurrentProjectionMatrix(Matrix4f m)
+  {
+    myCurrentProjectionMatrix = m;
+  }
+
+  Matrix4f Scene::currentProjectionMatrix()
+  {
+    return myCurrentProjectionMatrix;
+  }
 }

@@ -1,82 +1,84 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include <map>
 #include <Core/Matrix4f.h>
 #include <Core/Bound.h>
-namespace vrv
-{
-	class Drawable;
-   class Camera;
-	class Node
-	{
-	public:
-      typedef std::vector<Drawable*> DrawableList;
-		typedef std::vector<Node*> ChildrenList;
 
-	public:
-		Node();
+namespace vrv {
 
-		Node(const std::string& name);
+  class Drawable;
+  class Camera;
+  class Node
+  {
+  public:
+    typedef std::vector<Drawable*> DrawableList;
+    typedef std::vector<Node*> ChildrenList;
 
-      virtual ~Node();
+  public:
+    Node();
 
-      void addDrawable(Drawable* drawable);
+    Node(const std::string& name);
 
-      int numberOfDrawable();
+    virtual ~Node();
 
-      Drawable* getDrawable(int i);
+    void addDrawable(Drawable* drawable);
 
-		void addChild(Node* child);
+    int numberOfDrawable();
 
-		void removeChild(Node* child);
+    Drawable* getDrawable(int i);
 
-		int numberOfChildren();
+    void addChild(Node* child);
 
-		Node* getChild(int i);
+    void removeChild(Node* child);
 
-		Node* parent();
+    int numberOfChildren();
 
-		void setParent(Node* parent);
+    Node* getChild(int i);
 
-		void setPosition(Vector3f pos);
+    Node* parent();
 
-		Vector3f position();
+    void setParent(Node* parent);
 
-		void setScale(Vector3f scale);
+    void setPosition(Vector3f pos);
 
-		Vector3f scale();
+    Vector3f position();
 
-		void setRotation(Matrix4f rotation);
+    void setScale(Vector3f scale);
 
-		Matrix4f rotation();
+    Vector3f scale();
 
-		Matrix4f getModelMatrix();
+    void setRotation(Matrix4f rotation);
 
-		void setIsLightPoint(bool);
-		bool isLightPoint();
+    Matrix4f rotation();
 
-		void setIsEllipsoid(bool);
-		bool isEllipsoid();
+    Matrix4f getModelMatrix();
 
-      Bound bound();
+    void setIsLightPoint(bool);
+    bool isLightPoint();
 
-      bool isCameraNode();
-   protected:
+    void setIsEllipsoid(bool);
+    bool isEllipsoid();
 
-      void calculateBound();
+    Bound bound();
 
-	protected:
-		Node* myParent;
-		ChildrenList myChildren;
-      DrawableList myDrawables;
-		std::string myName;
-		Vector3f myPosition;
-		Vector3f myScale;
-		Matrix4f myRotation;
-		bool myIsInstanced;
-		bool myIsLightPoint;
-		bool myIsEllipsoid;
-      Bound myBound;
-	};
+    bool isCameraNode();
+  protected:
+
+    void calculateBound();
+
+  protected:
+    Node* myParent;
+    ChildrenList myChildren;
+    DrawableList myDrawables;
+    std::string myName;
+    Vector3f myPosition;
+    Vector3f myScale;
+    Matrix4f myRotation;
+    bool myIsInstanced;
+    bool myIsLightPoint;
+    bool myIsEllipsoid;
+    Bound myBound;
+  };
 }

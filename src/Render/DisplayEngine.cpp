@@ -10,102 +10,90 @@
 
 namespace vrv
 {
-   boost::signals2::signal<void()> DisplayEngine::signal_update;
+  DisplayEngine::DisplayEngine()
+    : myScene(0)
+    , myWindowManager(0)
+    , myQuit(false)
+    , mySecondsPerCycle(0)
+    , master_camera_(nullptr)
+  {
+    LARGE_INTEGER cycles;
+    QueryPerformanceFrequency(&cycles);
+    mySecondsPerCycle = 1.0 / cycles.QuadPart;
+  }
 
-   DisplayEngine::DisplayEngine()
-		: myScene(0)
-      , myWindowManager(0)
-      , myQuit(false)
-      , mySecondsPerCycle(0)
-      , myGuiManager(0)
-      , myFontManager(0)
-	{
-      LARGE_INTEGER cycles;
-      QueryPerformanceFrequency(&cycles);
-      mySecondsPerCycle = 1.0 / cycles.QuadPart;
-	}
+  void DisplayEngine::run()
+  {
+    LARGE_INTEGER previous;
+    QueryPerformanceCounter(&previous);
 
-   void DisplayEngine::run()
-	{
-      LARGE_INTEGER previous;
-      QueryPerformanceCounter(&previous);
-    
-      double deltaT = 1.0 / 60.0;
-      LARGE_INTEGER end;
+    double deltaT = 1.0 / 60.0;
+    LARGE_INTEGER end;
 
-      while (!myQuit)
-      {
-         handleMessage();
-         onUpdateTick(deltaT);
-         onRenderTick(deltaT);
-         swapBuffer();
+    while (!myQuit)
+    {
+      handleMessage();
+      onUpdateTick(deltaT);
+      onRenderTick(deltaT);
+      swapBuffer();
 
-         QueryPerformanceCounter(&end);
+      QueryPerformanceCounter(&end);
 
-         deltaT = (end.QuadPart - previous.QuadPart) * mySecondsPerCycle;
+      deltaT = (end.QuadPart - previous.QuadPart) * mySecondsPerCycle;
 
-         myScene->masterCamera()->setLastFrame(deltaT);
-         previous = end;
-      }
-      
-	}
+      myScene->masterCamera()->setLastFrame(deltaT);
+      previous = end;
+    }
 
-   void DisplayEngine::handleMessage()
-   {
-      myWindowManager->pickMessage();
-   }
+  }
 
-   void DisplayEngine::initialize(int width, int height, const std::string& title)
-	{
-      myWindowManager = new WindowManager(title, width, height);
-      myWindowManager->initialize();
+  void DisplayEngine::handleMessage()
+  {
+    myWindowManager->pickMessage();
+  }
 
-      myScene = new Scene(width, height);
-      myGuiManager = new GuiManager(myScene);
-      myFontManager = new FontManager();
-      myFontManager->initialize();
-	}
+  void DisplayEngine::initialize(int width, int height, const std::string& title)
+  {
+    myWindowManager = new WindowManager(*this, title, width, height);
+    myWindowManager->initialize();
+    master_camera_ = new Camera();
+    myScene = new Scene(master_camera_, width, height);
+  }
 
-   void DisplayEngine::onUpdateTick(double dt)
-	{
-      myGuiManager->update(dt);
-	}
-    
-   void DisplayEngine::onRenderTick(double dt)
-	{
-		if (myScene)
-		{
-			myScene->renderScene();       
-		}
-	}
+  void DisplayEngine::onUpdateTick(double dt)
+  {
 
-   void DisplayEngine::setSceneData(Node* root)
-	{
-		myScene->setSceneData(root);
-	}
+  }
 
-   Camera* DisplayEngine::masterCamera()
-	{
-		return myScene->masterCamera();
-	}
+  void DisplayEngine::onRenderTick(double dt)
+  {
+    if (myScene)
+    {
+      myScene->renderScene();
+    }
+  }
 
-   Scene* DisplayEngine::scene()
-	{
-		return myScene;
-	}
+  void DisplayEngine::setSceneData(Node* root)
+  {
+    myScene->setSceneData(root);
+  }
 
-   void DisplayEngine::handleWindowEvent(const WindowEvent& e)
-   {
-      Camera* camera = masterCamera();
-      if (camera)
-      {
-         camera->handleWindowEvent(e);
-      }
-   }
+  Scene* DisplayEngine::scene()
+  {
+    return myScene;
+  }
 
-   void DisplayEngine::swapBuffer()
-   {
-      if (myWindowManager)
-         myWindowManager->swapBuffers();
-   }
+  void DisplayEngine::handleWindowEvent(const WindowEvent& e)
+  {
+    if (master_camera_)
+    {
+      master_camera_->handleWindowEvent(e);
+    }
+  }
+
+  void DisplayEngine::swapBuffer()
+  {
+    if (myWindowManager)
+      myWindowManager->swapBuffers();
+  }
 }

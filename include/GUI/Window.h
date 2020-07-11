@@ -1,52 +1,51 @@
 #pragma once
 
-#include<Windows.h>
-#include<string>
+#include <Windows.h>
+#include <string>
 
-namespace vrv
-{
-   class WindowEventHandler;
-   class WindowResource;
+namespace vrv{
 
-   class Window
-   {
-   public:
+  class WindowEventHandler;
+  class WindowResource;
+  class DisplayEngine;
 
-      Window(HINSTANCE hInst, const std::string& name, HWND parent, WindowEventHandler* handler = 0);
+  class Window {
+  public:
 
-      ~Window();
+    Window(DisplayEngine& de, HINSTANCE hInst, const std::string& name, HWND parent, WindowEventHandler* handler);
 
-      void setWidth(int w);
+    ~Window();
 
-      void setHeight(int h);
+    void setWidth(int w);
 
-      void setMenu(WindowResource* menu);
+    void setHeight(int h);
 
-      void create();
+    void create();
 
-      HWND handler();
+    HWND handler();
 
-      void swapBuffer();
+    void swapBuffer();
 
-   protected:
+  protected:
 
-      void registerClasses();
+    void registerClasses();
 
-   protected:
-      std::string myTitleName;
-      std::string myClassName;
-      int myX;
-      int myY;
-      int myWidth;
-      int myHeight;
-      DWORD myWinStyle;
-      DWORD myWinStyleEx;
-      HWND myHandler;
-      WNDCLASSEX myWinClass;
-      HMENU myMenuHandler;
-      HWND myParentHandler;
-      HINSTANCE myInstance;
-      HDC myDeviceContext;
-      WindowEventHandler* myEventHandler;
-   };
+  protected:
+    std::string myTitleName;
+    std::string myClassName;
+    int myX;
+    int myY;
+    int myWidth;
+    int myHeight;
+    DWORD myWinStyle;
+    DWORD myWinStyleEx;
+    HWND myHandler;
+    WNDCLASSEX myWinClass;
+    HMENU myMenuHandler;
+    HWND myParentHandler;
+    HINSTANCE myInstance;
+    HDC myDeviceContext;
+    WindowEventHandler* myEventHandler;
+    DisplayEngine& de_;
+  };
 }

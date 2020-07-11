@@ -1,23 +1,22 @@
 #pragma once
 
-namespace vrv
-{
-	class Geometry;
-	class StateSet;
-	class Texture2D;
+namespace vrv {
 
-	class TextureQuadRender
-	{
-	public:
-		TextureQuadRender();
+  class Geometry;
+  class StateSet;
+  class Texture2D;
 
-		void drawTexture(Texture2D*);
+  class TextureQuadRender {
+  public:
+    TextureQuadRender();
 
-	protected:
-		void initialize();
+    void drawTexture(Texture2D*);
 
-	protected:
-		Geometry* myQuadGeometry;
-      StateSet* myStateSet;
-	};
+  protected:
+    void initialize();
+
+  protected:
+    Geometry* myQuadGeometry;
+    StateSet* myStateSet;
+  };
 }

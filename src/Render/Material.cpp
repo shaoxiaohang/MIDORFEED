@@ -8,9 +8,7 @@
 namespace vrv
 {
    BuiltTexNameGenerator::BuiltTexNameGenerator()
-   {
-
-   }
+   {}
 
    std::string BuiltTexNameGenerator::diffuseTexName()
    {
