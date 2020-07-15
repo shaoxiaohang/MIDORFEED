@@ -21,6 +21,8 @@ namespace vrv
 
       Vector3f operator*(const Vector3f& r);
 
+      Vector3f GetColumn(unsigned index) const;
+
       Vector3f operator[] (unsigned index) const;
 
       static Matrix3f makeTranslate(float x, float y);

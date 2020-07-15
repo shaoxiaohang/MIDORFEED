@@ -120,14 +120,14 @@ void main()
 	else
 	{
 		st = tex_st;
-		if(vrv_material.hasNormal)
-		{
-			N = normalMap();
-		}
-		else
-		{
+		//if(vrv_material.hasNormal)
+		//{
+			//N = normalMap();
+		//}
+		//else
+		//{
 			N = vrv_normal;
-		}
+		//}
 
 		N = normalize(N);
 		
@@ -178,10 +178,10 @@ vec3 calculateLightColor(vec4 diffuse,vec4 specular,float shininess, vec3 N)
 		}
 	}
 	
-	if(!hasLight)
-	{
-		finalColor = diffuse.xyz;
-	}
+	//if(!hasLight)
+	//{
+	//	finalColor = diffuse.xyz;
+	//}
 	
 	//finalColor += calculateReflectiveColor();
 	//finalColor += calculateRefractiveColor();
@@ -249,7 +249,8 @@ vec3 phoneLighting(vrv_light_struct light,vec3 diffuse,vec3 specular,float shini
 		shadowFactor = calcualteShadowFactor();
 	
 	//return specular_color;
-	return ambient_color + (diffuse_color+specular_color) * shadowFactor  ;
+	//return specular_color;
+	return ambient_color + (diffuse_color+specular_color); //* shadowFactor  ;
 	//return vec3(shadowFactor);
 	//return frag_pos_lightSpace.xyz;
 }

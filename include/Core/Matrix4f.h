@@ -22,7 +22,9 @@ namespace vrv
 
       bool operator == (const Matrix4f& r);
 
-      Vector4f operator[] (unsigned int index) const;
+      Vector4f GetColumn (unsigned int index) const;
+
+      Vector4f operator[](unsigned int index) const;
 
       void setColumn(int column, Vector4f vec);
 

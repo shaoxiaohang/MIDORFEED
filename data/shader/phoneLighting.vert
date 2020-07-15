@@ -35,7 +35,41 @@ void main()
 		M = vrv_model_matrix;
 	}
 	
-	gl_Position = vrv_proj_matrix*vrv_view_matrix*M*vec4(pos,1);
+	vec4 view_coor = vrv_view_matrix*vec4(pos,1);
+	vec3 projected_view = vec3(view_coor.x / abs(view_coor.z),
+	view_coor.y / abs(view_coor.z), 1.0);
+	
+	float xc = projected_view.x;
+    float yc = projected_view.y;
+    float rc2 = xc * xc + yc * yc;
+	
+    float k1 = -0.4619076504532866;
+    float k2 = 0.25455138686362;
+	
+	mat3 intrinsic_ = mat3(
+   868.6247, 0, 0, // first column (not row!)
+   0, 868.6247, 0, // second column
+   512, 288, 1  // third column
+	);
+
+    float xc_distortion = xc * (1 + k1 * rc2 + k2 * rc2*rc2);
+	//float xc_distortion = xc;
+	//float yc_distortion = yc;
+    float yc_distortion = yc * (1 + k1 * rc2 + k2 * rc2*rc2);
+	
+	projected_view.x = xc_distortion;
+    projected_view.y = yc_distortion;
+	vec3 distortion_vec = intrinsic_ * projected_view;
+    float distortion_ndc_x = 2.0f * distortion_vec.x / 1024.0f - 1.0f;;
+    float distortion_ndc_y = 2.0f * distortion_vec.y / 576.0f - 1.0f;
+	
+	gl_Position = vrv_proj_matrix*vrv_view_matrix*vec4(pos,1);
+	
+	gl_Position.x = distortion_ndc_x * gl_Position.w;
+	gl_Position.y = distortion_ndc_y * gl_Position.w;
+	
+	
+	//gl_Position.w = gl_Position.w * 2;
 	tex_st = st;
 	vrv_normal = normalize(mat3(transpose(inverse(M))) *normal);
 	vrv_tangent = normalize(mat3(transpose(inverse(M))) * tangent);

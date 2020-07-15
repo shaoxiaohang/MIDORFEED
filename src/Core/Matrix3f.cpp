@@ -46,9 +46,13 @@ namespace vrv
       return Vector3f(m[0] * r.x() + m[3] * r.y() + m[6] * r.z(), m[1] * r.x() + m[4] * r.y() + m[7] * r.z(), m[2] * r.x() + m[5] * r.y() + m[8] * r.z());
    }
 
+   Vector3f Matrix3f::GetColumn(unsigned index) const {
+     return Vector3f(m[index * 3], m[index * 3 + 1], m[index * 3 + 2] );
+   }
+
    Vector3f Matrix3f::operator[] (unsigned index) const
    {
-      return Vector3f(m[index * 3], m[index * 3] + 1, m[index * 3] + 2);
+     return Vector3f(m[index], m[index + 3], m[index + 6]);
    }
 
    Matrix3f Matrix3f::makeTranslate(float x, float y)

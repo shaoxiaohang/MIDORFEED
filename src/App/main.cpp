@@ -25,7 +25,7 @@ using namespace vrv;
 int main(int argc, char** argv)
 {
   DisplayEngine* de = new DisplayEngine();
-  de->initialize(800, 600, "main window");
+  de->initialize(1024, 576, "main window");
 
   Scenario* test = new Scenario("simple.scene");
   de->setSceneData(test);

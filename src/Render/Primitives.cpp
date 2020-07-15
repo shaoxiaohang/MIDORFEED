@@ -213,12 +213,12 @@ namespace vrv
   {
     if (!myGeometryInitialized)
     {
-      sPosArray.add(Vector3f(0.0f, 0.5f, 0.0f));
-      sPosArray.add(Vector3f(0.0f, -0.5f, 0.0f));
-      sPosArray.add(Vector3f(1.0f, -0.5f, 0.0f));
-      sPosArray.add(Vector3f(0.0f, 0.5f, 0.0f));
-      sPosArray.add(Vector3f(1.0f, -0.5f, 0.0f));
-      sPosArray.add(Vector3f(1.0f, 0.5f, 0.0f));
+      sPosArray.add(Vector3f(-0.5f, 0.5f, 0.0f));
+      sPosArray.add(Vector3f(-0.5f, -0.5f, 0.0f));
+      sPosArray.add(Vector3f(0.5f, -0.5f, 0.0f));
+      sPosArray.add(Vector3f(-0.5f, 0.5f, 0.0f));
+      sPosArray.add(Vector3f(0.5f, -0.5f, 0.0f));
+      sPosArray.add(Vector3f(0.5f, 0.5f, 0.0f));
 
       sTexArray.add(Vector2f(0.0f, 1.0f));
       sTexArray.add(Vector2f(0.0f, 0.0f));
