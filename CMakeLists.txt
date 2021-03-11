@@ -40,9 +40,8 @@ target_link_libraries(DVA Core Render GUI)
 target_link_libraries(Render
 Core
 opengl32.lib
-assimp-vc141-mtd.lib
+assimp-vc140-mt.lib
 tinyxml2d.lib
-IrrXMLd.lib
 zlibstaticd.lib
 )
 target_link_libraries(GUI
